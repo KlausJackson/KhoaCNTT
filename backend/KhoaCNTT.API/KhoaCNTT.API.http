@@ -1,0 +1,6 @@
+@KhoaCNTT.API_HostAddress = http://localhost:5249
+
+GET {{KhoaCNTT.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

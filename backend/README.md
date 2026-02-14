@@ -1,0 +1,263 @@
+# Overview
+
+Có vấn đề gì thì cứ hỏi nhé anh em.
+
+# Project Architecture
+
+Dự án sử dụng .NET 8.0, nhớ update Visual Studio lên phiên bản mới nhất để tránh lỗi khi chạy dự án. `dotnet --version` để kiểm tra phiên bản.
+
+## Backend
+
+Clean Architecture với 4 layers: API, Application, Domain, Infrastructure.
+```bash
+
+└── 📁backend
+    └── 📁ConsoleApp1
+        ├── Program.cs # file tôi dùng để test code linh tinh, không liên quan đến dự án chính
+    └── 📁KhoaCNTT.API # tầng nhận API request từ client
+        └── 📁Controllers
+            ├── AdminsController.cs
+            ├── AuthController.cs
+            ├── CommentsController.cs
+            ├── FilesController.cs
+            ├── LecturersController.cs
+            ├── NewsController.cs
+            ├── StudentsController.cs
+            ├── SubjectController.cs
+        └── 📁Extensions
+            ├── ServiceCollection.cs # đăng ký các services, controllers vào DI container
+        └── 📁Filters
+            ├── ApiExceptionFilter.cs
+        ├── Program.cs
+    └── 📁KhoaCNTT.Application # tầng logic nghiệp vụ
+        └── 📁Common
+            └── 📁Constants
+                ├── RoleConstant.cs
+            └── 📁Exceptions
+                ├── BusinessRule.cs
+                ├── NotFound.cs
+            └── 📁Utils
+                ├── AdminMappingProfile.cs
+                ├── AutoMapperProfile.cs
+                ├── PassswordHasher.cs
+        └── 📁DTOs # dùng để ghi rõ các trường thông tin sẽ gửi cho client
+            └── 📁Admin
+                ├── AdminResponse.cs
+                ├── CreateAdminRequest.cs
+                ├── UpdateAdminRequest.cs
+            └── 📁File
+                ├── UpdateFileRequest.cs
+                ├── UploadFileRequest.cs
+            └── 📁School
+                ├── ScheduleResponse.cs
+                ├── SchoolLoginResponse.cs
+                ├── ScoreResponse.cs
+            └── 📁Comment
+                ├── CommentResponse.cs
+                ├── CreateCommentRequest.cs
+            └── 📁Lecturer
+                ├── CreateLecturerRequest.cs
+                ├── LecturerResponse.cs
+                ├── UpdateLecturerRequest.cs
+            └── 📁News
+                ├── CreateNewsRequest.cs
+                ├── NewsResponse.cs
+                ├── UpdateNewsRequest.cs
+            ├── CommentDto.cs
+            ├── FileResourceDto.cs
+            ├── LecturerDto.cs
+            ├── NewsDto.cs
+        └── 📁Interfaces # giao diện cho các class, chỉ chứa tên các hàm chức năng, không chứa logic
+            └── 📁Repositories # 
+                ├── IAdminRepository.cs
+                ├── ICommentRepository.cs
+                ├── IFileRespository.cs
+                ├── ILecturerRepository.cs
+                ├── INewRepository.cs
+                ├── ISubjectRepository.cs
+            └── 📁Services # 
+                ├── IAdminService.cs
+                ├── IAuthService.cs
+                ├── ICommentService.cs
+                ├── IFileService.cs
+                ├── IFileStorageService.cs
+                ├── IJwtTokenGenerator.cs
+                ├── ILecturerService.cs
+                ├── INewsService.cs
+                ├── ISchoolApiService.cs
+        └── 📁Services # chứa các logic nghiệp vụ chính
+            ├── AdminService.cs
+            ├── AuthService.cs
+            ├── CommentService.cs
+            ├── FileService.cs
+            ├── LecturerService.cs
+            ├── NewsService.cs
+    └── 📁KhoaCNTT.Domain # tầng mô hình dữ liệu
+        └── 📁Common # lớp cơ sở cho tất cả các entity
+            ├── BaseEntity.cs # chứa các trường chung như Id, CreatedAt, UpdatedAt
+        └── 📁Entities
+            ├── AdminUser.cs
+            ├── Comment.cs
+            ├── FileResource.cs
+            ├── Lecturer.cs
+            ├── LecturerSubject.cs
+            ├── News.cs
+            ├── Subject.cs
+        └── 📁Enums
+            ├── DegreeType.cs
+            ├── FilePermission.cs
+            ├── FileStatus.cs
+            ├── NewsType.cs
+    └── 📁KhoaCNTT.Infrastructure # tầng kết nối ra bên ngoài (DB, API trường, lưu trữ file vật lý trên server)
+        └── 📁ExternalServices # gọi API trường
+            ├── SchoolApiClient.cs
+        └── 📁Identity # tạo token
+            ├── JwtTokenGenerator.cs
+        └── 📁Persistence
+            └── 📁Configurations # cấu hình mapping entity với database
+                ├── FileResourceConfig.cs
+                ├── LecturerConfig.cs
+                ├── NewsConfig.cs
+            └── 📁Migrations
+            ├── AppDbContext.cs
+        └── 📁Repositories # cài đặt thao tác với database
+            ├── AdminRepository.cs
+            ├── CommentRepository.cs
+            ├── FileRepository.cs
+            ├── LecturerRepository.cs
+            ├── NewsRepository.cs
+            ├── SubjectRepository.cs
+        └── 📁Storage
+            ├── LocalFileStorageService.cs # lưu file vật lý trên server
+    └── README.md
+```
+
+**Tóm tắt lại các layer:**
+* API → Nhận request từ client (Controller).
+* Application → Xử lý logic nghiệp vục.
+* Domain → Định nghĩa các trường thông tin trong các bảng (Entity, Enum).
+* Infrastructure → Làm việc với database, file vật lý trên máy, API ngoài.
+
+**Luồng hoạt động của một API request:**
+Client → Controller (API) → Service (Application) → Repository (Infrastructure) → Database
+Sau đó dữ liệu trả lại theo chiều ngược lại.
+
+## Frontend
+
+MVC với 3 layers: Views, Controllers, Models.
+```bash
+
+```
+
+# Project Setup
+
+Tạo folder mới để lưu trữ file trên ổ D nếu muốn test các chức năng quản lý tài liệu: `D:\KhoaCNTT_data`.
+
+## Database Setup
+Tạo database trong SQL Server Management Studio (SSMS) với tên `khoacntt`.
+
+Cách xem và chỉnh sửa dữ liệu trực tiếp trong database mà không cần mở SQL Server:
+1. Chọn View trên tab trên cùng của Visual Studio, chọn SQL Server Object Explorer.
+2. (localdb)\\MSSQLLocalDB -> Databases -> khoacntt.
+
+### Tạo các bảng trong cơ sở dữ liệu
+
+Cách chạy migration tạo bảng, thực hiện thay đổi trong cơ sở dữ liệu:
+1.  Vào **Tools** -> **NuGet Package Manager** -> **Package Manager Console**.
+2.  Ở ô **Default project** (trên cùng console), chọn: `KhoaCNTT.Infrastructure`.
+3.  `Add-Migration InitialCreate -StartupProject KhoaCNTT.API`
+    * Nếu đã có database cũ, xóa database trước khi chạy InitialCreate.
+    * Nếu nó báo Build Failed, hãy sửa hết lỗi đỏ trong code trước.
+4.  `Update-Database -StartupProject KhoaCNTT.API`
+
+Mọi thay đổi với database sử dụng code đều dùng 2 lệnh trên.
+
+## Nuget Packages
+
+Tải toàn bộ các gói thư viện cần thiết:
+1. Chạy lệnh cd tới KhoaCNTT.API để cùng thư mục với file .sln.
+2. Chạy lệnh `dotnet restore` để tải các gói thư viện.
+
+### Admin
+
+Có thể sử dụng luôn tài khoản Admin cấp 1 được lập trình sẵn trong code (admin, 123) để thực hiện các quyền của cấp 1, hoặc tạo tài khoản mới với quyền cấp 2/3 trong database rồi sửa trực tiếp thành cấp 1. 
+
+Hoặc dùng lệnh SQL để tạo admin cấp 1 (Không rõ liệu password hash có bị lỗi khi copy-paste không, nếu bị lỗi thì cứ làm cách trên):
+```sql
+insert into AdminUsers (Username, PasswordHash, FullName, Email, Level) values ('admin', '$2a$11$apTVlOWXAO4UPjsUXyNGg.udEKcsSFtV2UDy07beFEpCxvvmmdNoS', 'Admin', 'admin1@gmail.com', 1);
+```
+
+### Thêm dữ liệu vào database
+
+Danh sách môn học: "KhoaCNTT\database\subjects.sql"
+
+## Chạy dự án
+
+Chọn KhoaCNTT.API trên Visual Studio làm startup project, sau đó nhấn F5 để chạy dự án.
+
+# Getting Started to Code
+
+**Nguyên tắc quan trọng khi code clean architecture:**
+
+1. Không viết logic nghiệp vụ trong Controller, trừ check phân quyền. Nghiệp vụ viết trong Application.
+2. Không để Domain phụ thuộc vào Infrastructure. Domain là tầng độc lập.
+3. Chỉ Infrastructure được phép truy cập database.
+
+**Lưu ý cho ai dùng ChatGPT:**
+KHÔNG được:
+- Inject DbContext vào Application
+- Dùng EF trực tiếp trong Application
+- Truy cập database trong Controller
+
+
+*Các lưu ý khác:*
+Khi tạo file mới thì chọn New Class, nhớ sử dụng `public` thay vì syntax mặc định `internal` để các lớp có thể truy cập qua lại giữa các layers.
+
+Thứ tự code khuyên dùng: Domain → Application → Infrastructure → API.
+
+## 1. Domain
+
+Code từ đây trước, viết rõ các trường thông tin trong các bảng ở file trong folder Domain/Entities, viết các enum ở folder Domain/Enums (dành cho phân loại).
+
+## 2. Application
+
+DTOs: dùng để định nghĩa rõ ràng các trường thông tin sẽ gửi cho client, tránh gửi thừa thông tin nhạy cảm như password hash, hoặc các trường không cần thiết khác.
+
+Code các DTOs trước, sau đó viết các interface trong Interfaces/ (I Repositories và I Services), cuối cùng mới viết logic nghiệp vụ trong Services/.
+
+## 3. Infrastructure
+
+Code các class trong folder Repositories, cuối cùng code các class trong Storage.
+Code các cấu hình mapping giữa entity và database trong folder Configurations.
+Đăng ký các service vừa code vào DI container trong API/Extensions/ServiceCollection.cs để có thể gọi được ở các layers khác.
+
+## 4. API
+
+Viết API Controller để nhận request từ client, gọi service trong Application để xử lý nghiệp vụ, trả về response cho client.
+
+<hr>
+
+# Test
+
+Cách test sử dụng swagger có sẵn (có thể dùng postman, nhưng swagger tiện hơn):
+1. Chạy dự án, nó sẽ tự động mở trang swagger ở trình duyệt.
+2. Chọn API muốn test, nhấn Try it out, điền thông tin cần thiết, nhấn Execute để gửi request.
+3. Xem phần Response để kiểm tra kết quả trả về từ API.
+4. Sử dụng tài khoản admin/sinh viên:
+    - Copy token trong response của 2 route API đăng nhập /Auth/login/admin, /Auth/login/student.
+    - Lướt lên trên đàu, nhấn Authorize, dán "Bearer token_vừa_copy" vào ô giá trị, nhấn Authorize xong có thể sử dụng các route yêu cầu tài khoản.
+    *Ví dụ:* `Bearer eyJhbGciOi ... (dài lắm)`
+
+*Quy trình test sau khi code:*
+Code -> test.
+Có lỗi -> sửa -> test lại.
+Không sửa được -> chatgpt.
+Chatgpt không sửa được -> hỏi tôi.
+Test thấy không có lỗi -> commit -> push.
+
+Ai code xong phần của mình thì nhắn cho người test phần đấy (đã ghi rõ trong doc) để clone repo về và test luôn. Thấy lỗi thì báo lại cho dev để sửa luôn, không cần đợi cả nhóm xong hết mới sửa.
+
+# Note
+
+Sử dụng các file tôi đã code sẵn làm mẫu, copy-paste rồi sửa lại cho phù hợp sẽ dễ hơn là code hoàn toàn mới từ đầu.
+Khó khăn gì thì hỏi. Và đừng động vào các file code quản lý admin, tài liệu của tôi :DDD
