@@ -1,0 +1,71 @@
+# API layer
+# controllers
+backend/KhoaCNTT.API/Controllers/AdminsController.cs @KlausJackson
+backend/KhoaCNTT.API/Controllers/FilesController.cs @KlausJackson
+backend/KhoaCNTT.API/Controllers/AuthController.cs @KlausJackson
+backend/KhoaCNTT.API/Controllers/StudentsController.cs @KlausJackson
+backend/KhoaCNTT.API/Controllers/SubjectsController.cs @KlausJackson
+
+backend\KhoaCNTT.API\Program.cs @KlausJackson
+
+
+# Application layer
+backend/KhoaCNTT.Application/Common/Constants @KlausJackson
+backend/KhoaCNTT.Application/Common/Exceptions @KlausJackson
+backend/KhoaCNTT.Application/Common/Utils/AdminMappingProfile.cs @KlausJackson
+backend/KhoaCNTT.Application/Common/Utils/PasswordHasher.cs @KlausJackson
+
+# services
+backend/KhoaCNTT.Application/Services/AuthService.cs @KlausJackson
+backend/KhoaCNTT.Application/Services/AdminService.cs @KlausJackson
+backend/KhoaCNTT.Application/Services/FileService.cs @KlausJackson
+
+# interfaces
+# I repositories
+backend/KhoaCNTT.Application/Repositories/IAdminRepository.cs @KlausJackson
+backend/KhoaCNTT.Application/Repositories/IFileRepository.cs @KlausJackson
+backend/KhoaCNTT.Application/Repositories/ISubjectRepository.cs @KlausJackson
+
+# I services
+backend/KhoaCNTT.Application/Services/Interfaces/IAuthService.cs @KlausJackson
+backend/KhoaCNTT.Application/Services/Interfaces/IAdminService.cs @KlausJackson
+backend/KhoaCNTT.Application/Services/Interfaces/IFileService.cs @KlausJackson
+backend/KhoaCNTT.Application/Services/Interfaces/IFileStorageService.cs @KlausJackson
+backend/KhoaCNTT.Application/Services/Interfaces/IJwtTokenGenerator.cs @KlausJackson
+backend/KhoaCNTT.Application/Services/Interfaces/ISchoolApiService.cs @KlausJackson
+
+# dtos
+backend/KhoaCNTT.Application/DTOs/Admin @KlausJackson
+backend/KhoaCNTT.Application/DTOs/File @KlausJackson
+backend/KhoaCNTT.Application/DTOs/School @KlausJackson
+backend/KhoaCNTT.Application/DTOs/FileResourceDto.cs @KlausJackson
+
+
+# Domain layer
+backend/KhoaCNTT.Domain/Common @KlausJackson
+
+# entities
+backend/KhoaCNTT.Domain/Entities/AdminUser.cs @KlausJackson
+backend/KhoaCNTT.Domain/Entities/FileRResource.cs @KlausJackson
+backend/KhoaCNTT.Domain/Entities/Subject.cs @KlausJackson
+
+backend/KhoaCNTT.Domain/Enums/FilePermission.cs @KlausJackson
+backend/KhoaCNTT.Domain/Enums/FileStatus.cs @KlausJackson
+
+
+# Infrastructure layer
+backend/KhoaCNTT.Infrastructure/ExternalServices @KlausJackson
+backend/KhoaCNTT.Infrastructure/Identity @KlausJackson
+backend/KhoaCNTT.Infrastructure/Persistence/Configurations/FileResourceConfig.cs @KlausJackson
+backend/KhoaCNTT.Infrastructure/Storage @KlausJackson
+
+# repositories
+backend/KhoaCNTT.Infrastructure/Repositories/AdminRepository.cs @KlausJackson
+backend/KhoaCNTT.Infrastructure/Repositories/FileRepository.cs @KlausJackson
+backend/KhoaCNTT.Infrastructure/Repositories/SubjectRepository.cs @KlausJackson
+
+
+# others
+database/subjects.sql @KlausJackson
+.gitignore @KlausJackson
+README.md @KlausJackson
