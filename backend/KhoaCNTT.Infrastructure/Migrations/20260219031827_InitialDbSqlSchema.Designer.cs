@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KhoaCNTT.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260211053106_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260219031827_InitialDbSqlSchema")]
+    partial class InitialDbSqlSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,11 +34,13 @@ namespace KhoaCNTT.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME2")
+                        .HasDefaultValueSql("SYSDATETIME()");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VARCHAR(255)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -62,11 +64,20 @@ namespace KhoaCNTT.Infrastructure.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VARCHAR(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AdminUsers");
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("AdminUsers", t =>
+                        {
+                            t.HasCheckConstraint("CK_Admin_Level", "[Level] >= 1");
+                        });
                 });
 
             modelBuilder.Entity("KhoaCNTT.Domain.Entities.Comment", b =>
@@ -82,14 +93,16 @@ namespace KhoaCNTT.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME2")
+                        .HasDefaultValueSql("SYSDATETIME()");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("MSV")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("CHAR(10)");
 
                     b.Property<int>("NewsId")
                         .HasColumnType("int");
@@ -116,32 +129,31 @@ namespace KhoaCNTT.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApprovedByUsername")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ApprovedById")
+                        .HasColumnType("int");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME2")
+                        .HasDefaultValueSql("SYSDATETIME()");
 
-                    b.Property<string>("CreatedByUsername")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
 
                     b.Property<int>("DownloadCount")
                         .HasColumnType("int");
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FilePath")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -149,8 +161,11 @@ namespace KhoaCNTT.Infrastructure.Migrations
                     b.Property<int?>("ParentFileId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Permission")
-                        .HasColumnType("int");
+                    b.Property<string>("Permission")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("VARCHAR(50)")
+                        .HasDefaultValue("PublicRead");
 
                     b.Property<string>("RejectReason")
                         .HasColumnType("nvarchar(max)");
@@ -158,19 +173,18 @@ namespace KhoaCNTT.Infrastructure.Migrations
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Status")
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("VARCHAR(50)")
+                        .HasDefaultValue("Pending");
+
+                    b.Property<int>("SubjectId")
                         .HasColumnType("int");
-
-                    b.Property<string>("SubjectCode")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SubjectName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -180,9 +194,15 @@ namespace KhoaCNTT.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubjectCode");
+                    b.HasIndex("ApprovedById");
 
-                    b.ToTable("FileResources", (string)null);
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("ParentFileId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("KhoaCNTT.Domain.Entities.Lecturer", b =>
@@ -193,6 +213,9 @@ namespace KhoaCNTT.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("Birthdate")
+                        .HasColumnType("DATE");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -201,7 +224,7 @@ namespace KhoaCNTT.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VARCHAR(255)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -226,6 +249,9 @@ namespace KhoaCNTT.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Lecturers");
                 });
@@ -255,19 +281,32 @@ namespace KhoaCNTT.Infrastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NewsType")
-                        .HasColumnType("int");
+                    b.Property<string>("NewsType")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(100)");
 
                     b.Property<DateTime>("PublishedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("DATETIME2");
+
+                    b.Property<string>("RejectReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("VARCHAR(50)")
+                        .HasDefaultValue("Pending");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -277,6 +316,8 @@ namespace KhoaCNTT.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
 
                     b.ToTable("News");
                 });
@@ -293,14 +334,16 @@ namespace KhoaCNTT.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Credits")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(3);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("SubjectCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VARCHAR(50)");
 
                     b.Property<string>("SubjectName")
                         .IsRequired()
@@ -311,7 +354,13 @@ namespace KhoaCNTT.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects");
+                    b.HasIndex("SubjectCode")
+                        .IsUnique();
+
+                    b.ToTable("Subjects", t =>
+                        {
+                            t.HasCheckConstraint("CK_Subject_Credits", "[Credits] > 0");
+                        });
                 });
 
             modelBuilder.Entity("KhoaCNTT.Domain.Entities.Comment", b =>
@@ -323,6 +372,38 @@ namespace KhoaCNTT.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("News");
+                });
+
+            modelBuilder.Entity("KhoaCNTT.Domain.Entities.FileResource", b =>
+                {
+                    b.HasOne("KhoaCNTT.Domain.Entities.AdminUser", "ApprovedBy")
+                        .WithMany("ApprovedFiles")
+                        .HasForeignKey("ApprovedById")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("KhoaCNTT.Domain.Entities.AdminUser", "CreatedBy")
+                        .WithMany("CreatedFiles")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("KhoaCNTT.Domain.Entities.FileResource", "ParentFile")
+                        .WithMany()
+                        .HasForeignKey("ParentFileId");
+
+                    b.HasOne("KhoaCNTT.Domain.Entities.Subject", "Subject")
+                        .WithMany("Files")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApprovedBy");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("ParentFile");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("KhoaCNTT.Domain.Entities.LecturerSubject", b =>
@@ -344,6 +425,26 @@ namespace KhoaCNTT.Infrastructure.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("KhoaCNTT.Domain.Entities.News", b =>
+                {
+                    b.HasOne("KhoaCNTT.Domain.Entities.AdminUser", "CreatedBy")
+                        .WithMany("NewsList")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("KhoaCNTT.Domain.Entities.AdminUser", b =>
+                {
+                    b.Navigation("ApprovedFiles");
+
+                    b.Navigation("CreatedFiles");
+
+                    b.Navigation("NewsList");
+                });
+
             modelBuilder.Entity("KhoaCNTT.Domain.Entities.Lecturer", b =>
                 {
                     b.Navigation("LecturerSubjects");
@@ -356,6 +457,8 @@ namespace KhoaCNTT.Infrastructure.Migrations
 
             modelBuilder.Entity("KhoaCNTT.Domain.Entities.Subject", b =>
                 {
+                    b.Navigation("Files");
+
                     b.Navigation("LecturerSubjects");
                 });
 #pragma warning restore 612, 618

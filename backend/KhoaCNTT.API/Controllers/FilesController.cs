@@ -32,9 +32,9 @@ namespace KhoaCNTT.API.Controllers
         {
             // Lấy username và level từ Token
             var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var levelStr = User.FindFirst("AdminLevel")?.Value;
+            var levelStr = User.FindFirst("Level")?.Value;
             int level = int.TryParse(levelStr, out int l) ? l : 3; // Mặc định cấp 3 nếu ko có
-
+            
             await _fileService.UploadFileAsync(request, level, username!);
             return Ok("Upload thành công");
         }

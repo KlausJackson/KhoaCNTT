@@ -1,5 +1,6 @@
 ﻿
 using KhoaCNTT.Domain.Entities;
+using KhoaCNTT.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace KhoaCNTT.Infrastructure.Persistence
@@ -20,48 +21,79 @@ namespace KhoaCNTT.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+            // --- 1. AdminUsers ---
+            modelBuilder.Entity<AdminUser>(e => {
+                e.Property(x => x.Username).HasColumnType("VARCHAR(100)").IsRequired();
+                e.HasIndex(x => x.Username).IsUnique();
+                e.Property(x => x.Email).HasColumnType("VARCHAR(255)").IsRequired();
+                e.HasIndex(x => x.Email).IsUnique();
+                e.Property(x => x.CreatedAt).HasColumnType("DATETIME2").HasDefaultValueSql("SYSDATETIME()");
+                // Check constraint Level >= 1 (EF Core 8+)
+                e.ToTable(t => t.HasCheckConstraint("CK_Admin_Level", "[Level] >= 1"));
+            });
 
-            // Cấu hình khóa chính phức hợp cho bảng trung gian LecturerSubject
+            // --- 2. Subjects ---
+            modelBuilder.Entity<Subject>(e => {
+                e.Property(x => x.SubjectCode).HasColumnType("VARCHAR(50)").IsRequired();
+                e.HasIndex(x => x.SubjectCode).IsUnique();
+                e.Property(x => x.Credits).HasDefaultValue(3);
+                e.ToTable(t => t.HasCheckConstraint("CK_Subject_Credits", "[Credits] > 0"));
+            });
+
+            // --- 3. Lecturers ---
+            modelBuilder.Entity<Lecturer>(e => {
+                e.Property(x => x.Email).HasColumnType("VARCHAR(255)").IsRequired();
+                e.HasIndex(x => x.Email).IsUnique();
+                e.Property(x => x.Birthdate).HasColumnType("DATE");
+            });
+
+            // --- 4. News ---
+            modelBuilder.Entity<News>(e => {
+                e.Property(x => x.Content).HasColumnType("VARCHAR(MAX)");
+                e.Property(x => x.NewsType).HasConversion<string>().HasColumnType("VARCHAR(100)"); // Enum -> String
+                e.Property(x => x.Status).HasColumnType("VARCHAR(50)").HasDefaultValue("Pending");
+                e.Property(x => x.PublishedDate).HasColumnType("DATETIME2");
+
+                e.HasOne(n => n.CreatedBy)
+                 .WithMany(a => a.NewsList)
+                 .HasForeignKey(n => n.CreatedById)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // --- 5. Comments ---
+            modelBuilder.Entity<Comment>(e => {
+                e.Property(x => x.MSV).HasColumnType("CHAR(10)");
+                e.Property(x => x.CreatedAt).HasColumnType("DATETIME2").HasDefaultValueSql("SYSDATETIME()");
+            });
+
+            // --- 6. FileResources ---
+            modelBuilder.Entity<FileResource>(e => {
+                e.Property(x => x.Permission).HasConversion<string>().HasColumnType("VARCHAR(50)").HasDefaultValue(FilePermission.PublicRead);
+                e.Property(x => x.Status).HasConversion<string>().HasColumnType("VARCHAR(50)").HasDefaultValue(FileStatus.Pending);
+                e.Property(x => x.CreatedAt).HasColumnType("DATETIME2").HasDefaultValueSql("SYSDATETIME()");
+
+                // Quan hệ Subject
+                e.HasOne(f => f.Subject)
+                 .WithMany(s => s.Files)
+                 .HasForeignKey(f => f.SubjectId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                // Quan hệ CreatedBy (Admin)
+                e.HasOne(f => f.CreatedBy)
+                 .WithMany(a => a.CreatedFiles)
+                 .HasForeignKey(f => f.CreatedById)
+                 .OnDelete(DeleteBehavior.NoAction); // Tránh vòng lặp Cascade
+
+                // Quan hệ ApprovedBy (Admin)
+                e.HasOne(f => f.ApprovedBy)
+                 .WithMany(a => a.ApprovedFiles)
+                 .HasForeignKey(f => f.ApprovedById)
+                 .OnDelete(DeleteBehavior.NoAction); // Tránh vòng lặp Cascade
+            });
+
+            // --- 7. LecturerSubjects ---
             modelBuilder.Entity<LecturerSubject>()
                 .HasKey(ls => new { ls.LecturerId, ls.SubjectId });
-
-            // Cấu hình quan hệ Many-to-Many
-            modelBuilder.Entity<LecturerSubject>()
-                .HasOne(ls => ls.Lecturer)
-                .WithMany(l => l.LecturerSubjects)
-                .HasForeignKey(ls => ls.LecturerId);
-
-            modelBuilder.Entity<LecturerSubject>()
-                .HasOne(ls => ls.Subject)
-                .WithMany(s => s.LecturerSubjects)
-                .HasForeignKey(ls => ls.SubjectId);
-
-            // Cấu hình quan hệ News - Comment (1 News có nhiều Comment)
-            modelBuilder.Entity<Comment>()
-                .HasOne(c => c.News)
-                .WithMany(n => n.Comments)
-                .HasForeignKey(c => c.NewsId)
-                .OnDelete(DeleteBehavior.Cascade); // Xóa News thì xóa luôn Comment
-
-
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                // Tìm tất cả các bảng có thuộc tính 'CreatedAt'
-                var createdAtProperty = entityType.FindProperty("CreatedAt");
-                if (createdAtProperty != null && createdAtProperty.ClrType == typeof(DateTime))
-                {
-                    createdAtProperty.SetDefaultValueSql("GETDATE()");
-                }
-
-                // Tìm tất cả các bảng có thuộc tính 'IsDeleted'
-                var isDeletedProperty = entityType.FindProperty("IsDeleted");
-                if (isDeletedProperty != null && isDeletedProperty.ClrType == typeof(bool))
-                {
-                    isDeletedProperty.SetDefaultValue(false);
-                }
-            }
-
         }
     }
 }

@@ -10,19 +10,27 @@ namespace KhoaCNTT.Domain.Entities
         public string FilePath { get; set; } = string.Empty; // Đường dẫn
         public string ContentType { get; set; } = string.Empty; // MIME type (pdf, docx...)
         public long Size { get; set; }
-        public FilePermission Permission { get; set; }
-        public FileStatus Status { get; set; } = FileStatus.Pending;
 
-        public string CreatedByUsername { get; set; } = string.Empty; // Admin nào up
-        public string? ApprovedByUsername { get; set; } // Admin nào duyệt
-        public string? RejectReason { get; set; } // Lý do từ chối
-
-        public int? ParentFileId { get; set; } // ID của file cũ bị thay thế (Linked List)
-
-        // Các trường phụ
-        public string? SubjectCode { get; set; }
-        public string? SubjectName { get; set; }
-        public int DownloadCount { get; set; } = 0;
         public int ViewCount { get; set; } = 0;
+        public int DownloadCount { get; set; } = 0;
+
+        public FileStatus Status { get; set; } = FileStatus.Pending; // Enum
+        public string? RejectReason { get; set; }
+        public int? ParentFileId { get; set; }
+        public FileResource? ParentFile { get; set; }
+
+        public FilePermission Permission { get; set; } = FilePermission.PublicRead; // Enum
+
+        // FK Subject
+        public int SubjectId { get; set; }
+        public Subject Subject { get; set; } = null!;
+
+        // FK Admin Created
+        public int CreatedById { get; set; }
+        public AdminUser CreatedBy { get; set; } = null!;
+
+        // FK Admin Approved
+        public int? ApprovedById { get; set; }
+        public AdminUser? ApprovedBy { get; set; }
     }
 }

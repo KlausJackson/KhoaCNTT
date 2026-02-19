@@ -14,6 +14,8 @@ namespace KhoaCNTT.Domain.Entities
         public string ImageUrl { get; set; } = string.Empty; // đường dẫn ảnh đại diện
         public DegreeType Degree { get; set; } // học vị (thạc sĩ, tiến sĩ...)
         public string Position { get; set; } = string.Empty; // chức vụ (giảng viên, trưởng bộ môn...)
+        public DateTime? Birthdate { get; set; }
+
         // danh sách môn học tham gia giảng dạy
         // Quan hệ: Một giảng viên dạy nhiều môn
         public ICollection<LecturerSubject> LecturerSubjects { get; set; } = new List<LecturerSubject>();

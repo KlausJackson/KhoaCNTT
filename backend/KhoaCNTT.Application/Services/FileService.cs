@@ -15,14 +15,16 @@ namespace KhoaCNTT.Application.Services
         private readonly IFileRepository _repo;
         private readonly IFileStorageService _storage;
         private readonly IMapper _mapper;
+        private readonly IAdminRepository _adminRepo;
         private readonly ISubjectRepository _subjectRepo;
 
-        public FileService(IFileRepository repo, IFileStorageService storage, IMapper mapper, ISubjectRepository subjectRepo)
+        public FileService(IFileRepository repo, IFileStorageService storage, IMapper mapper, ISubjectRepository subjectRepo, IAdminRepository adminRepo)
         {
             _repo = repo;
             _storage = storage;
             _mapper = mapper;
             _subjectRepo = subjectRepo;
+            _adminRepo = adminRepo;
         }
 
         public async Task<List<FileResourceDto>> GetPendingFilesAsync()
@@ -48,6 +50,10 @@ namespace KhoaCNTT.Application.Services
                 throw new BusinessRuleException($"Mã môn học '{request.SubjectCode}' không tồn tại trong hệ thống.");
             }
 
+            // Validate Admin
+            var admin = await _adminRepo.GetByUsernameAsync(username);
+            if (admin == null) throw new Exception("Không tìm thấy Admin ID");
+
             // Tự động điền tên môn học chuẩn từ DB
             request.SubjectName = subject.SubjectName;
 
@@ -62,24 +68,17 @@ namespace KhoaCNTT.Application.Services
                 FilePath = filePath,
                 ContentType = request.File.ContentType,
                 Size = request.File.Length,
-                SubjectCode = request.SubjectCode,
-                SubjectName = request.SubjectName,
-                Permission = request.Permission,
+                SubjectId = subject.Id,
+                CreatedById = admin.Id,
 
-                // 3. Thông tin Admin
-                CreatedByUsername = username,
-                CreatedAt = DateTime.Now
+                Permission = request.Permission,
+                Status = (adminLevel == 1 || adminLevel == 2) ? FileStatus.Approved : FileStatus.Pending
             };
 
             // 4. Logic Phân quyền
-            if (adminLevel == 1 || adminLevel == 2)
+            if (fileEntity.Status == FileStatus.Approved)
             {
-                fileEntity.Status = FileStatus.Approved;
-                fileEntity.ApprovedByUsername = username;
-            }
-            else
-            {
-                fileEntity.Status = FileStatus.Pending;
+                fileEntity.ApprovedById = admin.Id; // Tự duyệt
             }
 
             await _repo.AddAsync(fileEntity);
@@ -90,13 +89,16 @@ namespace KhoaCNTT.Application.Services
             var file = await _repo.GetByIdAsync(fileId);
             if (file == null) throw new NotFoundException("File", fileId);
 
+            // Validate Admin
+            var admin = await _adminRepo.GetByUsernameAsync(approverName);
+            if (admin == null) throw new Exception("Không tìm thấy Admin ID");
+
             if (isApproved)
             {
                 file.Status = FileStatus.Approved;
-                file.ApprovedByUsername = approverName;
                 file.RejectReason = null;
 
-                // Xử lý thay thế file cũ (nếu có)
+                // Xử lý thay thế file cũ
                 if (file.ParentFileId.HasValue)
                 {
                     var oldFile = await _repo.GetByIdAsync(file.ParentFileId.Value);
@@ -113,9 +115,8 @@ namespace KhoaCNTT.Application.Services
             {
                 file.Status = FileStatus.Rejected;
                 file.RejectReason = rejectReason;
-                file.ApprovedByUsername = approverName;
             }
-
+            file.ApprovedById = admin.Id;
             await _repo.UpdateAsync(file);
         }
 
@@ -125,10 +126,17 @@ namespace KhoaCNTT.Application.Services
             var file = await _repo.GetByIdAsync(fileId);
             if (file == null) throw new NotFoundException("File", fileId);
 
+            // Validate Subject
+            var subject = await _subjectRepo.GetByCodeAsync(request.SubjectCode);
+
+            if (subject == null)
+            {
+                throw new BusinessRuleException($"Mã môn học '{request.SubjectCode}' không tồn tại trong hệ thống.");
+            }
+
             // Cập nhật thông tin
             file.Title = request.Title;
-            file.SubjectCode = request.SubjectCode;
-            file.SubjectName = request.SubjectName;
+            file.SubjectId = subject.Id;
             file.Permission = request.Permission;
 
             await _repo.UpdateAsync(file);

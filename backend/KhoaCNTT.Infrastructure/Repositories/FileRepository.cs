@@ -4,9 +4,6 @@ using KhoaCNTT.Application.Interfaces.Repositories;
 using KhoaCNTT.Domain.Entities;
 using KhoaCNTT.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KhoaCNTT.Infrastructure.Repositories
 {
@@ -27,7 +24,11 @@ namespace KhoaCNTT.Infrastructure.Repositories
 
         public async Task<FileResource?> GetByIdAsync(int id)
         {
-            return await _context.Files.FindAsync(id);
+            // return await _context.Files.FindAsync(id);
+            return await _context.Files
+             .Include(f => f.Subject)
+             .Include(f => f.CreatedBy) // Lấy tên người tạo
+             .FirstOrDefaultAsync(f => f.Id == id);
         }
 
         public async Task UpdateAsync(FileResource file)
@@ -44,6 +45,8 @@ namespace KhoaCNTT.Infrastructure.Repositories
         public async Task<List<FileResource>> GetPendingFilesAsync()
         {
             return await _context.Files
+                .Include(f => f.Subject)
+                .Include(f => f.CreatedBy)
                 .Where(f => f.Status == Domain.Enums.FileStatus.Pending)
                 .OrderByDescending(f => f.CreatedAt)
                 .ToListAsync();
@@ -51,21 +54,20 @@ namespace KhoaCNTT.Infrastructure.Repositories
 
         public async Task<List<FileResource>> SearchAsync(string keyword, int pageIndex, int pageSize, List<string>? subjectCodes)
         {
-            var query = _context.Files.AsQueryable();
+            var query = _context.Files
+                .Include(f => f.Subject)
+                .AsQueryable();
 
-            // 1. Chỉ lấy file đã duyệt
             query = query.Where(f => f.Status == Domain.Enums.FileStatus.Approved);
 
-            // 2. Lọc theo từ khóa (Tiêu đề hoặc Tên file)
             if (!string.IsNullOrEmpty(keyword))
             {
                 query = query.Where(f => f.Title.Contains(keyword) || f.FileName.Contains(keyword));
             }
 
-            // 3. Lọc theo DANH SÁCH mã môn
             if (subjectCodes != null && subjectCodes.Any())
             {
-                query = query.Where(f => subjectCodes.Contains(f.SubjectCode));
+                query = query.Where(f => subjectCodes.Contains(f.Subject.SubjectCode));
             }
 
             return await query

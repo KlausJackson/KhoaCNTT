@@ -14,7 +14,13 @@ namespace KhoaCNTT.Domain.Entities
         public string Content { get; set; } = string.Empty; // HTML
         public DateTime PublishedDate { get; set; } = DateTime.Now;
         public NewsType NewsType { get; set; }
-        // Quan hệ: Một tin tức có nhiều bình luận
+        public string Status { get; set; } = "Pending";
+        public string? RejectReason { get; set; }
+
+        // Khóa ngoại Admin
+        public int CreatedById { get; set; }
+        public AdminUser CreatedBy { get; set; } = null!; // được thiết lập khi tạo tin tức
+
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
