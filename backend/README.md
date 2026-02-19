@@ -193,16 +193,20 @@ Tải toàn bộ các gói thư viện cần thiết:
 
 ### Admin
 
-Có thể sử dụng luôn tài khoản Admin cấp 1 được lập trình sẵn trong code (admin, 123) để thực hiện các quyền của cấp 1, hoặc tạo tài khoản mới với quyền cấp 2/3 trong database rồi sửa trực tiếp thành cấp 1. 
-
-Hoặc dùng lệnh SQL để tạo admin cấp 1 (Không rõ liệu password hash có bị lỗi khi copy-paste không, nếu bị lỗi thì cứ làm cách trên):
-```sql
-insert into AdminUsers (Username, PasswordHash, FullName, Email, Level) values ('admin', '$2a$11$apTVlOWXAO4UPjsUXyNGg.udEKcsSFtV2UDy07beFEpCxvvmmdNoS', 'Admin', 'admin1@gmail.com', 1);
-```
+Sử dụng tài khoản Admin cấp 1 được lập trình sẵn trong code (admin, abc123) để thực hiện các quyền của cấp 1, và tạo tài khoản mới với quyền cấp 2/3 trong database rồi sửa trực tiếp thành cấp 1. 
 
 ### Thêm dữ liệu vào database
 
 Danh sách môn học: "KhoaCNTT\database\subjects.sql"
+
+1. Chọn View trên tab trên cùng của Visual Studio, chọn SQL Server Object Explorer.
+2. (localdb)\\MSSQLLocalDB -> Databases -> khoacntt.
+3. Làm theo hướng dẫn trong ảnh và update lệnh SQL như sau:
+- CreatedAt: từ not null thành null.
+- isDeleted: thêm default 0.
+
+![Image](/subjects.png)
+
 
 ## Chạy dự án
 
