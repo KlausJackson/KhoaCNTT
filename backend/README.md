@@ -201,12 +201,13 @@ Danh sách môn học: "KhoaCNTT\database\subjects.sql"
 
 1. Chọn View trên tab trên cùng của Visual Studio, chọn SQL Server Object Explorer.
 2. (localdb)\\MSSQLLocalDB -> Databases -> khoacntt.
-3. Làm theo hướng dẫn trong ảnh và update lệnh SQL như sau:
-- CreatedAt: từ not null thành null.
-- isDeleted: thêm default 0.
-
 ![Image](/subjects.png)
-
+3. Nếu CreatedAt là null thì chạy lệnh SQL danh sách môn học bên trên.
+4. Nếu CreatedAt là not null thì đổi lại thành null rồi update như trong hình.
+5. Chạy lệnh SQL sau để CreatedAt không bị null:
+```sql
+UPDATE Subjects SET CreatedAt = GETDATE() WHERE CreatedAt IS NULL;
+```
 
 ## Chạy dự án
 
