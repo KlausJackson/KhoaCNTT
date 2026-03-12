@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Khoa Công nghệ thông tin - Đại học Thủy Lợi</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&family=Inter:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/test.css" />
+    <style>
+      /* ===== USER MENU DROPDOWN ===== */
+      .user-menu {
+        position: relative;
+      }
+      .user-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition: background 0.2s;
+      }
+      .user-toggle:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .user-toggle i {
+        color: #93c5fd;
+      }
+      .user-toggle .fa-chevron-down {
+        font-size: 10px;
+        color: #94a3b8;
+        transition: transform 0.2s;
+      }
+      .user-menu.open .fa-chevron-down {
+        transform: rotate(180deg);
+      }
+      .user-dropdown {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        min-width: 180px;
+        z-index: 200;
+        overflow: hidden;
+      }
+      .user-menu.open .user-dropdown {
+        display: block;
+      }
+      .user-dropdown a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 16px;
+        color: #1e293b;
+        text-decoration: none;
+        font-size: 13.5px;
+        font-weight: 600;
+        transition: background 0.15s;
+      }
+      .user-dropdown a:hover {
+        background: #f1f5f9;
+      }
+      .user-dropdown a i {
+        width: 16px;
+        text-align: center;
+      }
+      .dropdown-admin i {
+        color: #7c3aed;
+      }
+      .dropdown-logout {
+        color: #dc2626 !important;
+      }
+      .dropdown-logout i {
+        color: #dc2626;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <div class="container">
+        <div class="contact-info">
+          <i class="fas fa-map-marker-alt"></i> 175 Tây Sơn, Đống Đa, Hà Nội
+          <span class="separator">|</span>
+          <i class="fas fa-phone-alt"></i> (024) 3852 2201
+        </div>
+        <div class="social-login">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <div class="divider">|</div>
+
+          <!-- Khi chưa đăng nhập: hiện link này -->
+          <a href="login.html" class="login-link" id="loginBtn">
+            <i class="fas fa-user-circle"></i> Đăng nhập
+          </a>
+
+          <!-- Khi đã đăng nhập: hiện user menu này (ẩn mặc định) -->
+          <div class="user-menu" id="userMenu" style="display: none">
+            <div class="user-toggle" id="userToggle">
+              <i class="fas fa-user-circle"></i>
+              <span id="userName">Phạm Văn Việt</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="user-dropdown">
+              <a href="#" class="dropdown-admin">
+                <i class="fas fa-shield-alt"></i> Trang quản trị
+              </a>
+              <a href="#" class="dropdown-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="main-header navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Logo_Dai_hoc_Thuy_loi.svg/1200px-Logo_Dai_hoc_Thuy_loi.svg.png"
+            alt="TLU Logo"
+          />
+          <div class="school-text ms-2">
+            <div class="name">KHOA CÔNG NGHỆ THÔNG TIN</div>
+            <div class="sub">Trường Đại học Thủy Lợi - TLU</div>
+          </div>
+        </a>
+        <div class="collapse navbar-collapse justify-content-end">
+          <ul class="navbar-nav align-items-center">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Đội ngũ giảng viên</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="tailieu.html">Tài liệu học tập</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="tracuu.html">Tra cứu học tập</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero-section">
+      <div class="container hero-container">
+        <div class="news-badge"><i class="fas fa-bolt"></i> TIN NỔI BẬT</div>
+        <h1 class="hero-title">
+          Chào mừng Tân sinh viên K66<br />Nhập học năm 2026
+        </h1>
+        <p class="hero-desc">
+          Khoa Công nghệ thông tin - Đại học Thủy Lợi tự hào là cái nôi đào tạo
+          nguồn nhân lực chất lượng cao, đáp ứng nhu cầu khắt khe của kỷ nguyên
+          số.
+        </p>
+        <a href="#" class="btn-detail"
+          >Xem chi tiết <i class="fas fa-arrow-right"></i
+        ></a>
+      </div>
+    </section>
+
+    <main class="main-content">
+      <div class="container content-grid">
+        <div class="news-column">
+          <div class="section-header">
+            <div class="section-title">
+              <span class="title-bar"></span>
+              <h2>Tin tức & Sự kiện</h2>
+            </div>
+            <a href="#" class="view-all"
+              >Xem tất cả <i class="fas fa-chevron-right"></i
+            ></a>
+          </div>
+
+          <div class="news-grid">
+            <div class="news-card featured">
+              <div class="news-overlay">
+                <div class="news-meta">
+                  <i class="far fa-calendar-alt"></i> 15/03/2026 |
+                  <i class="fas fa-tag"></i> Sự kiện
+                </div>
+                <h3>
+                  Hội thảo Khoa học Công nghệ Sinh viên lần thứ XV - Năm 2026
+                </h3>
+              </div>
+            </div>
+
+            <div class="news-list">
+              <div class="news-item">
+                <div class="news-thumb"></div>
+                <div class="item-info">
+                  <span class="item-date">12/03/2026</span>
+                  <h4>
+                    Lịch bảo vệ Đồ án tốt nghiệp đợt 1 năm 2026 dành cho K62
+                  </h4>
+                </div>
+              </div>
+              <div class="news-item">
+                <div class="news-thumb"></div>
+                <div class="item-info">
+                  <span class="item-date">10/03/2026</span>
+                  <h4>Thông báo tuyển dụng thực tập sinh FPT Software 2026</h4>
+                </div>
+              </div>
+              <div class="news-item">
+                <div class="news-thumb"></div>
+                <div class="item-info">
+                  <span class="item-date">05/03/2026</span>
+                  <h4>
+                    Kết quả kỳ thi Olympic Tin học cấp trường năm học 2025-2026
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="sidebar">
+          <div class="search-box">
+            <input type="text" placeholder="Tìm kiếm tin tức, sự kiện..." />
+            <button><i class="fas fa-search"></i></button>
+          </div>
+
+          <div class="portal-card">
+            <div class="portal-header">
+              <i class="fas fa-graduation-cap"></i>
+              <h3>Tra cứu học tập</h3>
+            </div>
+            <p>Đăng nhập để xem điểm, thời khóa biểu và tài liệu nội bộ.</p>
+            <a href="tracuu.html" class="btn-portal">Truy cập Cổng Sinh Viên</a>
+          </div>
+
+          <div class="links-card">
+            <div class="portal-header">
+              <i class="fas fa-link"></i>
+              <h3>Liên kết nhanh</h3>
+            </div>
+            <ul class="quick-links">
+              <li>
+                <a href="#"
+                  ><i class="fas fa-chevron-right"></i> Thông báo Đào tạo</a
+                >
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fas fa-chevron-right"></i> Tuyển dụng & Việc làm</a
+                >
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fas fa-chevron-right"></i> Biểu mẫu Sinh viên</a
+                >
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fas fa-chevron-right"></i> Cổng Đăng ký tín chỉ</a
+                >
+              </li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="main-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-5">
+            <h5 class="footer-title">KHOA CÔNG NGHỆ THÔNG TIN</h5>
+            <p class="school-name-footer">Trường Đại học Thủy Lợi - TLU</p>
+            <ul class="footer-contact list-unstyled">
+              <li>
+                <i class="fas fa-map-marker-alt"></i> 175 Tây Sơn, Đống Đa, Hà
+                Nội
+              </li>
+              <li><i class="fas fa-envelope"></i> vpkcntt@tlu.edu.vn</li>
+            </ul>
+          </div>
+          <div class="col-lg-4">
+            <h5 class="footer-title">Liên kết hữu ích</h5>
+            <ul class="footer-links list-unstyled">
+              <li><a href="#">Giới thiệu Khoa</a></li>
+              <li><a href="#">Tuyển sinh 2026</a></li>
+              <li><a href="#">Đội ngũ Giảng viên</a></li>
+              <li><a href="#">Quy chế Đào tạo</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-3">
+            <h5 class="footer-title">Kết nối với chúng tôi</h5>
+            <div class="footer-social">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom text-center">
+          <p>
+            © 2026 Faculty of Information Technology - Thuy Loi University.
+            Designed with ❤️ by Group 05.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ===== AUTH STATE (shared via sessionStorage) ===== -->
+    <script>
+      const MOCK_USER = {
+        name: "Phạm Văn Việt",
+        msv: "123456789",
+        lop: "65KTPM",
+      };
+
+      function isLoggedIn() {
+        return sessionStorage.getItem("sv_logged_in") === "1";
+      }
+
+      function renderAuthState() {
+        const loggedIn = isLoggedIn();
+        const loginBtn = document.getElementById("loginBtn");
+        const userMenu = document.getElementById("userMenu");
+        const userName = document.getElementById("userName");
+
+        loginBtn.style.display = loggedIn ? "none" : "";
+        userMenu.style.display = loggedIn ? "flex" : "none";
+
+        if (loggedIn) {
+          const user =
+            JSON.parse(sessionStorage.getItem("sv_user") || "null") ||
+            MOCK_USER;
+          userName.textContent = user.name;
+        }
+      }
+
+      function doLogout() {
+        sessionStorage.removeItem("sv_logged_in");
+        sessionStorage.removeItem("sv_user");
+        renderAuthState();
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        renderAuthState();
+
+        // User dropdown toggle
+        const toggle = document.getElementById("userToggle");
+        if (toggle) {
+          toggle.addEventListener("click", function (e) {
+            e.stopPropagation();
+            document.getElementById("userMenu").classList.toggle("open");
+          });
+        }
+        document.addEventListener("click", function () {
+          const m = document.getElementById("userMenu");
+          if (m) m.classList.remove("open");
+        });
+
+        // Logout
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            doLogout();
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

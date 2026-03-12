@@ -1,0 +1,1226 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tra cứu học tập - Khoa CNTT - Đại học Thủy Lợi</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      /* ========== CSS VARIABLES ========== */
+      :root {
+        --primary-blue: #1a3a6b;
+        --accent-blue: #2563eb;
+        --light-blue: #dbeafe;
+        --text-dark: #1e293b;
+        --text-muted: #64748b;
+        --bg-light: #f8fafc;
+        --border: #e2e8f0;
+        --white: #ffffff;
+        --success: #16a34a;
+        --warning: #d97706;
+        --danger: #dc2626;
+        --grade-a: #16a34a;
+        --grade-b: #2563eb;
+        --grade-c: #d97706;
+        --grade-d: #dc2626;
+        --grade-f: #7f1d1d;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Open Sans", sans-serif;
+        background: var(--bg-light);
+        color: var(--text-dark);
+      }
+
+      /* ========== TOP BAR ========== */
+      .top-bar {
+        background: var(--primary-blue);
+        color: #cbd5e1;
+        font-size: 12.5px;
+        padding: 7px 0;
+      }
+      .top-bar .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .top-bar .contact-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .top-bar .separator {
+        color: #475569;
+        margin: 0 4px;
+      }
+      .top-bar .social-login {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .top-bar .social-login a {
+        color: #cbd5e1;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .top-bar .social-login a:hover {
+        color: #fff;
+      }
+      .top-bar .divider {
+        color: #475569;
+      }
+
+      /* User greeting */
+      .user-greeting {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 13px;
+      }
+      .user-greeting i {
+        color: #93c5fd;
+      }
+      .user-greeting .logout-link {
+        color: #94a3b8;
+        font-size: 11px;
+        text-decoration: none;
+        border: 1px solid #334155;
+        border-radius: 4px;
+        padding: 2px 8px;
+        margin-left: 6px;
+        transition: all 0.2s;
+      }
+      .user-greeting .logout-link:hover {
+        color: #fff;
+        border-color: #64748b;
+      }
+
+      /* ========== NAVBAR ========== */
+      .main-header {
+        background: var(--white);
+        border-bottom: 2px solid #e2e8f0;
+        padding: 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+      }
+      .main-header .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 72px;
+      }
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        gap: 12px;
+      }
+      .school-text .name {
+        font-family: "Montserrat", sans-serif;
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--primary-blue);
+        line-height: 1.2;
+      }
+      .school-text .sub {
+        font-size: 11.5px;
+        color: var(--text-muted);
+      }
+      .navbar-nav {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        list-style: none;
+      }
+      .nav-link {
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-dark);
+        transition: all 0.2s;
+      }
+      .nav-link:hover {
+        background: var(--light-blue);
+        color: var(--accent-blue);
+      }
+      .nav-item.active .nav-link {
+        background: var(--accent-blue);
+        color: #fff;
+        border-radius: 8px;
+      }
+
+      /* ========== BREADCRUMB ========== */
+      .breadcrumb-bar {
+        background: #fff;
+        border-bottom: 1px solid #f1f5f9;
+        padding: 10px 0;
+      }
+      .breadcrumb-bar .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        font-size: 13px;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .breadcrumb-bar a {
+        color: var(--accent-blue);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      /* ========== MAIN CONTENT ========== */
+      .tracuu-wrapper {
+        max-width: 1200px;
+        margin: 32px auto;
+        padding: 0 20px;
+      }
+
+      /* Page header */
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 24px;
+      }
+      .page-header h1 {
+        font-family: "Montserrat", sans-serif;
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--primary-blue);
+      }
+      .page-header .student-info {
+        font-size: 13.5px;
+        color: var(--text-muted);
+        margin-top: 4px;
+      }
+      .page-header .student-info strong {
+        color: var(--text-dark);
+      }
+
+      .btn-export {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--primary-blue);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.2s;
+      }
+      .btn-export:hover {
+        background: #112d56;
+      }
+
+      /* Tabs */
+      .tab-bar {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 0;
+      }
+      .tab-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border: none;
+        background: none;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+        border-radius: 6px 6px 0 0;
+        transition: all 0.2s;
+      }
+      .tab-btn:hover {
+        color: var(--accent-blue);
+        background: var(--light-blue);
+      }
+      .tab-btn.active {
+        color: var(--accent-blue);
+        border-bottom-color: var(--accent-blue);
+        background: #eff6ff;
+      }
+
+      /* Semester selector */
+      .semester-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+      .semester-bar select {
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        padding: 7px 14px;
+        font-size: 14px;
+        color: var(--text-dark);
+        font-family: "Open Sans", sans-serif;
+        background: #fff;
+        cursor: pointer;
+        outline: none;
+      }
+      .semester-bar select:focus {
+        border-color: var(--accent-blue);
+      }
+
+      /* ========== TIMETABLE TABLE ========== */
+      .card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        background: var(--primary-blue);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 13px 16px;
+        text-align: left;
+      }
+      tbody tr {
+        border-bottom: 1px solid var(--border);
+        transition: background 0.15s;
+      }
+      tbody tr:last-child {
+        border-bottom: none;
+      }
+      tbody tr:hover {
+        background: #f8fafc;
+      }
+      tbody td {
+        padding: 13px 16px;
+        font-size: 14px;
+        color: var(--text-dark);
+        vertical-align: middle;
+      }
+
+      /* Day badge */
+      .day-badge {
+        display: inline-block;
+        background: var(--accent-blue);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 20px;
+        white-space: nowrap;
+      }
+      .day-badge.thu2 {
+        background: #7c3aed;
+      }
+      .day-badge.thu3 {
+        background: #0891b2;
+      }
+      .day-badge.thu4 {
+        background: #16a34a;
+      }
+      .day-badge.thu5 {
+        background: #d97706;
+      }
+      .day-badge.thu6 {
+        background: #dc2626;
+      }
+      .day-badge.thu7 {
+        background: #be185d;
+      }
+
+      /* Grade badge */
+      .grade-badge {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 6px;
+        letter-spacing: 0.5px;
+      }
+      .grade-A {
+        background: #dcfce7;
+        color: var(--grade-a);
+      }
+      .grade-B {
+        background: #dbeafe;
+        color: var(--grade-b);
+      }
+      .grade-C {
+        background: #fef3c7;
+        color: var(--warning);
+      }
+      .grade-D {
+        background: #fee2e2;
+        color: var(--danger);
+      }
+      .grade-F {
+        background: #fca5a5;
+        color: var(--grade-f);
+      }
+
+      /* GPA summary */
+      .gpa-summary {
+        padding: 16px 20px;
+        background: linear-gradient(90deg, #eff6ff, #f8fafc);
+        border-top: 2px solid var(--light-blue);
+        font-size: 14px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .gpa-summary .gpa-val {
+        font-size: 20px;
+        font-weight: 800;
+        font-family: "Montserrat", sans-serif;
+        color: var(--accent-blue);
+      }
+
+      /* Tab panels */
+      .tab-panel {
+        display: none;
+      }
+      .tab-panel.active {
+        display: block;
+      }
+
+      /* Subject name highlight */
+      .subject-name {
+        font-weight: 700;
+        color: var(--primary-blue);
+      }
+      .room-tag {
+        font-size: 12px;
+        color: var(--text-muted);
+        background: #f1f5f9;
+        border-radius: 4px;
+        padding: 1px 7px;
+        margin-left: 4px;
+      }
+
+      /* ========== FOOTER ========== */
+      .main-footer {
+        background: #0f2647;
+        color: #94a3b8;
+        padding: 48px 0 0;
+        margin-top: 60px;
+      }
+      .main-footer .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .main-footer .row {
+        display: grid;
+        grid-template-columns: 5fr 4fr 3fr;
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+      .footer-title {
+        font-family: "Montserrat", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: #e2e8f0;
+        letter-spacing: 0.5px;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+      }
+      .school-name-footer {
+        color: #64748b;
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+      .footer-contact {
+        list-style: none;
+        font-size: 13.5px;
+      }
+      .footer-contact li {
+        margin-bottom: 8px;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .footer-contact i {
+        color: var(--accent-blue);
+        margin-top: 2px;
+      }
+      .footer-links {
+        list-style: none;
+      }
+      .footer-links li {
+        margin-bottom: 8px;
+      }
+      .footer-links a {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 13.5px;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: #fff;
+      }
+      .footer-social {
+        display: flex;
+        gap: 10px;
+      }
+      .footer-social a {
+        width: 38px;
+        height: 38px;
+        background: #1e3a5f;
+        color: #93c5fd;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .footer-social a:hover {
+        background: var(--accent-blue);
+        color: #fff;
+      }
+      .footer-bottom {
+        border-top: 1px solid #1e3a5f;
+        padding: 18px 0;
+        text-align: center;
+        font-size: 13px;
+        color: #475569;
+      }
+
+      /* ========== USER MENU DROPDOWN ========== */
+      .user-menu {
+        position: relative;
+      }
+      .user-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition: background 0.2s;
+      }
+      .user-toggle:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .user-toggle i {
+        color: #93c5fd;
+      }
+      .user-toggle .fa-chevron-down {
+        font-size: 10px;
+        color: #94a3b8;
+        transition: transform 0.2s;
+      }
+      .user-menu.open .fa-chevron-down {
+        transform: rotate(180deg);
+      }
+      .user-dropdown {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        min-width: 180px;
+        z-index: 200;
+        overflow: hidden;
+      }
+      .user-menu.open .user-dropdown {
+        display: block;
+      }
+      .user-dropdown a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 16px;
+        color: #1e293b;
+        text-decoration: none;
+        font-size: 13.5px;
+        font-weight: 600;
+        transition: background 0.15s;
+      }
+      .user-dropdown a:hover {
+        background: #f1f5f9;
+      }
+      .user-dropdown a i {
+        width: 16px;
+        text-align: center;
+      }
+      .dropdown-admin i {
+        color: #7c3aed;
+      }
+      .dropdown-logout i {
+        color: #dc2626;
+      }
+      .dropdown-logout {
+        color: #dc2626 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <div class="container">
+        <div class="contact-info">
+          <i class="fas fa-map-marker-alt"></i> 175 Tây Sơn, Đống Đa, Hà Nội
+          <span class="separator">|</span>
+          <i class="fas fa-phone-alt"></i> (024) 3852 2201
+        </div>
+        <div class="social-login">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <div class="divider">|</div>
+
+          <!-- Khi chưa đăng nhập: hiện link này -->
+          <a href="login.html" class="login-link" id="loginBtn">
+            <i class="fas fa-user-circle"></i> Đăng nhập
+          </a>
+
+          <!-- Khi đã đăng nhập: hiện user menu này (ẩn mặc định) -->
+          <div class="user-menu" id="userMenu" style="display: none">
+            <div class="user-toggle" id="userToggle">
+              <i class="fas fa-user-circle"></i>
+              <span id="userName">Phạm Văn Việt</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="user-dropdown">
+              <a href="#" class="dropdown-admin">
+                <i class="fas fa-shield-alt"></i> Trang quản trị
+              </a>
+              <a href="#" class="dropdown-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="main-header navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Logo_Dai_hoc_Thuy_loi.svg/1200px-Logo_Dai_hoc_Thuy_loi.svg.png"
+            alt="TLU Logo"
+          />
+          <div class="school-text ms-2">
+            <div class="name">KHOA CÔNG NGHỆ THÔNG TIN</div>
+            <div class="sub">Trường Đại học Thủy Lợi - TLU</div>
+          </div>
+        </a>
+        <div class="collapse navbar-collapse justify-content-end">
+          <ul class="navbar-nav align-items-center">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Đội ngũ giảng viên</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="tailieu.html">Tài liệu học tập</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="tracuu.html">Tra cứu học tập</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===== BREADCRUMB ===== -->
+    <div class="breadcrumb-bar">
+      <div class="container">
+        <a href="index.html">Trang chủ</a>
+        <i class="fas fa-chevron-right" style="font-size: 10px"></i>
+        <span>Tra cứu học tập</span>
+      </div>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <!-- ===== AUTH GATE (shown when not logged in) ===== -->
+    <div id="auth-gate" style="display: none">
+      <div
+        class="tracuu-wrapper"
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 320px;
+        "
+      >
+        <div
+          style="
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            padding: 52px 60px;
+            text-align: center;
+            max-width: 520px;
+            width: 100%;
+          "
+        >
+          <div style="margin-bottom: 20px">
+            <svg
+              width="64"
+              height="64"
+              viewBox="0 0 64 64"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="28" cy="22" r="13" fill="#cbd5e1" />
+              <path
+                d="M4 54c0-13.255 10.745-24 24-24"
+                stroke="#cbd5e1"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+              <rect
+                x="38"
+                y="38"
+                width="20"
+                height="16"
+                rx="3"
+                fill="#94a3b8"
+              />
+              <rect
+                x="44"
+                y="34"
+                width="8"
+                height="8"
+                rx="4"
+                fill="#64748b"
+                stroke="#fff"
+                stroke-width="2"
+              />
+              <rect x="45" y="44" width="2" height="4" rx="1" fill="#fff" />
+            </svg>
+          </div>
+          <h2
+            style="
+              font-family: &quot;Montserrat&quot;, sans-serif;
+              font-size: 20px;
+              font-weight: 800;
+              color: #1a3a6b;
+              margin-bottom: 10px;
+            "
+          >
+            Yêu cầu xác thực Cổng Sinh Viên
+          </h2>
+          <p style="color: #64748b; font-size: 14px; margin-bottom: 28px">
+            Vui lòng đăng nhập bằng tài khoản Sinh viên (@tlu.edu.vn) để xem
+            điểm và thời khóa biểu.
+          </p>
+          <button
+            onclick="doLogin()"
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              background: #1a3a6b;
+              color: #fff;
+              border: none;
+              border-radius: 8px;
+              padding: 12px 28px;
+              font-size: 14px;
+              font-weight: 700;
+              cursor: pointer;
+              font-family: &quot;Open Sans&quot;, sans-serif;
+              transition: background 0.2s;
+            "
+            onmouseover="this.style.background = '#112d56'"
+            onmouseout="this.style.background = '#1a3a6b'"
+          >
+            <i class="fas fa-sign-in-alt"></i> Đăng nhập Cổng SV
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MAIN CONTENT (shown when logged in) ===== -->
+    <div id="tracuu-content" style="display: none">
+      <div class="tracuu-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div>
+            <h1>Tra cứu học tập</h1>
+            <div class="student-info">
+              <!-- BE: inject thông tin sinh viên vào các span này -->
+              Sinh viên:
+              <strong id="sv-name">Phạm Văn Việt</strong> &nbsp;–&nbsp; MSV:
+              <strong id="sv-msv">123456789</strong> &nbsp;–&nbsp; Lớp:
+              <strong id="sv-lop">6MTPM</strong>
+            </div>
+          </div>
+          <button class="btn-export" onclick="window.print()">
+            <i class="fas fa-file-pdf"></i> Xuất File (PDF)
+          </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="switchTab('tkb', this)">
+            <i class="fas fa-calendar-alt"></i> Thời khóa biểu
+          </button>
+          <button class="tab-btn" onclick="switchTab('diem', this)">
+            <i class="fas fa-star"></i> Xem điểm
+          </button>
+        </div>
+
+        <!-- ===== TAB: THỜI KHÓA BIỂU ===== -->
+        <div id="panel-tkb" class="tab-panel active">
+          <!-- Semester selector -->
+          <div class="semester-bar">
+            <i class="fas fa-calendar" style="color: var(--accent-blue)"></i>
+            Chọn học kỳ:
+            <!--
+            BE: render <option> từ API danh sách học kỳ
+            selected value = học kỳ hiện tại
+            onChange gọi API lấy TKB mới
+          -->
+            <select id="semester-select-tkb" onchange="onSemesterChange('tkb')">
+              <option value="HK1_2025_2026" selected>Học kỳ 1 2025-2026</option>
+              <option value="HK2_2024_2025">Học kỳ 2 2024-2025</option>
+              <option value="HK1_2024_2025">Học kỳ 1 2024-2025</option>
+            </select>
+          </div>
+
+          <div class="card">
+            <table id="tkb-table">
+              <thead>
+                <tr>
+                  <th>Thứ</th>
+                  <th>Tiết học</th>
+                  <th>Tên học phần</th>
+                  <th>Phòng học</th>
+                  <th>Giảng viên</th>
+                </tr>
+              </thead>
+              <!--
+              ====================================================
+              BE: Render các <tr> vào trong <tbody id="tkb-body">
+              Mỗi môn là 1 hàng với cấu trúc bên dưới.
+              Dữ liệu mẫu JSON mà BE nên trả về:
+              {
+                "thoiKhoaBieu": [
+                  {
+                    "thu": "Thứ 2",
+                    "thuCode": "thu2",
+                    "tietHoc": "1-3 (07:00-09:15)",
+                    "tenHocPhan": "Lập trình Web (Thực hành)",
+                    "phongHoc": "Phòng Máy 3 - Toà C",
+                    "giangVien": "ThS. Nguyễn Văn A"
+                  }
+                ]
+              }
+              ====================================================
+            -->
+              <tbody id="tkb-body">
+                <tr>
+                  <td><span class="day-badge thu2">Thứ 2</span></td>
+                  <td>1-3 (07:00 - 09:15)</td>
+                  <td>
+                    <span class="subject-name">Lập trình Web (Thực hành)</span>
+                  </td>
+                  <td>Phòng Máy 3 - Toà C</td>
+                  <td>ThS. Nguyễn Văn A</td>
+                </tr>
+                <tr>
+                  <td><span class="day-badge thu4">Thứ 4</span></td>
+                  <td>4-6 (09:35 - 12:00)</td>
+                  <td>
+                    <span class="subject-name">Phát triển dự án phần mềm</span>
+                  </td>
+                  <td>Phòng 225 - Toà B1</td>
+                  <td>TS. Cù Việt Dũng</td>
+                </tr>
+                <tr>
+                  <td><span class="day-badge thu6">Thứ 6</span></td>
+                  <td>7-9 (13:00 - 15:25)</td>
+                  <td><span class="subject-name">An toàn thông tin</span></td>
+                  <td>Phòng 301 - Toà C</td>
+                  <td>TS. Phạm Văn B</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ===== TAB: XEM ĐIỂM ===== -->
+        <div id="panel-diem" class="tab-panel">
+          <!-- Semester selector -->
+          <div class="semester-bar">
+            <i class="fas fa-calendar" style="color: var(--accent-blue)"></i>
+            Chọn học kỳ:
+            <select
+              id="semester-select-diem"
+              onchange="onSemesterChange('diem')"
+            >
+              <option value="HK1_2025_2026" selected>Học kỳ 1 2025-2026</option>
+              <option value="HK2_2024_2025">Học kỳ 2 2024-2025</option>
+              <option value="HK1_2024_2025">Học kỳ 1 2024-2025</option>
+            </select>
+          </div>
+
+          <div class="card">
+            <table id="diem-table">
+              <thead>
+                <tr>
+                  <th>Mã HP</th>
+                  <th>Tên học phần</th>
+                  <th>Số TC</th>
+                  <th>QT</th>
+                  <th>THI</th>
+                  <th>Tổng kết</th>
+                  <th>Điểm chữ</th>
+                </tr>
+              </thead>
+              <!--
+              ====================================================
+              BE: Render các <tr> vào trong <tbody id="diem-body">
+              JSON mà BE nên trả về:
+              {
+                "diemHocKy": [
+                  {
+                    "maHP": "CSE481",
+                    "tenHocPhan": "Phát triển dự án phần mềm",
+                    "soTinChi": 3,
+                    "diemQT": 9.0,
+                    "diemThi": 7.5,
+                    "tongKet": 8.7,
+                    "diemChu": "A"
+                  }
+                ],
+                "gpa": 3.45
+              }
+              ====================================================
+            -->
+              <tbody id="diem-body">
+                <tr>
+                  <td>CSE481</td>
+                  <td>
+                    <span class="subject-name">Phát triển dự án phần mềm</span>
+                  </td>
+                  <td>3</td>
+                  <td>9.0</td>
+                  <td>7.5</td>
+                  <td>8.7</td>
+                  <td><span class="grade-badge grade-A">A</span></td>
+                </tr>
+                <tr>
+                  <td>CSE305</td>
+                  <td><span class="subject-name">Lập trình Web</span></td>
+                  <td>3</td>
+                  <td>8.0</td>
+                  <td>7.0</td>
+                  <td>7.4</td>
+                  <td><span class="grade-badge grade-B">B</span></td>
+                </tr>
+                <tr>
+                  <td>MATH121</td>
+                  <td><span class="subject-name">Đại số tuyến tính</span></td>
+                  <td>3</td>
+                  <td>6.5</td>
+                  <td>5.0</td>
+                  <td>5.6</td>
+                  <td><span class="grade-badge grade-C">C</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- GPA Summary -->
+            <!-- BE: thay data-gpa và nội dung text với GPA thực tế -->
+            <div class="gpa-summary" id="gpa-summary">
+              <i
+                class="fas fa-chart-line"
+                style="color: var(--accent-blue)"
+              ></i>
+              Điểm trung bình học kỳ (GPA):
+              <span class="gpa-val" id="gpa-val">3.45</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end .tracuu-wrapper -->
+    </div>
+    <!-- end #tracuu-content -->
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="main-footer">
+      <div class="container">
+        <div class="row">
+          <div>
+            <h5 class="footer-title">KHOA CÔNG NGHỆ THÔNG TIN</h5>
+            <p class="school-name-footer">Trường Đại học Thủy Lợi - TLU</p>
+            <ul class="footer-contact">
+              <li>
+                <i class="fas fa-map-marker-alt"></i> 175 Tây Sơn, Đống Đa, Hà
+                Nội
+              </li>
+              <li>
+                <i class="fas fa-envelope"></i>
+                <a
+                  href="/cdn-cgi/l/email-protection"
+                  class="__cf_email__"
+                  data-cfemail="3b4d4b5058554f4f7b4f574e155e5f4e154d55"
+                  >[email&#160;protected]</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="footer-title">Liên kết hữu ích</h5>
+            <ul class="footer-links">
+              <li><a href="#">Giới thiệu Khoa</a></li>
+              <li><a href="#">Tuyển sinh 2026</a></li>
+              <li><a href="#">Đội ngũ Giảng viên</a></li>
+              <li><a href="#">Quy chế Đào tạo</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="footer-title">Kết nối với chúng tôi</h5>
+            <div class="footer-social">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            © 2026 Faculty of Information Technology - Thuy Loi University.
+            Designed with ❤️ by Group 05.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ===== JAVASCRIPT ===== -->
+
+    <!-- ===== AUTHENTICATION & STATE LOGIC ===== -->
+    <script>
+      // ============================================================
+      // AUTH STATE MANAGEMENT
+      // Simulates: isLoggedIn based on sessionStorage
+      // In production: BE sets a session cookie / JWT;
+      // page is server-rendered only for authenticated users.
+      // ============================================================
+
+      // --- Mock student data (replace with BE injection) ---
+      const MOCK_USER = {
+        name: "Phạm Văn Việt",
+        msv: "123456789",
+        lop: "65KTPM",
+      };
+
+      // --- Check login state ---
+      function isLoggedIn() {
+        return sessionStorage.getItem("sv_logged_in") === "1";
+      }
+
+      // --- Show/hide sections based on auth state ---
+      function renderAuthState() {
+        const loggedIn = isLoggedIn();
+
+        // Topbar: toggle login link vs user menu
+        document.getElementById("loginBtn").style.display = loggedIn
+          ? "none"
+          : "";
+        document.getElementById("userMenu").style.display = loggedIn
+          ? ""
+          : "none";
+
+        if (loggedIn) {
+          const user =
+            JSON.parse(sessionStorage.getItem("sv_user") || "null") ||
+            MOCK_USER;
+          // Update topbar username
+          document.getElementById("userName").textContent = user.name;
+          // Update student info in page header
+          document.getElementById("sv-name").textContent = user.name;
+          document.getElementById("sv-msv").textContent = user.msv;
+          document.getElementById("sv-lop").textContent = user.lop;
+        }
+
+        // Show auth gate OR main content
+        document.getElementById("auth-gate").style.display = loggedIn
+          ? "none"
+          : "";
+        document.getElementById("tracuu-content").style.display = loggedIn
+          ? ""
+          : "none";
+      }
+
+      // --- Login simulation (called from auth gate button) ---
+      function doLogin() {
+        // In production: redirect to SSO / OAuth login page
+        // Here: simulate successful login for demo
+        sessionStorage.setItem("sv_logged_in", "1");
+        sessionStorage.setItem("sv_user", JSON.stringify(MOCK_USER));
+        renderAuthState();
+      }
+
+      // --- Logout ---
+      function doLogout() {
+        sessionStorage.removeItem("sv_logged_in");
+        sessionStorage.removeItem("sv_user");
+        renderAuthState();
+      }
+
+      // --- Tab switcher ---
+      function switchTab(tab, btn) {
+        document
+          .querySelectorAll(".tab-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-panel")
+          .forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("panel-" + tab).classList.add("active");
+      }
+
+      // --- Semester change handler ---
+      function onSemesterChange(type) {
+        const hocKy = document.getElementById("semester-select-" + type).value;
+        if (type === "tkb") loadTKB(hocKy);
+        else loadDiem(hocKy);
+      }
+
+      // --- Load TKB (stub — replace with real fetch) ---
+      function loadTKB(hocKy) {
+        console.log("[FE] loadTKB called, hocKy =", hocKy);
+        /*
+         * fetch(`/api/tracuu/tkb?hocKy=${hocKy}`)
+         *   .then(r => r.json())
+         *   .then(data => renderTKB(data.thoiKhoaBieu));
+         */
+      }
+
+      function renderTKB(rows) {
+        const tbody = document.getElementById("tkb-body");
+        tbody.innerHTML = rows
+          .map(
+            (r) => `
+          <tr>
+            <td><span class="day-badge ${r.thuCode}">${r.thu}</span></td>
+            <td>${r.tietHoc}</td>
+            <td><span class="subject-name">${r.tenHocPhan}</span></td>
+            <td>${r.phongHoc}</td>
+            <td>${r.giangVien}</td>
+          </tr>`,
+          )
+          .join("");
+      }
+
+      // --- Load Điểm (stub — replace with real fetch) ---
+      function loadDiem(hocKy) {
+        console.log("[FE] loadDiem called, hocKy =", hocKy);
+        /*
+         * fetch(`/api/tracuu/diem?hocKy=${hocKy}`)
+         *   .then(r => r.json())
+         *   .then(data => {
+         *     renderDiem(data.diemHocKy);
+         *     document.getElementById('gpa-val').textContent = data.gpa.toFixed(2);
+         *   });
+         */
+      }
+
+      function renderDiem(rows) {
+        const gradeClass = {
+          A: "grade-A",
+          B: "grade-B",
+          C: "grade-C",
+          D: "grade-D",
+          F: "grade-F",
+        };
+        const tbody = document.getElementById("diem-body");
+        tbody.innerHTML = rows
+          .map(
+            (r) => `
+          <tr>
+            <td>${r.maHP}</td>
+            <td><span class="subject-name">${r.tenHocPhan}</span></td>
+            <td>${r.soTinChi}</td>
+            <td>${r.diemQT}</td>
+            <td>${r.diemThi}</td>
+            <td>${r.tongKet}</td>
+            <td><span class="grade-badge ${gradeClass[r.diemChu] || ""}">${r.diemChu}</span></td>
+          </tr>`,
+          )
+          .join("");
+      }
+
+      // --- User dropdown toggle ---
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggle = document.getElementById("userToggle");
+        if (toggle) {
+          toggle.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const menu = document.getElementById("userMenu");
+            menu.classList.toggle("open");
+          });
+        }
+        document.addEventListener("click", function () {
+          const menu = document.getElementById("userMenu");
+          if (menu) menu.classList.remove("open");
+        });
+
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            doLogout();
+          });
+        }
+
+        // Initial render
+        renderAuthState();
+      });
+    </script>
+  </body>
+</html>

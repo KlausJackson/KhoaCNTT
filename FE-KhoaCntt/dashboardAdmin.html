@@ -1,0 +1,1465 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Đại học Thủy lợi</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ══════════════════════════════
+       RESET & BASE
+    ══════════════════════════════ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --blue-dark: #0f2554;
+        --blue-mid: #1a3a7c;
+        --blue-acc: #2563eb;
+        --blue-light: #dbeafe;
+        --red: #dc2626;
+        --green: #16a34a;
+        --orange: #d97706;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-400: #94a3b8;
+        --gray-600: #475569;
+        --gray-800: #1e293b;
+        --white: #ffffff;
+        --sidebar-w: 260px;
+        --radius: 10px;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+        --transition: 0.2s ease;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-size: 14px;
+        color: var(--gray-800);
+        background: var(--gray-50);
+        display: flex;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button {
+        cursor: pointer;
+        font-family: inherit;
+      }
+      select {
+        font-family: inherit;
+      }
+
+      /* ══════════════════════════════
+       LAYOUT SHELL
+    ══════════════════════════════ */
+      .shell {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      /* ══════════════════════════════
+       SIDEBAR
+    ══════════════════════════════ */
+      .sidebar {
+        width: var(--sidebar-w);
+        min-height: 100vh;
+        background: linear-gradient(
+          175deg,
+          var(--blue-dark) 0%,
+          var(--blue-mid) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+
+      .sidebar-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 24px 20px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .sidebar-logo-icon {
+        width: 42px;
+        height: 42px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .sidebar-logo-text h2 {
+        color: var(--white);
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+      .sidebar-logo-text p {
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 11px;
+        margin-top: 2px;
+      }
+
+      .sidebar-nav {
+        padding: 16px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 13.5px;
+        font-weight: 500;
+        cursor: pointer;
+        transition:
+          background var(--transition),
+          color var(--transition);
+      }
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--white);
+      }
+      .nav-item.active {
+        background: rgba(255, 255, 255, 0.16);
+        color: var(--white);
+      }
+      .nav-item i {
+        width: 18px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      /* ══════════════════════════════
+       RIGHT SIDE
+    ══════════════════════════════ */
+      .right-side {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      /* ── Top Header ── */
+      .top-header {
+        background: var(--white);
+        border-bottom: 1px solid var(--gray-200);
+        padding: 0 28px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .header-label {
+        font-size: 13px;
+        color: var(--gray-600);
+      }
+      .role-pill {
+        background: var(--blue-light);
+        color: var(--blue-acc);
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .hdr-name {
+        font-size: 13.5px;
+        font-weight: 600;
+        text-align: right;
+      }
+      .hdr-role {
+        font-size: 11.5px;
+        color: var(--gray-400);
+        text-align: right;
+      }
+      .hdr-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--blue-acc);
+        color: var(--white);
+        font-size: 13px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* ── Main Content ── */
+      .main-content {
+        padding: 28px;
+        flex: 1;
+      }
+
+      .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .page-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--gray-800);
+      }
+
+      .add-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--blue-acc);
+        color: var(--white);
+        border: none;
+        border-radius: var(--radius);
+        padding: 10px 18px;
+        font-size: 13.5px;
+        font-weight: 600;
+        transition:
+          background var(--transition),
+          transform var(--transition),
+          box-shadow var(--transition);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+      }
+      .add-btn:hover {
+        background: #1d4ed8;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        transform: translateY(-1px);
+      }
+
+      /* ── Card / Table ── */
+      .card {
+        background: var(--white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--gray-200);
+        overflow: hidden;
+      }
+
+      .tbl {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .tbl thead {
+        background: var(--gray-50);
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .tbl th {
+        padding: 12px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--gray-600);
+        text-align: left;
+        white-space: nowrap;
+      }
+      .tbl td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--gray-100);
+        vertical-align: middle;
+      }
+      .tbl tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .tbl tbody tr:hover {
+        background: var(--gray-50);
+      }
+
+      .td-name {
+        font-weight: 600;
+        color: var(--gray-800);
+      }
+      .td-user {
+        font-family: monospace;
+        font-size: 13px;
+        color: var(--gray-600);
+        background: var(--gray-100);
+        padding: 2px 8px;
+        border-radius: 5px;
+      }
+      .td-email {
+        color: var(--blue-acc);
+        font-size: 13px;
+      }
+
+      /* Badges */
+      .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .badge-root {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+      }
+      .badge-manager {
+        background: #fff7ed;
+        color: #d97706;
+        border: 1px solid #fed7aa;
+      }
+      .badge-editor {
+        background: #f0fdf4;
+        color: #16a34a;
+        border: 1px solid #bbf7d0;
+      }
+
+      /* Status dots */
+      .status-dot {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .status-dot::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .status-active {
+        color: var(--green);
+      }
+      .status-active::before {
+        background: var(--green);
+        box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+      }
+      .status-inactive {
+        color: var(--gray-400);
+      }
+      .status-inactive::before {
+        background: var(--gray-400);
+      }
+
+      /* Action buttons */
+      .actions {
+        display: flex;
+        gap: 6px;
+      }
+      .action-btn {
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--gray-200);
+        border-radius: 7px;
+        background: var(--white);
+        color: var(--gray-600);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        transition:
+          background var(--transition),
+          color var(--transition),
+          border-color var(--transition);
+      }
+      .action-btn:hover {
+        background: var(--blue-light);
+        color: var(--blue-acc);
+        border-color: #bfdbfe;
+      }
+      .action-btn[title="Xóa"]:hover {
+        background: #fef2f2;
+        color: var(--red);
+        border-color: #fecaca;
+      }
+      .action-btn.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+      .action-btn[title="Vô hiệu hóa"]:hover {
+        background: #fff7ed;
+        color: #d97706;
+        border-color: #fed7aa;
+      }
+      .action-btn[title="Kích hoạt"]:hover {
+        background: #f0fdf4;
+        color: var(--green);
+        border-color: #bbf7d0;
+      }
+
+      /* ── Status Confirm Modal ── */
+      .status-modal-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        margin: 0 auto 20px;
+      }
+      .status-modal-icon.disable {
+        background: #fff7ed;
+        color: #f59e0b;
+      }
+      .status-modal-icon.delete {
+        background: #fef2f2;
+        color: #dc2626;
+      }
+      .btn-delete {
+        padding: 11px 28px;
+        background: #dc2626;
+        border: none;
+        border-radius: 8px;
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition:
+          background var(--transition),
+          box-shadow var(--transition);
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+      }
+      .btn-delete:hover {
+        background: #b91c1c;
+        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
+      }
+      .status-modal-note.delete-note {
+        color: var(--red);
+      }
+
+      .status-modal-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--gray-800);
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .status-modal-desc {
+        font-size: 13.5px;
+        color: var(--gray-600);
+        text-align: center;
+        line-height: 1.6;
+        margin-bottom: 10px;
+      }
+      .status-modal-note {
+        font-size: 13px;
+        color: #d97706;
+        text-align: center;
+        line-height: 1.6;
+        margin-bottom: 4px;
+      }
+      .status-modal-note.enable-note {
+        color: var(--green);
+      }
+      .modal.status-modal {
+        width: 420px;
+        text-align: center;
+        padding: 32px 28px 24px;
+      }
+      .btn-disable {
+        padding: 11px 28px;
+        background: #f59e0b;
+        border: none;
+        border-radius: 8px;
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition:
+          background var(--transition),
+          box-shadow var(--transition);
+        box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+      }
+      .btn-disable:hover {
+        background: #d97706;
+        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+      }
+      .btn-enable {
+        padding: 11px 28px;
+        background: #16a34a;
+        border: none;
+        border-radius: 8px;
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition:
+          background var(--transition),
+          box-shadow var(--transition);
+        box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+      }
+      .btn-enable:hover {
+        background: #15803d;
+        box-shadow: 0 4px 14px rgba(22, 163, 74, 0.4);
+      }
+      .modal-footer.center {
+        justify-content: center;
+        gap: 12px;
+      }
+
+      /* ══════════════════════════════
+       MODAL
+    ══════════════════════════════ */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 37, 84, 0.45);
+        backdrop-filter: blur(3px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal {
+        background: var(--white);
+        border-radius: 14px;
+        padding: 28px;
+        width: 540px;
+        max-width: 95vw;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        transform: translateY(12px) scale(0.98);
+        transition: transform 0.25s ease;
+      }
+      .modal-overlay.active .modal {
+        transform: translateY(0) scale(1);
+      }
+      .modal.small {
+        width: 360px;
+      }
+
+      .modal h2 {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--gray-800);
+        margin-bottom: 20px;
+      }
+
+      /* Alert banner */
+      .alert-banner {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 10px 14px;
+        color: var(--red);
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 16px;
+      }
+      .alert-banner.visible {
+        display: flex;
+      }
+
+      /* Form */
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gray-800);
+        margin-bottom: 6px;
+      }
+      .required {
+        color: var(--red);
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 9px 13px;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 8px;
+        font-size: 13.5px;
+        color: var(--gray-800);
+        background: var(--white);
+        outline: none;
+        transition:
+          border-color var(--transition),
+          box-shadow var(--transition);
+      }
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: var(--blue-acc);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+      }
+      .form-group input.error {
+        border-color: var(--red);
+      }
+      .form-group input.error:focus {
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+      }
+
+      .field-error {
+        font-size: 12px;
+        color: var(--red);
+        margin-top: 5px;
+        display: none;
+      }
+      .field-error.visible {
+        display: block;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .perm-label {
+        font-size: 13.5px;
+        color: var(--gray-600);
+        margin-bottom: 12px;
+      }
+
+      /* Modal footer */
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 24px;
+      }
+      .btn-cancel {
+        padding: 9px 20px;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 8px;
+        background: var(--white);
+        color: var(--gray-600);
+        font-size: 13.5px;
+        font-weight: 600;
+        transition:
+          background var(--transition),
+          border-color var(--transition);
+      }
+      .btn-cancel:hover {
+        background: var(--gray-100);
+        border-color: var(--gray-300);
+      }
+
+      .btn-primary {
+        padding: 9px 22px;
+        background: var(--blue-acc);
+        border: none;
+        border-radius: 8px;
+        color: var(--white);
+        font-size: 13.5px;
+        font-weight: 600;
+        transition:
+          background var(--transition),
+          box-shadow var(--transition);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+      }
+      .btn-primary:hover {
+        background: #1d4ed8;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <!-- ══════════════ SIDEBAR ══════════════ -->
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <i class="fas fa-university"></i>
+          </div>
+          <div class="sidebar-logo-text">
+            <h2>Đại học Thủy lợi</h2>
+            <p>Admin Dashboard</p>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <div class="nav-item active">
+            <i class="fas fa-user-cog"></i>
+            <span>Tài khoản quản trị</span>
+          </div>
+          <div class="nav-item">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>Giảng viên</span>
+          </div>
+          <div class="nav-item">
+            <i class="fas fa-newspaper"></i>
+            <span>Tin tức &amp; Sự kiện</span>
+          </div>
+          <div class="nav-item">
+            <i class="fas fa-folder"></i>
+            <span>Tài liệu</span>
+          </div>
+          <div class="nav-item">
+            <i class="fas fa-chart-bar"></i>
+            <span>Báo cáo &amp; Thống kê</span>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- ══════════════ RIGHT SIDE ══════════════ -->
+      <div class="right-side">
+        <!-- TOP HEADER -->
+        <header class="top-header">
+          <div class="header-left">
+            <span class="header-label">Demo Vai trò:</span>
+            <span class="role-pill">Root Admin (Cấp 1)</span>
+          </div>
+          <div class="header-right">
+            <div class="hdr-user-info">
+              <div class="hdr-name">Phạm Văn Việt</div>
+              <div class="hdr-role">Root Admin</div>
+            </div>
+            <div class="hdr-avatar">PV</div>
+          </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+          <div class="page-header">
+            <h1 class="page-title">Quản lý Tài khoản Quản trị viên</h1>
+            <button class="add-btn" id="btnAdd">
+              <i class="fas fa-plus"></i>
+              Thêm tài khoản quản trị viên
+            </button>
+          </div>
+
+          <div class="card">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>Tên người dùng</th>
+                  <th>Tên đăng nhập</th>
+                  <th>Email</th>
+                  <th>Cấp độ quản trị</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody">
+                <!-- Row 1: Root Admin -->
+                <tr>
+                  <td><span class="td-name">Phạm Văn Việt</span></td>
+                  <td><span class="td-user">root_admin</span></td>
+                  <td><span class="td-email">viet.pv@tlu.edu.vn</span></td>
+                  <td><span class="badge badge-root">Cấp 1 (Root)</span></td>
+                  <td>
+                    <span class="status-dot status-active">Đang hoạt động</span>
+                  </td>
+                  <td>
+                    <div class="actions">
+                      <button
+                        class="action-btn disabled"
+                        title="Không thể chỉnh sửa Root"
+                      >
+                        <i class="fas fa-history"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 2: Manager -->
+                <tr>
+                  <td><span class="td-name">Nguyễn Thị Manager</span></td>
+                  <td><span class="td-user">manager_01</span></td>
+                  <td><span class="td-email">manager@tlu.edu.vn</span></td>
+                  <td>
+                    <span class="badge badge-manager">Cấp 2 (Manager)</span>
+                  </td>
+                  <td>
+                    <span class="status-dot status-active">Đang hoạt động</span>
+                  </td>
+                  <td>
+                    <div class="actions">
+                      <button
+                        class="action-btn"
+                        title="Phân quyền"
+                        onclick="openModal('permModal')"
+                      >
+                        <i class="fas fa-user-shield"></i>
+                      </button>
+                      <button
+                        class="action-btn"
+                        title="Vô hiệu hóa"
+                        onclick="
+                          openStatusModal(this, 'disable', 'Nguyễn Thị Manager')
+                        "
+                      >
+                        <i class="fas fa-ban"></i>
+                      </button>
+                      <button class="action-btn" title="Đặt lại mật khẩu">
+                        <i class="fas fa-lock"></i>
+                      </button>
+                      <button
+                        class="action-btn"
+                        title="Xóa"
+                        onclick="openDeleteModal('Nguyễn Thị Manager')"
+                      >
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 3: Editor -->
+                <tr>
+                  <td><span class="td-name">Trần Văn Editor</span></td>
+                  <td><span class="td-user">editor_01</span></td>
+                  <td><span class="td-email">editor@tlu.edu.vn</span></td>
+                  <td>
+                    <span class="badge badge-editor">Cấp 3 (Editor)</span>
+                  </td>
+                  <td>
+                    <span class="status-dot status-inactive"
+                      >Bị vô hiệu hóa</span
+                    >
+                  </td>
+                  <td>
+                    <div class="actions">
+                      <button
+                        class="action-btn"
+                        title="Phân quyền"
+                        onclick="openModal('permModal')"
+                      >
+                        <i class="fas fa-user-shield"></i>
+                      </button>
+                      <button
+                        class="action-btn"
+                        title="Kích hoạt"
+                        onclick="
+                          openStatusModal(this, 'enable', 'Trần Văn Editor')
+                        "
+                      >
+                        <i class="fas fa-check-circle"></i>
+                      </button>
+                      <button class="action-btn" title="Đặt lại mật khẩu">
+                        <i class="fas fa-lock"></i>
+                      </button>
+                      <button
+                        class="action-btn"
+                        title="Xóa"
+                        onclick="openDeleteModal('Trần Văn Editor')"
+                      >
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ══════════ MODAL: THÊM TÀI KHOẢN ══════════ -->
+    <div class="modal-overlay" id="addModal">
+      <div class="modal">
+        <h2>Thêm tài khoản quản trị viên</h2>
+
+        <div class="alert-banner" id="addAlertBanner">
+          <i class="fas fa-exclamation-circle"></i>
+          <span>Không thể kết nối đến máy chủ, vui lòng thử lại sau.</span>
+        </div>
+
+        <div class="form-group">
+          <label>Tên người dùng <span class="required">*</span></label>
+          <input type="text" id="addFullName" placeholder="VD: Nguyễn Văn A" />
+          <div class="field-error" id="fullNameError"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tên đăng nhập <span class="required">*</span></label>
+            <input type="text" id="addUsername" placeholder="vd: admin_new" />
+            <div class="field-error" id="usernameError"></div>
+          </div>
+          <div class="form-group">
+            <label>Mật khẩu <span class="required">*</span></label>
+            <input type="password" id="addPassword" placeholder="••••••" />
+            <div class="field-error" id="passwordError"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email <span class="required">*</span></label>
+          <input type="text" id="addEmail" placeholder="email@tlu.edu.vn" />
+          <div class="field-error" id="emailError"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-cancel" onclick="closeModal('addModal')">
+            Hủy
+          </button>
+          <button class="btn-primary" onclick="validateAddForm()">
+            Tạo tài khoản
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ MODAL: PHÂN QUYỀN ══════════ -->
+    <div class="modal-overlay" id="permModal">
+      <div class="modal small">
+        <h2>Phân quyền tài khoản</h2>
+        <p class="perm-label">Chọn cấp độ cho tài khoản này:</p>
+        <div class="form-group">
+          <select id="permSelect">
+            <option>Cấp 2 (Manager)</option>
+            <option selected>Cấp 3 (Editor)</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" onclick="closeModal('permModal')">
+            Hủy
+          </button>
+          <button class="btn-primary" onclick="closeModal('permModal')">
+            Xác nhận
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ MODAL: XÁC NHẬN XÓA TÀI KHOẢN ══════════ -->
+    <div class="modal-overlay" id="deleteModal">
+      <div class="modal status-modal">
+        <div class="status-modal-icon delete">
+          <i class="fas fa-user-times"></i>
+        </div>
+        <div class="status-modal-title">Xác nhận xóa tài khoản</div>
+        <div class="status-modal-desc">
+          Bạn có chắc chắn muốn xóa tài khoản quản trị viên<br />
+          <strong id="deleteTargetName"></strong> không?
+        </div>
+        <div class="status-modal-note delete-note">
+          * Hành động này sẽ thu hồi toàn bộ quyền hạn và đóng các phiên<br />làm
+          việc hiện tại của tài khoản này.
+        </div>
+        <div class="modal-footer center" style="margin-top: 24px">
+          <button
+            class="btn-cancel"
+            onclick="closeModal('deleteModal')"
+            style="padding: 11px 28px"
+          >
+            Hủy bỏ
+          </button>
+          <button class="btn-delete" onclick="confirmDelete()">
+            <i class="fas fa-trash"></i> Xóa tài khoản
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ MODAL: XÁC NHẬN VÔ HIỆU HÓA ══════════ -->
+    <div class="modal-overlay" id="disableModal">
+      <div class="modal status-modal">
+        <div class="status-modal-icon disable">
+          <i class="fas fa-user-lock"></i>
+        </div>
+        <div class="status-modal-title">Xác nhận vô hiệu hóa</div>
+        <div class="status-modal-desc">
+          Bạn có chắc chắn muốn vô hiệu hóa tài khoản quản trị<br />
+          viên <strong id="disableTargetName"></strong> không?
+        </div>
+        <div class="status-modal-note">
+          * Tài khoản này sẽ bị chặn đăng nhập và đóng các phiên làm việc<br />hiện
+          tại, nhưng dữ liệu không bị mất.
+        </div>
+        <div class="modal-footer center" style="margin-top: 24px">
+          <button
+            class="btn-cancel"
+            onclick="closeModal('disableModal')"
+            style="padding: 11px 28px"
+          >
+            Hủy bỏ
+          </button>
+          <button class="btn-disable" onclick="confirmStatusChange('disable')">
+            <i class="fas fa-lock"></i> Vô hiệu hóa
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ MODAL: XÁC NHẬN KÍCH HOẠT ══════════ -->
+    <div class="modal-overlay" id="enableModal">
+      <div class="modal status-modal">
+        <div class="status-modal-icon enable">
+          <i class="fas fa-user-check"></i>
+        </div>
+        <div class="status-modal-title">Xác nhận kích hoạt</div>
+        <div class="status-modal-desc">
+          Bạn có chắc chắn muốn kích hoạt lại tài khoản quản trị<br />
+          viên <strong id="enableTargetName"></strong> không?
+        </div>
+        <div class="status-modal-note enable-note">
+          * Tài khoản sẽ được phép đăng nhập trở lại sau khi kích hoạt.
+        </div>
+        <div class="modal-footer center" style="margin-top: 24px">
+          <button
+            class="btn-cancel"
+            onclick="closeModal('enableModal')"
+            style="padding: 11px 28px"
+          >
+            Hủy bỏ
+          </button>
+          <button class="btn-enable" onclick="confirmStatusChange('enable')">
+            <i class="fas fa-check-circle"></i> Kích hoạt
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ JAVASCRIPT ══════════ -->
+    <script>
+      /* ─────────────────────────────────────────
+     CẤU HÌNH — BE chỉ cần thay đổi phần này
+  ───────────────────────────────────────── */
+      const API_BASE = "/api"; // Đổi thành URL gốc của BE
+      const EXISTING_USERNAMES = []; // Để trống — sẽ được check qua API thật
+
+      /* ─────────────────────────────────────────
+     MODAL HELPERS
+  ───────────────────────────────────────── */
+      function openModal(id) {
+        document.getElementById(id).classList.add("active");
+      }
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("active");
+        if (id === "addModal") resetAddForm();
+      }
+
+      // Đóng khi click ra ngoài modal
+      document.querySelectorAll(".modal-overlay").forEach((overlay) => {
+        overlay.addEventListener("click", (e) => {
+          if (e.target === overlay) closeModal(overlay.id);
+        });
+      });
+
+      document
+        .getElementById("btnAdd")
+        .addEventListener("click", () => openModal("addModal"));
+
+      /* ─────────────────────────────────────────
+     FORM FIELD HELPERS
+  ───────────────────────────────────────── */
+      const errMap = {
+        addFullName: "fullNameError",
+        addUsername: "usernameError",
+        addPassword: "passwordError",
+        addEmail: "emailError",
+      };
+
+      function setError(inputId, errorId, msg) {
+        const input = document.getElementById(inputId);
+        const err = document.getElementById(errorId);
+        input.classList.add("error");
+        err.textContent = msg;
+        err.classList.add("visible");
+      }
+
+      function clearError(inputId, errorId) {
+        document.getElementById(inputId).classList.remove("error");
+        document.getElementById(errorId).classList.remove("visible");
+      }
+
+      function getVal(id) {
+        return document.getElementById(id).value.trim();
+      }
+
+      function resetAddForm() {
+        Object.keys(errMap).forEach((id) => {
+          document.getElementById(id).value = "";
+          clearError(id, errMap[id]);
+        });
+        document.getElementById("addAlertBanner").classList.remove("visible");
+      }
+
+      // Live clear lỗi khi gõ
+      Object.keys(errMap).forEach((id) => {
+        document.getElementById(id).addEventListener("input", () => {
+          clearError(id, errMap[id]);
+          document.getElementById("addAlertBanner").classList.remove("visible");
+        });
+      });
+
+      /* ─────────────────────────────────────────
+     VALIDATE & SUBMIT — Kết nối BE tại đây
+  ───────────────────────────────────────── */
+      async function validateAddForm() {
+        const fullName = getVal("addFullName");
+        const username = getVal("addUsername");
+        const password = getVal("addPassword");
+        const email = getVal("addEmail");
+        const banner = document.getElementById("addAlertBanner");
+
+        // Reset
+        Object.keys(errMap).forEach((id) => clearError(id, errMap[id]));
+        banner.classList.remove("visible");
+
+        let valid = true;
+
+        // 1. Tên người dùng
+        if (!fullName) {
+          setError(
+            "addFullName",
+            "fullNameError",
+            "Tên người dùng không được để trống",
+          );
+          valid = false;
+        }
+
+        // 2. Tên đăng nhập
+        if (!username) {
+          setError(
+            "addUsername",
+            "usernameError",
+            "Tên đăng nhập không được để trống",
+          );
+          valid = false;
+        } else if (username.length < 4) {
+          setError(
+            "addUsername",
+            "usernameError",
+            "Tên đăng nhập phải có ít nhất 4 ký tự",
+          );
+          valid = false;
+        } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+          setError(
+            "addUsername",
+            "usernameError",
+            "Tên đăng nhập chỉ được chứa chữ, số và dấu _",
+          );
+          valid = false;
+        }
+
+        // 3. Mật khẩu
+        if (!password) {
+          setError(
+            "addPassword",
+            "passwordError",
+            "Mật khẩu không được để trống",
+          );
+          valid = false;
+        } else if (password.length < 6) {
+          setError(
+            "addPassword",
+            "passwordError",
+            "Mật khẩu phải có ít nhất 6 ký tự",
+          );
+          valid = false;
+        }
+
+        // 4. Email
+        if (!email) {
+          setError("addEmail", "emailError", "Email không được để trống");
+          valid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          setError("addEmail", "emailError", "Email không đúng định dạng");
+          valid = false;
+        } else if (!email.endsWith("@tlu.edu.vn")) {
+          setError(
+            "addEmail",
+            "emailError",
+            "Email phải thuộc miền @tlu.edu.vn",
+          );
+          valid = false;
+        }
+
+        if (!valid) return;
+
+        /* ═══════════════════════════════════════════
+       GỌI API TẠO TÀI KHOẢN
+       BE implement endpoint: POST /api/admins
+       Request body (JSON):
+         { fullName, username, password, email }
+       Response thành công (201):
+         { success: true, data: { id, fullName, username, email, role, status } }
+       Response lỗi (400/409/500):
+         { success: false, message: "..." }
+    ═══════════════════════════════════════════ */
+        try {
+          const res = await fetch(`${API_BASE}/admins`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fullName, username, password, email }),
+          });
+
+          const json = await res.json();
+
+          if (!res.ok || !json.success) {
+            // Xử lý lỗi từ server (trùng username, v.v.)
+            const msg = json.message || "Có lỗi xảy ra, vui lòng thử lại.";
+            if (
+              msg.toLowerCase().includes("username") ||
+              msg.toLowerCase().includes("tên đăng nhập")
+            ) {
+              setError("addUsername", "usernameError", msg);
+            } else if (msg.toLowerCase().includes("email")) {
+              setError("addEmail", "emailError", msg);
+            } else {
+              // Hiện banner lỗi chung
+              banner.querySelector("span").textContent = msg;
+              banner.classList.add("visible");
+            }
+            return;
+          }
+
+          // Thành công → đóng modal, reload bảng
+          closeModal("addModal");
+          loadAdminList(); // gọi lại để cập nhật bảng
+        } catch (err) {
+          // Lỗi mạng / server không phản hồi
+          banner.querySelector("span").textContent =
+            "Không thể kết nối đến máy chủ, vui lòng thử lại sau.";
+          banner.classList.add("visible");
+        }
+      }
+
+      /* ─────────────────────────────────────────
+     LOAD DANH SÁCH ADMIN TỪ BE
+     BE implement: GET /api/admins
+     Response:
+       { success: true, data: [ { id, fullName, username, email, role, status }, ... ] }
+     role: "root" | "manager" | "editor"
+     status: "active" | "inactive"
+  ───────────────────────────────────────── */
+      async function loadAdminList() {
+        /* ── DEMO: bỏ comment dưới khi kết nối BE thật ──
+    try {
+      const res  = await fetch(`${API_BASE}/admins`);
+      const json = await res.json();
+      if (json.success) renderTable(json.data);
+    } catch(e) {
+      console.error('Không tải được danh sách:', e);
+    }
+    */
+      }
+
+      function renderTable(admins) {
+        const badgeMap = {
+          root: '<span class="badge badge-root">Cấp 1 (Root)</span>',
+          manager: '<span class="badge badge-manager">Cấp 2 (Manager)</span>',
+          editor: '<span class="badge badge-editor">Cấp 3 (Editor)</span>',
+        };
+        const statusMap = {
+          active:
+            '<span class="status-dot status-active">Đang hoạt động</span>',
+          inactive:
+            '<span class="status-dot status-inactive">Bị vô hiệu hóa</span>',
+        };
+
+        const tbody = document.getElementById("adminTableBody");
+        tbody.innerHTML = admins
+          .map(
+            (a) => `
+      <tr>
+        <td><span class="td-name">${a.fullName}</span></td>
+        <td><span class="td-user">${a.username}</span></td>
+        <td><span class="td-email">${a.email}</span></td>
+        <td>${badgeMap[a.role] ?? a.role}</td>
+        <td>${statusMap[a.status] ?? a.status}</td>
+        <td>
+          <div class="actions">
+            ${
+              a.role === "root"
+                ? `<button class="action-btn disabled" title="Không thể chỉnh sửa Root"><i class="fas fa-history"></i></button>`
+                : `<button class="action-btn" title="Phân quyền" onclick="openPermModal(${a.id})"><i class="fas fa-user-shield"></i></button>
+                 <button class="action-btn" title="Đặt lại mật khẩu" onclick="resetPassword(${a.id})"><i class="fas fa-lock"></i></button>
+                 <button class="action-btn" title="Xóa" onclick="deleteAdmin(${a.id})"><i class="fas fa-trash"></i></button>`
+            }
+          </div>
+        </td>
+      </tr>
+    `,
+          )
+          .join("");
+      }
+
+      /* ─────────────────────────────────────────
+     CÁC ACTION KHÁC — BE implement thêm
+  ───────────────────────────────────────── */
+
+      // Phân quyền: PUT /api/admins/:id/role  { role: "manager" | "editor" }
+      function openPermModal(adminId) {
+        document.getElementById("permModal").dataset.targetId = adminId;
+        openModal("permModal");
+      }
+
+      // Reset mật khẩu: POST /api/admins/:id/reset-password
+      async function resetPassword(adminId) {
+        if (!confirm("Bạn có chắc muốn đặt lại mật khẩu tài khoản này?"))
+          return;
+        /* await fetch(`${API_BASE}/admins/${adminId}/reset-password`, { method: 'POST' }); */
+        alert("Đã gửi email đặt lại mật khẩu.");
+      }
+
+      // Xóa: DELETE /api/admins/:id
+      async function deleteAdmin(adminId) {
+        if (!confirm("Bạn có chắc muốn xóa tài khoản này?")) return;
+        /* 
+    const res = await fetch(`${API_BASE}/admins/${adminId}`, { method: 'DELETE' });
+    if (res.ok) loadAdminList();
+    */
+      }
+
+      /* ─────────────────────────────────────────
+     TOGGLE TRẠNG THÁI (VÔ HIỆU HÓA / KÍCH HOẠT)
+     BE implement: PUT /api/admins/:id/status
+     Body: { status: "active" | "inactive" }
+     Response: { success: true }
+  ───────────────────────────────────────── */
+      let _statusTargetBtn = null;
+      let _deleteTargetRow = null;
+
+      function openDeleteModal(name) {
+        // Lưu row để xóa sau khi xác nhận
+        _deleteTargetRow = event.target.closest("tr");
+        document.getElementById("deleteTargetName").textContent = name;
+        openModal("deleteModal");
+      }
+
+      async function confirmDelete() {
+        /* ── Gọi API BE ──
+    const adminId = _deleteTargetRow.dataset.id;
+    const res = await fetch(`${API_BASE}/admins/${adminId}`, { method: 'DELETE' });
+    if (!res.ok) { alert('Có lỗi xảy ra.'); return; }
+    */
+
+        // Xóa row khỏi bảng (demo)
+        if (_deleteTargetRow) {
+          _deleteTargetRow.style.transition = "opacity .25s, transform .25s";
+          _deleteTargetRow.style.opacity = "0";
+          _deleteTargetRow.style.transform = "translateX(20px)";
+          setTimeout(() => {
+            _deleteTargetRow.remove();
+            _deleteTargetRow = null;
+          }, 250);
+        }
+        closeModal("deleteModal");
+      }
+
+      function openStatusModal(btn, type, name) {
+        _statusTargetBtn = btn;
+        if (type === "disable") {
+          document.getElementById("disableTargetName").textContent = name;
+          openModal("disableModal");
+        } else {
+          document.getElementById("enableTargetName").textContent = name;
+          openModal("enableModal");
+        }
+      }
+
+      async function confirmStatusChange(type) {
+        const modalId = type === "disable" ? "disableModal" : "enableModal";
+        const newStatus = type === "disable" ? "inactive" : "active";
+        const btn = _statusTargetBtn;
+
+        /* ── Gọi API BE ──
+    const adminId = btn.closest('tr').dataset.id;
+    const res = await fetch(`${API_BASE}/admins/${adminId}/status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus })
+    });
+    if (!res.ok) { alert('Có lỗi xảy ra.'); return; }
+    */
+
+        // Cập nhật UI ngay (demo — khi có BE thật thì gọi loadAdminList())
+        const row = btn.closest("tr");
+        const statusCell = row.querySelector("td:nth-child(5)");
+
+        if (newStatus === "inactive") {
+          statusCell.innerHTML =
+            '<span class="status-dot status-inactive">Bị vô hiệu hóa</span>';
+          // Đổi nút thành "Kích hoạt"
+          const name = row.querySelector(".td-name").textContent;
+          btn.title = "Kích hoạt";
+          btn.innerHTML = '<i class="fas fa-check-circle"></i>';
+          btn.setAttribute(
+            "onclick",
+            `openStatusModal(this, 'enable', '${name}')`,
+          );
+        } else {
+          statusCell.innerHTML =
+            '<span class="status-dot status-active">Đang hoạt động</span>';
+          const name = row.querySelector(".td-name").textContent;
+          btn.title = "Vô hiệu hóa";
+          btn.innerHTML = '<i class="fas fa-ban"></i>';
+          btn.setAttribute(
+            "onclick",
+            `openStatusModal(this, 'disable', '${name}')`,
+          );
+        }
+
+        closeModal(modalId);
+        _statusTargetBtn = null;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1144 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tài liệu học tập - Khoa CNTT - Đại học Thủy Lợi</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-blue: #1a3a6b;
+        --accent-blue: #2563eb;
+        --light-blue: #dbeafe;
+        --text-dark: #1e293b;
+        --text-muted: #64748b;
+        --bg-light: #f8fafc;
+        --border: #e2e8f0;
+        --white: #ffffff;
+        --danger: #dc2626;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Open Sans", sans-serif;
+        background: var(--bg-light);
+        color: var(--text-dark);
+      }
+
+      /* TOP BAR */
+      .top-bar {
+        background: var(--primary-blue);
+        color: #cbd5e1;
+        font-size: 12.5px;
+        padding: 7px 0;
+      }
+      .top-bar .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .top-bar .contact-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .top-bar .separator {
+        color: #475569;
+        margin: 0 4px;
+      }
+      .top-bar .social-login {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .top-bar .social-login a {
+        color: #cbd5e1;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .top-bar .social-login a:hover {
+        color: #fff;
+      }
+      .top-bar .divider {
+        color: #475569;
+      }
+
+      /* USER MENU */
+      .user-menu {
+        position: relative;
+      }
+      .user-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition: background 0.2s;
+      }
+      .user-toggle:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .user-toggle i {
+        color: #93c5fd;
+      }
+      .user-toggle .fa-chevron-down {
+        font-size: 10px;
+        color: #94a3b8;
+        transition: transform 0.2s;
+      }
+      .user-menu.open .fa-chevron-down {
+        transform: rotate(180deg);
+      }
+      .user-dropdown {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        min-width: 180px;
+        z-index: 200;
+        overflow: hidden;
+      }
+      .user-menu.open .user-dropdown {
+        display: block;
+      }
+      .user-dropdown a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 16px;
+        color: #1e293b;
+        text-decoration: none;
+        font-size: 13.5px;
+        font-weight: 600;
+        transition: background 0.15s;
+      }
+      .user-dropdown a:hover {
+        background: #f1f5f9;
+      }
+      .user-dropdown a i {
+        width: 16px;
+        text-align: center;
+      }
+      .dropdown-admin i {
+        color: #7c3aed;
+      }
+      .dropdown-logout {
+        color: #dc2626 !important;
+      }
+      .dropdown-logout i {
+        color: #dc2626;
+      }
+
+      /* NAVBAR */
+      .main-header {
+        background: var(--white);
+        border-bottom: 2px solid #e2e8f0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+      }
+      .main-header .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 72px;
+      }
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        gap: 12px;
+      }
+      .navbar-brand img {
+        height: 46px;
+        width: auto;
+      }
+      .school-text .name {
+        font-family: "Montserrat", sans-serif;
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--primary-blue);
+        line-height: 1.2;
+      }
+      .school-text .sub {
+        font-size: 11.5px;
+        color: var(--text-muted);
+      }
+      .navbar-nav {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        list-style: none;
+      }
+      .nav-link {
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-dark);
+        transition: all 0.2s;
+      }
+      .nav-link:hover {
+        background: var(--light-blue);
+        color: var(--accent-blue);
+      }
+      .nav-item.active .nav-link {
+        background: var(--accent-blue);
+        color: #fff;
+        border-radius: 8px;
+      }
+
+      /* BREADCRUMB */
+      .breadcrumb-bar {
+        background: #fff;
+        border-bottom: 1px solid #f1f5f9;
+        padding: 10px 0;
+      }
+      .breadcrumb-bar .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        font-size: 13px;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .breadcrumb-bar a {
+        color: var(--accent-blue);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      /* PAGE WRAPPER */
+      .page-wrapper {
+        max-width: 1200px;
+        margin: 36px auto 0;
+        padding: 0 20px;
+      }
+
+      /* PAGE HEADER */
+      .page-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+      .page-title-bar {
+        width: 5px;
+        height: 32px;
+        background: var(--danger);
+        border-radius: 3px;
+        flex-shrink: 0;
+      }
+      .page-header h1 {
+        font-family: "Montserrat", sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--primary-blue);
+      }
+
+      /* FILTER BAR */
+      .filter-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      .search-wrap {
+        flex: 1;
+        min-width: 220px;
+        position: relative;
+      }
+      .search-wrap input {
+        width: 100%;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        padding: 9px 14px 9px 38px;
+        font-size: 13.5px;
+        font-family: "Open Sans", sans-serif;
+        color: var(--text-dark);
+        background: #fff;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .search-wrap input:focus {
+        border-color: var(--accent-blue);
+      }
+      .search-wrap i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 13px;
+      }
+      .filter-bar select {
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        padding: 9px 14px;
+        font-size: 13.5px;
+        font-family: "Open Sans", sans-serif;
+        color: var(--text-dark);
+        background: #fff;
+        cursor: pointer;
+        outline: none;
+        transition: border-color 0.2s;
+        min-width: 160px;
+      }
+      .filter-bar select:focus {
+        border-color: var(--accent-blue);
+      }
+
+      /* CATEGORY TABS */
+      .cat-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      .cat-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 16px;
+        border-radius: 20px;
+        border: 1.5px solid var(--border);
+        background: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .cat-tab:hover {
+        border-color: var(--accent-blue);
+        color: var(--accent-blue);
+        background: var(--light-blue);
+      }
+      .cat-tab.active {
+        background: var(--accent-blue);
+        color: #fff;
+        border-color: var(--accent-blue);
+      }
+      .cat-tab .count {
+        background: #f1f5f9;
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 700;
+        padding: 1px 7px;
+        border-radius: 10px;
+      }
+      .cat-tab.active .count {
+        background: rgba(255, 255, 255, 0.25);
+        color: #fff;
+      }
+
+      /* DOC CARD */
+      .doc-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        margin-bottom: 12px;
+      }
+      .doc-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--border);
+        transition: background 0.15s;
+      }
+      .doc-row:last-child {
+        border-bottom: none;
+      }
+      .doc-row:hover {
+        background: #f8faff;
+      }
+
+      .doc-icon-wrap {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 20px;
+      }
+      .doc-icon-wrap.pdf {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+      .doc-icon-wrap.doc {
+        background: #dbeafe;
+        color: #2563eb;
+      }
+      .doc-icon-wrap.ppt {
+        background: #ffedd5;
+        color: #ea580c;
+      }
+      .doc-icon-wrap.zip {
+        background: #fef9c3;
+        color: #ca8a04;
+      }
+      .doc-icon-wrap.xls {
+        background: #dcfce7;
+        color: #16a34a;
+      }
+
+      .doc-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .doc-name {
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--primary-blue);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 5px;
+      }
+      .doc-meta {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 12px;
+        color: var(--text-muted);
+        flex-wrap: wrap;
+      }
+      .doc-meta span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .subject-tag {
+        background: var(--light-blue);
+        color: var(--accent-blue);
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+      }
+
+      .doc-size {
+        font-size: 12.5px;
+        color: var(--text-muted);
+        font-weight: 600;
+        min-width: 56px;
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .doc-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+
+      .btn-view {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 7px;
+        font-size: 12.5px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        font-family: "Open Sans", sans-serif;
+        transition: all 0.18s;
+        background: var(--light-blue);
+        color: var(--accent-blue);
+      }
+      .btn-view:hover {
+        background: #bfdbfe;
+      }
+      .btn-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 7px;
+        font-size: 12.5px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        font-family: "Open Sans", sans-serif;
+        transition: all 0.18s;
+        background: var(--primary-blue);
+        color: #fff;
+      }
+      .btn-download:hover {
+        background: #112d56;
+      }
+
+      /* EMPTY STATE */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+      }
+      .empty-state i {
+        font-size: 40px;
+        margin-bottom: 14px;
+        display: block;
+        color: #cbd5e1;
+      }
+
+      /* PAGINATION */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        margin: 32px 0 60px;
+      }
+      .page-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1.5px solid var(--border);
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all 0.18s;
+      }
+      .page-btn:hover:not(.disabled) {
+        border-color: var(--accent-blue);
+        color: var(--accent-blue);
+      }
+      .page-btn.active {
+        background: var(--accent-blue);
+        color: #fff;
+        border-color: var(--accent-blue);
+      }
+      .page-btn.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+
+      /* FOOTER */
+      .main-footer {
+        background: #0f2647;
+        color: #94a3b8;
+        padding: 48px 0 0;
+        margin-top: 0;
+      }
+      .main-footer .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .main-footer .row {
+        display: grid;
+        grid-template-columns: 5fr 4fr 3fr;
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+      .footer-title {
+        font-family: "Montserrat", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: #e2e8f0;
+        letter-spacing: 0.5px;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+      }
+      .school-name-footer {
+        color: #64748b;
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+      .footer-contact {
+        list-style: none;
+        font-size: 13.5px;
+      }
+      .footer-contact li {
+        margin-bottom: 8px;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .footer-contact i {
+        color: var(--accent-blue);
+        margin-top: 2px;
+      }
+      .footer-links {
+        list-style: none;
+      }
+      .footer-links li {
+        margin-bottom: 8px;
+      }
+      .footer-links a {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 13.5px;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: #fff;
+      }
+      .footer-social {
+        display: flex;
+        gap: 10px;
+      }
+      .footer-social a {
+        width: 38px;
+        height: 38px;
+        background: #1e3a5f;
+        color: #93c5fd;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .footer-social a:hover {
+        background: var(--accent-blue);
+        color: #fff;
+      }
+      .footer-bottom {
+        border-top: 1px solid #1e3a5f;
+        padding: 18px 0;
+        text-align: center;
+        font-size: 13px;
+        color: #475569;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <div class="container">
+        <div class="contact-info">
+          <i class="fas fa-map-marker-alt"></i> 175 Tây Sơn, Đống Đa, Hà Nội
+          <span class="separator">|</span>
+          <i class="fas fa-phone-alt"></i> (024) 3852 2201
+        </div>
+        <div class="social-login">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <div class="divider">|</div>
+          <a href="login.html" class="login-link" id="loginBtn">
+            <i class="fas fa-user-circle"></i> Đăng nhập
+          </a>
+          <div class="user-menu" id="userMenu" style="display: none">
+            <div class="user-toggle" id="userToggle">
+              <i class="fas fa-user-circle"></i>
+              <span id="userName">Phạm Văn Việt</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="user-dropdown">
+              <a href="#" class="dropdown-admin"
+                ><i class="fas fa-shield-alt"></i> Trang quản trị</a
+              >
+              <a href="#" class="dropdown-logout" id="logoutBtn"
+                ><i class="fas fa-sign-out-alt"></i> Đăng xuất</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="main-header">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/vi/thumb/1/1d/Logo_Dai_hoc_Thuy_loi.svg/1200px-Logo_Dai_hoc_Thuy_loi.svg.png"
+            alt="TLU Logo"
+          />
+          <div class="school-text">
+            <div class="name">KHOA CÔNG NGHỆ THÔNG TIN</div>
+            <div class="sub">Trường Đại học Thủy Lợi - TLU</div>
+          </div>
+        </a>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Trang chủ</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Đội ngũ giảng viên</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="tailieu.html">Tài liệu học tập</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="tracuu.html">Tra cứu học tập</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb-bar">
+      <div class="container">
+        <a href="index.html">Trang chủ</a>
+        <i class="fas fa-chevron-right" style="font-size: 10px"></i>
+        <span>Tài liệu học tập</span>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="page-wrapper">
+      <div class="page-header">
+        <div class="page-title-bar"></div>
+        <h1>Tài liệu học tập</h1>
+      </div>
+
+      <!-- Filter -->
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <i class="fas fa-search"></i>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Tìm kiếm tài liệu, môn học..."
+            oninput="filterDocs()"
+          />
+        </div>
+        <select id="sortSelect" onchange="filterDocs()">
+          <option value="newest">Mới nhất</option>
+          <option value="oldest">Cũ nhất</option>
+          <option value="name">Tên A–Z</option>
+          <option value="size">Kích thước</option>
+        </select>
+        <select id="typeSelect" onchange="filterDocs()">
+          <option value="all">Tất cả định dạng</option>
+          <option value="pdf">PDF</option>
+          <option value="ppt">PowerPoint</option>
+          <option value="doc">Word</option>
+          <option value="xls">Excel</option>
+          <option value="zip">ZIP/RAR</option>
+        </select>
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="cat-tabs">
+        <button class="cat-tab active" onclick="setCategory('all', this)">
+          <i class="fas fa-th-large"></i> Tất cả
+          <span class="count" id="cnt-all">0</span>
+        </button>
+        <button class="cat-tab" onclick="setCategory('ltw', this)">
+          <i class="fas fa-code"></i> Lập trình Web
+          <span class="count" id="cnt-ltw">0</span>
+        </button>
+        <button class="cat-tab" onclick="setCategory('ptda', this)">
+          <i class="fas fa-project-diagram"></i> Phát triển dự án
+          <span class="count" id="cnt-ptda">0</span>
+        </button>
+        <button class="cat-tab" onclick="setCategory('attt', this)">
+          <i class="fas fa-shield-alt"></i> An toàn thông tin
+          <span class="count" id="cnt-attt">0</span>
+        </button>
+        <button class="cat-tab" onclick="setCategory('dsttt', this)">
+          <i class="fas fa-database"></i> Cơ sở dữ liệu
+          <span class="count" id="cnt-dsttt">0</span>
+        </button>
+      </div>
+
+      <!-- List -->
+      <div class="doc-card" id="docList"></div>
+      <div class="empty-state" id="emptyState" style="display: none">
+        <i class="fas fa-folder-open"></i>
+        <p>Không tìm thấy tài liệu phù hợp.</p>
+      </div>
+
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+      <div class="container">
+        <div class="row">
+          <div>
+            <h5 class="footer-title">KHOA CÔNG NGHỆ THÔNG TIN</h5>
+            <p class="school-name-footer">Trường Đại học Thủy Lợi - TLU</p>
+            <ul class="footer-contact">
+              <li>
+                <i class="fas fa-map-marker-alt"></i> 175 Tây Sơn, Đống Đa, Hà
+                Nội
+              </li>
+              <li><i class="fas fa-envelope"></i> vpkcntt@tlu.edu.vn</li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="footer-title">Liên kết hữu ích</h5>
+            <ul class="footer-links">
+              <li><a href="#">Giới thiệu Khoa</a></li>
+              <li><a href="#">Tuyển sinh 2026</a></li>
+              <li><a href="#">Đội ngũ Giảng viên</a></li>
+              <li><a href="#">Quy chế Đào tạo</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="footer-title">Kết nối với chúng tôi</h5>
+            <div class="footer-social">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            © 2026 Faculty of Information Technology - Thuy Loi University.
+            Designed with ❤️ by Group 05.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      /* ====== DATA ====== */
+      const DOCS = [
+        {
+          id: 1,
+          cat: "ltw",
+          type: "pdf",
+          name: "Quy định chung về quản lý và đánh giá Đồ án tốt nghiệp Ngành CNTT",
+          subject: "Lập trình Web",
+          size: "1.2 MB",
+          sizeB: 1258291,
+          date: "2026-03-10",
+          by: "ThS. Nguyễn Văn A",
+        },
+        {
+          id: 2,
+          cat: "ltw",
+          type: "ppt",
+          name: "Bài giảng Lập trình Web – Chương 1: HTML & CSS nâng cao",
+          subject: "Lập trình Web",
+          size: "8.4 MB",
+          sizeB: 8808038,
+          date: "2026-03-05",
+          by: "ThS. Nguyễn Văn A",
+        },
+        {
+          id: 3,
+          cat: "ltw",
+          type: "zip",
+          name: "Source code mẫu – Lab 1 đến Lab 5 Lập trình Web",
+          subject: "Lập trình Web",
+          size: "3.7 MB",
+          sizeB: 3880140,
+          date: "2026-02-28",
+          by: "ThS. Nguyễn Văn A",
+        },
+        {
+          id: 4,
+          cat: "ptda",
+          type: "pdf",
+          name: "Đề cương môn Phát triển dự án phần mềm HK2 2025-2026",
+          subject: "Phát triển dự án",
+          size: "540 KB",
+          sizeB: 552960,
+          date: "2026-03-08",
+          by: "TS. Cù Việt Dũng",
+        },
+        {
+          id: 5,
+          cat: "ptda",
+          type: "ppt",
+          name: "Slide Chương 3: Quản lý rủi ro trong phát triển phần mềm",
+          subject: "Phát triển dự án",
+          size: "5.1 MB",
+          sizeB: 5347737,
+          date: "2026-02-20",
+          by: "TS. Cù Việt Dũng",
+        },
+        {
+          id: 6,
+          cat: "ptda",
+          type: "doc",
+          name: "Mẫu báo cáo đồ án môn học – Phát triển dự án phần mềm",
+          subject: "Phát triển dự án",
+          size: "210 KB",
+          sizeB: 215040,
+          date: "2026-02-15",
+          by: "TS. Cù Việt Dũng",
+        },
+        {
+          id: 7,
+          cat: "attt",
+          type: "pdf",
+          name: "Tài liệu tham khảo: Mã hóa và bảo mật thông tin – Phần 1",
+          subject: "An toàn thông tin",
+          size: "2.8 MB",
+          sizeB: 2936012,
+          date: "2026-03-01",
+          by: "TS. Phạm Văn B",
+        },
+        {
+          id: 8,
+          cat: "attt",
+          type: "ppt",
+          name: "Bài giảng An toàn thông tin – Chương 4: Tấn công mạng và phòng thủ",
+          subject: "An toàn thông tin",
+          size: "6.2 MB",
+          sizeB: 6502809,
+          date: "2026-02-25",
+          by: "TS. Phạm Văn B",
+        },
+        {
+          id: 9,
+          cat: "attt",
+          type: "zip",
+          name: "Lab thực hành An toàn thông tin – Bộ công cụ và hướng dẫn",
+          subject: "An toàn thông tin",
+          size: "12.5 MB",
+          sizeB: 13107200,
+          date: "2026-02-10",
+          by: "TS. Phạm Văn B",
+        },
+        {
+          id: 10,
+          cat: "dsttt",
+          type: "pdf",
+          name: "Đề cương chi tiết môn Hệ quản trị Cơ sở dữ liệu HK2 2025-2026",
+          subject: "Cơ sở dữ liệu",
+          size: "480 KB",
+          sizeB: 491520,
+          date: "2026-03-12",
+          by: "TS. Lê Thị C",
+        },
+        {
+          id: 11,
+          cat: "dsttt",
+          type: "xls",
+          name: "Bài tập thực hành SQL – Tổng hợp từ Lab 1 đến Lab 8",
+          subject: "Cơ sở dữ liệu",
+          size: "1.1 MB",
+          sizeB: 1153433,
+          date: "2026-03-06",
+          by: "TS. Lê Thị C",
+        },
+        {
+          id: 12,
+          cat: "dsttt",
+          type: "ppt",
+          name: "Slide Chương 5: Tối ưu hóa truy vấn và chỉ mục trong SQL Server",
+          subject: "Cơ sở dữ liệu",
+          size: "4.3 MB",
+          sizeB: 4509286,
+          date: "2026-02-22",
+          by: "TS. Lê Thị C",
+        },
+      ];
+
+      const ICON = {
+        pdf: { cls: "pdf", i: "fas fa-file-pdf" },
+        doc: { cls: "doc", i: "fas fa-file-word" },
+        ppt: { cls: "ppt", i: "fas fa-file-powerpoint" },
+        xls: { cls: "xls", i: "fas fa-file-excel" },
+        zip: { cls: "zip", i: "fas fa-file-archive" },
+      };
+
+      let cat = "all",
+        page = 1;
+      const PER = 8;
+
+      function fmtDate(d) {
+        const [y, m, dd] = d.split("-");
+        return `${dd}/${m}/${y}`;
+      }
+
+      function filtered() {
+        const q = document.getElementById("searchInput").value.toLowerCase();
+        const type = document.getElementById("typeSelect").value;
+        const sort = document.getElementById("sortSelect").value;
+        let list = DOCS.filter(
+          (d) =>
+            (cat === "all" || d.cat === cat) &&
+            (type === "all" || d.type === type) &&
+            (!q ||
+              d.name.toLowerCase().includes(q) ||
+              d.subject.toLowerCase().includes(q)),
+        );
+        if (sort === "newest")
+          list.sort((a, b) => b.date.localeCompare(a.date));
+        else if (sort === "oldest")
+          list.sort((a, b) => a.date.localeCompare(b.date));
+        else if (sort === "name")
+          list.sort((a, b) => a.name.localeCompare(b.name, "vi"));
+        else if (sort === "size") list.sort((a, b) => b.sizeB - a.sizeB);
+        return list;
+      }
+
+      function render() {
+        const list = filtered();
+        const pageList = list.slice((page - 1) * PER, page * PER);
+        const dl = document.getElementById("docList");
+        const es = document.getElementById("emptyState");
+
+        // Update counts
+        ["all", "ltw", "ptda", "attt", "dsttt"].forEach((c) => {
+          const el = document.getElementById("cnt-" + c);
+          if (el)
+            el.textContent =
+              c === "all"
+                ? DOCS.length
+                : DOCS.filter((d) => d.cat === c).length;
+        });
+
+        if (!list.length) {
+          dl.style.display = "none";
+          es.style.display = "";
+        } else {
+          dl.style.display = "";
+          es.style.display = "none";
+          dl.innerHTML = pageList
+            .map((d) => {
+              const ic = ICON[d.type] || ICON.pdf;
+              return `<div class="doc-row">
+              <div class="doc-icon-wrap ${ic.cls}"><i class="${ic.i}"></i></div>
+              <div class="doc-info">
+                <div class="doc-name" title="${d.name}">${d.name}</div>
+                <div class="doc-meta">
+                  <span class="subject-tag">${d.subject}</span>
+                  <span><i class="fas fa-user"></i> ${d.by}</span>
+                  <span><i class="far fa-calendar-alt"></i> ${fmtDate(d.date)}</span>
+                </div>
+              </div>
+              <div class="doc-size">${d.size}</div>
+              <div class="doc-actions">
+                <button class="btn-view" onclick="viewDoc(${d.id})"><i class="fas fa-eye"></i> Xem</button>
+                <button class="btn-download" onclick="dlDoc(${d.id})"><i class="fas fa-download"></i> Tải</button>
+              </div>
+            </div>`;
+            })
+            .join("");
+        }
+
+        // Pagination
+        const total = Math.ceil(list.length / PER);
+        const pag = document.getElementById("pagination");
+        if (total <= 1) {
+          pag.innerHTML = "";
+          return;
+        }
+        let h = `<button class="page-btn${page === 1 ? " disabled" : ""}" onclick="goPage(${page - 1})"><i class="fas fa-chevron-left"></i></button>`;
+        for (let i = 1; i <= total; i++)
+          h += `<button class="page-btn${i === page ? " active" : ""}" onclick="goPage(${i})">${i}</button>`;
+        h += `<button class="page-btn${page === total ? " disabled" : ""}" onclick="goPage(${page + 1})"><i class="fas fa-chevron-right"></i></button>`;
+        pag.innerHTML = h;
+      }
+
+      function filterDocs() {
+        page = 1;
+        render();
+      }
+      function setCategory(c, btn) {
+        cat = c;
+        page = 1;
+        document
+          .querySelectorAll(".cat-tab")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        render();
+      }
+      function goPage(p) {
+        const t = Math.ceil(filtered().length / PER);
+        if (p < 1 || p > t) return;
+        page = p;
+        render();
+        window.scrollTo({ top: 200, behavior: "smooth" });
+      }
+      function viewDoc(id) {
+        alert("Chức năng xem tài liệu online đang phát triển.");
+      }
+      function dlDoc(id) {
+        const d = DOCS.find((x) => x.id === id);
+        if (d) alert(`Đang tải xuống:\n${d.name}`);
+      }
+
+      /* AUTH */
+      const MOCK_USER = {
+        name: "Phạm Văn Việt",
+        msv: "123456789",
+        lop: "65KTPM",
+      };
+      function isLoggedIn() {
+        return sessionStorage.getItem("sv_logged_in") === "1";
+      }
+      function renderAuth() {
+        const ok = isLoggedIn();
+        document.getElementById("loginBtn").style.display = ok ? "none" : "";
+        document.getElementById("userMenu").style.display = ok
+          ? "flex"
+          : "none";
+        if (ok) {
+          const u =
+            JSON.parse(sessionStorage.getItem("sv_user") || "null") ||
+            MOCK_USER;
+          document.getElementById("userName").textContent = u.name;
+        }
+      }
+      function doLogout() {
+        sessionStorage.removeItem("sv_logged_in");
+        sessionStorage.removeItem("sv_user");
+        renderAuth();
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        render();
+        renderAuth();
+        const t = document.getElementById("userToggle");
+        if (t) {
+          t.addEventListener("click", (e) => {
+            e.stopPropagation();
+            document.getElementById("userMenu").classList.toggle("open");
+          });
+        }
+        document.addEventListener("click", () => {
+          const m = document.getElementById("userMenu");
+          if (m) m.classList.remove("open");
+        });
+        const lb = document.getElementById("logoutBtn");
+        if (lb) {
+          lb.addEventListener("click", (e) => {
+            e.preventDefault();
+            doLogout();
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

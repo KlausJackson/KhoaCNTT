@@ -1,0 +1,195 @@
+/* --- Cấu hình chung --- */
+body {
+  background-color: #f0f4f8;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+  margin: 0;
+}
+
+.login-container {
+  display: flex;
+  width: 1050px;
+  height: 650px;
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+}
+
+/* --- PHẦN BÊN TRÁI (INFO) --- */
+.login-info-side {
+  background: linear-gradient(135deg, #0055a5 0%, #003366 100%);
+  color: white;
+  width: 53%;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-info-side h1 {
+  font-weight: 800;
+  font-size: 2.4rem;
+  margin-bottom: 20px;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+}
+
+.feature-list li {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.icon-check {
+  margin-right: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+/* --- PHẦN BÊN PHẢI (FORM) --- */
+.login-form-side {
+  width: 47%;
+  padding: 60px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.school-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 40px;
+}
+
+.school-logo {
+  width: 75px;
+}
+
+.school-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0055a5;
+  margin: 0;
+}
+
+.school-dept {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #777;
+  margin: 0;
+}
+
+/* --- Style cho Input chuyên nghiệp --- */
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #444;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.input-group-custom {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-group-custom i {
+  position: absolute;
+  left: 15px;
+  color: #adb5bd;
+  transition: 0.3s;
+}
+
+.form-control {
+  background-color: #f8fafd;
+  border: 1.5px solid #e9ecef;
+  padding: 12px 15px 12px 45px;
+  border-radius: 12px;
+  height: 52px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  background-color: #fff;
+  border-color: #0055a5;
+  box-shadow: 0 0 0 4px rgba(0, 85, 165, 0.1);
+  outline: none;
+}
+
+.input-group-custom:focus-within i {
+  color: #0055a5;
+}
+
+/* --- Style cho 2 Nút bấm --- */
+.btn-group-custom {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn-custom {
+  flex: 1;
+  height: 52px;
+  border-radius: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-student {
+  background-color: #0055a5;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 85, 165, 0.2);
+}
+
+.btn-student:hover {
+  background-color: #003d7a;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 85, 165, 0.4);
+}
+
+.btn-admin {
+  background-color: #ffffff;
+  color: #0055a5;
+  border: 2px solid #0055a5;
+}
+
+.btn-admin:hover {
+  background-color: #f0f7ff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 85, 165, 0.1);
+}
+
+.forgot-link {
+  font-size: 0.85rem;
+  color: #0055a5;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.copyright {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #aaa;
+}
