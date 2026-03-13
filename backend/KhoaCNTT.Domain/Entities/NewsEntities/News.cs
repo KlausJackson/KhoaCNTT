@@ -1,5 +1,4 @@
-﻿
-using KhoaCNTT.Domain.Common;
+﻿using KhoaCNTT.Domain.Common;
 using KhoaCNTT.Domain.Enums;
 
 namespace KhoaCNTT.Domain.Entities.NewsEntities
@@ -8,7 +7,7 @@ namespace KhoaCNTT.Domain.Entities.NewsEntities
     {
         public string Title { get; set; } = string.Empty;
         public int CurrentResourceId { get; set; }
-        public NewsResource CurrentResource { get; set; }
+        public NewsResource CurrentResource { get; set; } = null!;
         public NewsType NewsType { get; set; }
         public int ViewCount { get; set; } = 0;
 

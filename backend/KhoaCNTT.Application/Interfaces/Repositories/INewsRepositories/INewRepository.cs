@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KhoaCNTT.Domain.Entities;
+using KhoaCNTT.Domain.Entities.NewsEntities;
 
-namespace KhoaCNTT.Application.Interfaces.Repositories.INewsRepositories
+namespace KhoaCNTT.Application.Interfaces.Repositories.INewsRepositories;
+
+public interface INewsRepository : IRepository<News>
 {
-    internal class INewRepository
-    {
-    }
+    Task<News?> GetByIdWithResourceAsync(int newsId, CancellationToken ct = default);
+    Task<IEnumerable<News>> GetAllWithResourceAsync(CancellationToken ct = default);
+    Task IncrementViewCountAsync(int newsId, CancellationToken ct = default);
 }

@@ -12,5 +12,6 @@ namespace KhoaCNTT.Application.Interfaces.Repositories
         Task UpdateAsync(Admin admin);
         Task DeleteAsync(Admin admin);
         Task<List<Admin>> GetAllAsync();
+        Task<bool> ExistsAsync(int requesterId, CancellationToken ct);
     }
 }

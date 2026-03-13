@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using KhoaCNTT.Application.Common.Exceptions;
 using KhoaCNTT.Application.DTOs.File;
 using KhoaCNTT.Application.Interfaces.Repositories;
@@ -62,7 +61,7 @@ namespace KhoaCNTT.Application.Services
                 Size = request.File.Length,
                 CreatedAt = DateTime.UtcNow
             };
-            await _resourceRepo.AddAsync(resource);
+            await _resourceRepo.AddAsync(resource, CancellationToken.None);
 
             // Lay Id oldResource
             int? oldResourceId = null;
@@ -89,7 +88,7 @@ namespace KhoaCNTT.Application.Services
                 IsProcessed = false,
                 CreatedAt = DateTime.UtcNow
             };
-            await _requestRepo.AddAsync(fileRequest);
+            await _requestRepo.AddAsync(fileRequest, CancellationToken.None);
 
             // Auto Approve nếu là Admin Cấp 1, 2
             if (adminLevel <= 2)
@@ -127,7 +126,7 @@ namespace KhoaCNTT.Application.Services
                 Reason = reason,
                 CreatedAt = DateTime.UtcNow
             };
-            await _approvalRepo.AddAsync(approval);
+            await _approvalRepo.AddAsync(approval, CancellationToken.None);
 
             if (isApproved)
             { // Nếu chấp nhận
@@ -146,20 +145,20 @@ namespace KhoaCNTT.Application.Services
                         CreatedAt = DateTime.UtcNow,
                         CreatedBy = adminId
                     };
-                    await _fileRepo.AddAsync(newFile);
+                    await _fileRepo.AddAsync(newFile, CancellationToken.None);
                 }
                 else
                 { // thay thế thì cập nhật FileEntity cũ
                     var targetFile = await _fileRepo.GetByIdAsync(request.TargetFileId.Value);
                     targetFile.CurrentResourceId = request.NewResourceId; // Trỏ sang file vật lý mới
                     targetFile.UpdatedAt = DateTime.UtcNow;
-                    await _fileRepo.UpdateAsync(targetFile);
+                    await _fileRepo.UpdateAsync(targetFile, CancellationToken.None);
                 }
             }
 
             request.IsProcessed = true;
             request.UpdatedAt = DateTime.UtcNow;
-            await _requestRepo.UpdateAsync(request);
+            await _requestRepo.UpdateAsync(request, CancellationToken.None);
         }
 
         public async Task<List<FileRequestDto>> GetPendingRequestsAsync()
@@ -212,7 +211,7 @@ namespace KhoaCNTT.Application.Services
 
             // Tăng View
             file.ViewCount++;
-            await _fileRepo.UpdateAsync(file);
+            await _fileRepo.UpdateAsync(file, CancellationToken.None);
 
             return _mapper.Map<FileDto>(file);
         }
@@ -233,7 +232,7 @@ namespace KhoaCNTT.Application.Services
 
             // Tăng lượt tải
             file.DownloadCount++;
-            await _fileRepo.UpdateAsync(file);
+            await _fileRepo.UpdateAsync(file, CancellationToken.None);
 
             // Stream file từ ổ cứng
             var stream = _storage.GetFileStream(resource.FilePath);
@@ -248,7 +247,7 @@ namespace KhoaCNTT.Application.Services
             var file = await _fileRepo.GetByIdAsync(fileId);
             if (file == null) throw new NotFoundException("File", fileId);
 
-            await _fileRepo.DeleteAsync(file);
+            await _fileRepo.DeleteAsync(file, CancellationToken.None);
         }
 
         public async Task UpdateFileInfoAsync(int fileId, UpdateFileRequest request)
@@ -258,11 +257,11 @@ namespace KhoaCNTT.Application.Services
             if (file == null) throw new NotFoundException("File", fileId);
 
             await checkSubjectCode(request.SubjectCode);
-            
+
             file.Title = request.Title;
             file.SubjectCode = request.SubjectCode;
             file.Permission = request.Permission;
-            await _fileRepo.UpdateAsync(file);
+            await _fileRepo.UpdateAsync(file, CancellationToken.None);
         }
 
         public async Task<Dictionary<string, int>> GetStatsByFileTypeAsync() => await _fileRepo.GetStatsByFileTypeAsync();
@@ -302,5 +301,3 @@ namespace KhoaCNTT.Application.Services
         }
     }
 }
-
-
