@@ -6,12 +6,18 @@ using KhoaCNTT.Application.Interfaces.Repositories;
 using KhoaCNTT.Application.Interfaces.Services;
 using KhoaCNTT.Domain.Entities.FileEntities;
 using KhoaCNTT.Domain.Enums;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using PdfSharpCore.Pdf;
+using PdfSharpCore.Pdf.IO;
+using System.IO;
+using System.Reflection.Metadata.Ecma335;
 
 namespace KhoaCNTT.Application.Services
 {
     public class FileService : IFileService
     {
+        private readonly IWebHostEnvironment _env;
+
         private readonly IFileRepository _fileRepo; // Quản lý Metadata (Hiển thị)
         private readonly IFileRequestRepository _requestRepo;    // Quản lý Yêu cầu duyệt
         private readonly IFileResourceRepository _resourceRepo;  // Quản lý File vật lý
@@ -30,8 +36,10 @@ namespace KhoaCNTT.Application.Services
             IFileStorageService storage,
             IMapper mapper,
             ISubjectRepository subjectRepo,
-            IAdminRepository adminRepo)
+            IAdminRepository adminRepo,
+            IWebHostEnvironment env)
         {
+            _env = env;
             _fileRepo = fileRepo;
             _requestRepo = requestRepo;
             _resourceRepo = resourceRepo;
@@ -162,21 +170,27 @@ namespace KhoaCNTT.Application.Services
             await _requestRepo.UpdateAsync(request);
         }
 
-        public async Task<List<FileRequestDto>> GetPendingRequestsAsync()
+        public async Task<PagedResult<FileRequestDto>> GetPendingRequestsAsync()
         {
             // var requests = await _requestRepo.GetAllAsync(r => !r.IsProcessed);
             var requests = await _requestRepo.GetPendingRequestsWithDetailsAsync();
-            return _mapper.Map<List<FileRequestDto>>(requests);
+            return new PagedResult<FileRequestDto>
+            {
+                Total = requests.Count,
+                Items = _mapper.Map<List<FileRequestDto>>(requests)
+            };
         }
 
         // SEARCH, GET, DOWNLOAD
 
-        public async Task<List<FileDto>> SearchFilesAsync(string keyword, List<string>? subjectCodes, int page, int pageSize, string userId, bool isAdmin)
+        public async Task<PagedResult<FileDto>> SearchFilesAsync(string? keyword, List<string>? subjectCodes, string? fileType, int page, int pageSize, string userId, bool isAdmin)
         {
-            var entities = await _fileRepo.SearchAsync(keyword, subjectCodes, page, pageSize);
+            var result = await _fileRepo.SearchAsync(keyword, subjectCodes, fileType, page, pageSize);
 
+            int count = result.Total;
             var sendToClient = new List<FileDto>();
-            foreach (var entity in entities)
+
+            foreach (var entity in result.Items)
             {
                 // Admin thấy tất cả
                 if (isAdmin)
@@ -199,10 +213,14 @@ namespace KhoaCNTT.Application.Services
                 sendToClient.Add(_mapper.Map<FileDto>(entity));
             }
 
-            return _mapper.Map<List<FileDto>>(entities);
+            return new PagedResult<FileDto>
+            {
+                Total = count - pageSize + sendToClient.Count,
+                Items = sendToClient,
+            };
         }
 
-        public async Task<FileDto> GetFileByIdAsync(int id, string? userId, bool isAdmin)
+        public async Task<(Stream stream, string contentType)> GetFileByIdAsync(int id, string? userId, bool isAdmin)
         {
             var file = await _fileRepo.GetByIdAsync(id); // Lấy FileEntity
             if (file == null) throw new NotFoundException("File", id);
@@ -210,14 +228,41 @@ namespace KhoaCNTT.Application.Services
             // CHECK QUYỀN
             CheckPermission(file.Permission, userId, isAdmin);
 
+            var extension = Path.GetExtension(file.CurrentResource.FileName).ToLower();
+
+            // CHẶN HÌNH Ảnh VÀ CÁC FILE DỄ COPY
+            if (extension != ".pdf")
+            {
+                throw new BusinessRuleException("Tài liệu này không hỗ trợ xem trước để bảo vệ bản quyền. Vui lòng tải về.");
+            }
+
+            var stream = _storage.GetFileStream(file.CurrentResource.FilePath);
+            if (stream == null)
+                throw new NotFoundException("File vật lý không tồn tại", id);
+
+            using var originalPdf = PdfReader.Open(stream, PdfDocumentOpenMode.Import);
+
+            var previewPdf = new PdfDocument();
+
+            if (originalPdf.PageCount > 1)
+            {
+                previewPdf.AddPage(originalPdf.Pages[0]);
+                previewPdf.AddPage(originalPdf.Pages[1]);
+            }
+
+            var memoryStream = new MemoryStream();
+            previewPdf.Save(memoryStream, false);
+            memoryStream.Position = 0;
+
             // Tăng View
             file.ViewCount++;
+            file.UpdatedAt = DateTime.UtcNow;
             await _fileRepo.UpdateAsync(file);
 
-            return _mapper.Map<FileDto>(file);
+            return (memoryStream, "application/pdf");
         }
 
-        public async Task<(Stream, string)> DownloadFileAsync(int fileId, string? userId, bool isAdmin)
+        public async Task<(Stream stream, string contentType, string fileName)> DownloadFileAsync(int fileId, string? userId, bool isAdmin)
         {
             // Lấy FileEntity
             var file = await _fileRepo.GetByIdAsync(fileId);
@@ -235,11 +280,13 @@ namespace KhoaCNTT.Application.Services
             file.DownloadCount++;
             await _fileRepo.UpdateAsync(file);
 
+            string fileName = resource.FileName;
+
             // Stream file từ ổ cứng
             var stream = _storage.GetFileStream(resource.FilePath);
-            if (stream == null) throw new NotFoundException("File vật lý", resource.FileName);
-
-            return (stream, resource.FileName);
+            if (stream == null) throw new NotFoundException("File vật lý", fileName);
+            
+            return (stream, GetContentType(fileName), fileName);
         }
 
         public async Task DeleteFileAsync(int fileId)
@@ -258,9 +305,11 @@ namespace KhoaCNTT.Application.Services
             if (file == null) throw new NotFoundException("File", fileId);
 
             await checkSubjectCode(request.SubjectCode);
-            
+
             file.Title = request.Title;
-            file.SubjectCode = request.SubjectCode;
+            file.SubjectCode = string.IsNullOrWhiteSpace(request.SubjectCode)
+                ? null
+                : request.SubjectCode;
             file.Permission = request.Permission;
             file.FileType = request.FileType;
             await _fileRepo.UpdateAsync(file);
@@ -297,9 +346,64 @@ namespace KhoaCNTT.Application.Services
 
         private async Task checkSubjectCode(string? subjectCode)
         {
-            if (subjectCode == null) return;
+            if (string.IsNullOrWhiteSpace(subjectCode))
+            {
+                return;
+            }
             var subject = await _subjectRepo.GetByCodeAsync(subjectCode);
             if (subject == null) throw new BusinessRuleException("Mã môn học không tồn tại");
+        }
+
+
+        public string GetContentType(string fileName)
+        {
+            var extension = Path.GetExtension(fileName).ToLower();
+            string contentType = extension switch
+            {
+                ".pdf" => "application/pdf",
+                ".png" => "image/png",
+                ".jpg" => "image/jpeg",
+                ".jpeg" => "image/jpeg",
+                ".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ".xls" => "application/vnd.ms-excel",
+                ".pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                ".ppt" => "application/vnd.ms-powerpoint",
+                ".txt" => "text/plain",
+                ".zip" => "application/zip",
+                ".rar" => "application/vnd.rar",
+                ".7z" => "application/x-7z-compressed",
+                ".csv" => "text/csv",
+                ".xml" => "application/xml",
+                ".json" => "application/json",
+                ".tar" => "application/x-tar",
+                ".gz" => "application/gzip",
+                ".mp4" => "video/mp4",
+                ".mp3" => "audio/mpeg",
+                ".avi" => "video/x-msvideo",
+                ".mkv" => "video/x-matroska",
+                ".exe" => "application/vnd.microsoft.portable-executable",
+                ".dll" => "application/vnd.microsoft.portable-executable",
+                ".iso" => "application/x-iso9660-image",
+                ".html" => "text/html",
+                ".css" => "text/css",
+                ".js" => "application/javascript",
+                ".py" => "text/x-python",
+                ".java" => "text/x-java-source",
+                ".cpp" => "text/x-c++src",
+                ".cs" => "text/x-csharp",
+                ".go" => "text/x-go",
+                ".rb" => "text/x-ruby",
+                ".php" => "text/x-php",
+                ".swift" => "text/x-swift",
+                ".kt" => "text/x-kotlin",
+                ".rs" => "text/x-rust",
+                ".md" => "text/markdown",
+                ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                ".doc" => "application/msword",
+                _ => "application/octet-stream"
+
+            };
+            return contentType;
         }
     }
 }

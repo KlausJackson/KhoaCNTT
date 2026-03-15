@@ -312,14 +312,10 @@ namespace KhoaCNTT.Infrastructure.Migrations
                     b.Property<int>("LecturerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SubjectCode")
-                        .IsRequired()
                         .HasColumnType("VARCHAR(50)");
 
-                    b.HasKey("LecturerId", "SubjectId");
+                    b.HasKey("LecturerId", "SubjectCode");
 
                     b.HasIndex("SubjectCode");
 

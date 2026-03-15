@@ -74,7 +74,17 @@ namespace KhoaCNTT.Infrastructure.Persistence
 
             // --- 5. LecturerSubjects ---
             modelBuilder.Entity<LecturerSubject>()
-                .HasKey(ls => new { ls.LecturerId, ls.SubjectId });
+                .HasKey(ls => new { ls.LecturerId, ls.SubjectCode });
+
+            modelBuilder.Entity<LecturerSubject>()
+                .HasOne(ls => ls.Lecturer)
+                .WithMany(l => l.LecturerSubjects)
+                .HasForeignKey(ls => ls.LecturerId);
+
+            modelBuilder.Entity<LecturerSubject>()
+                .HasOne(ls => ls.Subject)
+                .WithMany(s => s.LecturerSubjects)
+                .HasForeignKey(ls => ls.SubjectCode);
 
             //// set isDeleted mặc định là false cho mọi bảng trừ LecturerSubject
             //foreach (var entityType in modelBuilder.Model.GetEntityTypes())

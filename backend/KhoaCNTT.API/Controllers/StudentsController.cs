@@ -55,7 +55,6 @@ namespace KhoaCNTT.API.Controllers
             }
         }
 
-        // get semester Id from school API
 
     }
 }

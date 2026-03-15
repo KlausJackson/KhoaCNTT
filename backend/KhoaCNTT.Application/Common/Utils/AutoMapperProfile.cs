@@ -13,6 +13,24 @@ namespace KhoaCNTT.Application.Common.Utils
         public AutoMapperProfile()
         {
             // Cấu hình map 2 chiều: Từ Entity -> DTO và ngược lại
+
+            CreateMap<FileEntity, FileDto>()
+            .ForMember(dest => dest.FileType, opt => opt.MapFrom(src => src.FileType.ToString()))
+
+            // Nếu SubjectCode bị null thì gán chuỗi rỗng
+            .ForMember(dest => dest.SubjectCode, opt => opt.MapFrom(src => src.SubjectCode ?? ""))
+
+            // Kích thước file lấy từ CurrentResource
+            .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.CurrentResource != null ? src.CurrentResource.Size : 0))
+            // FileName 
+            .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.CurrentResource != null ? src.CurrentResource.FileName : ""))
+
+            // Size
+            //.ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.CurrentResource != null ? src.CurrentResource.Size : 0))
+
+            // SubjectName
+            .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Subject != null ? src.Subject.SubjectName : "Môn chung"));
+
             CreateMap<FileResource, FileRequestDto>().ReverseMap();
             CreateMap<FileRequest, FileRequestDto>()
                 .ForMember(dest => dest.RequesterName, opt => opt.MapFrom(src => src.NewResource.Admin.FullName))

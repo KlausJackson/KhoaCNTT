@@ -3,23 +3,23 @@ import axiosClient from './axiosClient'
 
 const lecturerApi = {
     getAll: () => {
-        return axiosClient.get("/Lecturer/")
+        return axiosClient.get("/Lecturers/")
     },
 
     getById: (id) => {
-        return axiosClient.get(`/Lecturer/${id}`)
+        return axiosClient.get(`/Lecturers/${id}`)
     },
 
 	create: (data) => {
-		return axiosClient.post('/Lecturer', data)
+		return axiosClient.post('/Lecturers', data)
 	},
 
 	update: (id, data) => {
-		return axiosClient.put(`/Lecturer/${id}`, data)
+		return axiosClient.put(`/Lecturers/${id}`, data)
 	},
 
     delete: (id) => {
-        return axiosClient.delete(`/Lecturer/${id}`)
+        return axiosClient.delete(`/Lecturers/${id}`)
     }
 }
 

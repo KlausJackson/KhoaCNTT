@@ -27,9 +27,13 @@ axiosClient.interceptors.response.use(
 	(error) => {
 		if (error.response) {
 			if (error.response.status === 401) {
-				// Hết hạn token hoặc chưa đăng nhập -> Đá ra trang login
-				localStorage.removeItem('token')
-				window.location.href = '/login'
+				if (!error.config.url.includes('/Auth/login')) {
+					// Hết hạn token hoặc chưa đăng nhập
+					localStorage.removeItem('token')
+					localStorage.removeItem('role')
+					localStorage.removeItem('username')
+					// window.location.href = '/login'
+				}
 			} else if (error.response.status === 403) {
 				alert('Bạn không có quyền thực hiện hành động này!')
 			}

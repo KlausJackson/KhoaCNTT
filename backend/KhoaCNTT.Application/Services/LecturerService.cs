@@ -104,7 +104,6 @@ namespace KhoaCNTT.Application.Services
             lecturer.LecturerSubjects.Clear();
             if (subjectCodes == null || subjectCodes.Count == 0) return;
 
-            int subjectId = 0;
             foreach (var code in subjectCodes.Distinct())
             {
                 if (string.IsNullOrWhiteSpace(code)) continue;
@@ -114,7 +113,6 @@ namespace KhoaCNTT.Application.Services
                 lecturer.LecturerSubjects.Add(new LecturerSubject
                 {
                     LecturerId = lecturer.Id,
-                    SubjectId = subjectId++,
                     SubjectCode = subject.SubjectCode,
                     Subject = subject
                 });

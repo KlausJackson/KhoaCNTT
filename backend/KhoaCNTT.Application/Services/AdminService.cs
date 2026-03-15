@@ -6,6 +6,8 @@ using KhoaCNTT.Application.DTOs.Admin;
 using KhoaCNTT.Application.Interfaces.Repositories;
 using KhoaCNTT.Application.Interfaces.Services;
 using KhoaCNTT.Domain.Entities;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 
 namespace KhoaCNTT.Application.Services
 {
@@ -31,6 +33,14 @@ namespace KhoaCNTT.Application.Services
         public async Task CreateAdminAsync(CreateAdminRequest request)
         {
             // 1. Check fields
+            // check username không dược để trống và có độ dài từ 3-20 ký tự, chỉ chứa chữ, số, dấu châm và dấu gạch dưới
+            if (string.IsNullOrWhiteSpace(request.Username) ||
+                !Regex.IsMatch(request.Username, @"^[a-zA-Z0-9._]{3,20}$"))
+            {
+                throw new BusinessRuleException(
+                    "Tên đăng nhập phải từ 3–20 ký tự và chỉ chứa chữ, số, dấu chấm hoặc dấu gạch dưới."
+                );
+            }
 
             // Check trùng Username
             var existAdmin = await _repo.GetByUsernameAsync(request.Username);
@@ -42,7 +52,25 @@ namespace KhoaCNTT.Application.Services
                 throw new BusinessRuleException("Cấp độ quản trị viên phải là 2 hoặc 3.");
 
             // Check email
-            // if (request.Email )
+            if (!string.IsNullOrWhiteSpace(request.Email))
+            {
+                try
+                {
+                    var email = new MailAddress(request.Email);
+                }
+                catch
+                {
+                    throw new BusinessRuleException("Email không hợp lệ.");
+                }
+            } else
+            {
+                throw new BusinessRuleException("Email không được để trống.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Password) || request.Password.Length < 6)
+            {
+                throw new BusinessRuleException("Mật khẩu phải có ít nhất 6 ký tự.");
+            }
 
             // 2. Hash Password
             var passwordHash = _hasher.Hash(request.Password);
@@ -66,11 +94,34 @@ namespace KhoaCNTT.Application.Services
             var admin = await _repo.GetByIdAsync(id);
             if (admin == null) throw new NotFoundException("Admin", id);
 
+            if (admin.Level == 1)
+            {
+                throw new BusinessRuleException("Không thể chỉnh sửa thông tin của Super Admin.");
+            }
+
+            if (request.Level.HasValue && request.Level != 2 && request.Level != 3)
+            {
+                throw new BusinessRuleException("Cấp độ quản trị viên phải là 2 hoặc 3.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Email))
+            {
+                try
+                {
+                    var email = new MailAddress(request.Email);
+                }
+                catch
+                {
+                    throw new BusinessRuleException("Email không hợp lệ.");
+                }
+            }
+
             // Cập nhật thông tin (Không cho đổi Username)
-            admin.FullName = request.FullName;
-            admin.Email = request.Email;
-            admin.Level = request.Level; // Phân quyền lại
-            admin.IsActive = request.IsActive; // Vô hiệu hóa/Mở khóa
+            admin.FullName = request.FullName ?? admin.FullName;
+            admin.Email = request.Email ?? admin.Email;
+            admin.PasswordHash = request.PasswordHash != null ? _hasher.Hash(request.PasswordHash) : admin.PasswordHash;
+            admin.Level = request.Level ?? admin.Level;
+            admin.IsActive = request.IsActive ?? admin.IsActive;
 
             await _repo.UpdateAsync(admin);
         }

@@ -50,7 +50,8 @@ namespace KhoaCNTT.API.Extensions
             services.AddTransient<PasswordHasher>();
 
             // 3. AutoMapper & Http
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(typeof(KhoaCNTT.Application.Common.Utils.AutoMapperProfile));
+            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddHttpClient<ISchoolApiService, SchoolApiClient>(client =>
             {
                 client.BaseAddress = new Uri(configuration["SchoolApi:BaseUrl"]);

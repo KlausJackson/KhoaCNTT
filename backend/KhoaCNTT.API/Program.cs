@@ -1,6 +1,7 @@
 ﻿
 using KhoaCNTT.API.Extensions;
 using KhoaCNTT.API.Filters;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,9 @@ builder.Services.AddSwagger();
 
 builder.Services.AddControllers(options => {
     options.Filters.Add<ApiExceptionFilter>();
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 builder.Services.AddEndpointsApiExplorer();
 

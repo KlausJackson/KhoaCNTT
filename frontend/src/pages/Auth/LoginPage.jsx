@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import authApi from '../../api/authApi'
+import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
 	const [username, setUsername] = useState('')
@@ -8,6 +9,7 @@ const LoginPage = () => {
 
 	const [error, setError] = useState(null)
 	const [isLoading, setIsLoading] = useState(false)
+	const navigate = useNavigate()
 
 	const handleLogin = async (role) => {
 		if (!username || !password) {
@@ -27,7 +29,12 @@ const LoginPage = () => {
 				response = await authApi.loginStudent({ username, password })
 			}
 
-			console.log('Login success:', response.data)
+			console.log('Login success:', response)
+			localStorage.setItem('token', response.token)
+			localStorage.setItem('role', role)
+			localStorage.setItem('username', username)			
+			navigate('/')
+
 		} catch (err) {
 			if (err.response) {
 				if (

@@ -6,17 +6,17 @@ public interface IFileService
     Task UploadFileAsync(UploadFileRequest request, string username, int adminLevel);
     Task ReplaceFileAsync(int fileId, UploadFileRequest request, string username, int adminLevel);
     Task ApproveFileAsync(int requestId, bool isApproved, string? reason, string username);
-    Task<List<FileRequestDto>> GetPendingRequestsAsync();
+    Task<PagedResult<FileRequestDto>> GetPendingRequestsAsync();
 
     // --- SỬ DỤNG ---
     // Tìm kiếm/Lấy danh sách
-    Task<List<FileDto>> SearchFilesAsync(string keyword, List<string>? subjectCodes, int page, int pageSize, string userId, bool isAdmin);
+    Task<PagedResult<FileDto>> SearchFilesAsync(string? keyword, List<string>? subjectCodes, string? fileType, int page, int pageSize, string userId, bool isAdmin);
 
     // Xem chi tiết (Tăng view count)
-    Task<FileDto> GetFileByIdAsync(int id, string? userId, bool isAdmin);
+    Task<(Stream stream, string contentType)> GetFileByIdAsync(int id, string? userId, bool isAdmin);
 
     // Tải file (Tăng download count)
-    Task<(Stream, string)> DownloadFileAsync(int fileId, string? userId, bool isAdmin);
+    Task<(Stream stream, string contentType, string fileName)> DownloadFileAsync(int fileId, string? userId, bool isAdmin);
 
     // --- Quản lý ---
     Task DeleteFileAsync(int fileId); // Xóa FileEntity

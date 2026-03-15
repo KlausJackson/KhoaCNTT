@@ -1,11 +1,37 @@
-
 import axiosClient from './axiosClient'
 
 const fileApi = {
 	// --- User ---
-	search: (params) => {
-		// params: { keyword: '', subjectCodes: ['CSE481'], page: 1, pageSize: 10 }
-		return axiosClient.get('/Files/search', { params })
+	search: async ({
+	keyword,
+	subjectCodes,
+	fileType,
+	page,
+	pageSize
+	}) => {
+
+		const query = new URLSearchParams()
+
+		if (keyword) query.append("keyword", keyword)
+
+		if (subjectCodes && subjectCodes.length > 0) {
+			subjectCodes.forEach(code => {
+				query.append("subjectCodes", code)
+			})
+		}
+
+		if (fileType) query.append("fileType", fileType)
+
+		query.append("page", page)
+		query.append("pageSize", pageSize)
+
+		//console.log("Query params:", query.toString())
+	
+		const res = await axiosClient.get("/Files/search", {
+			params: query
+		})
+		//console.log("API response:", res)
+		return res
 	},
 
 	getById: (id) => {
@@ -13,12 +39,11 @@ const fileApi = {
 	},
 
 	download: (id) => {
-		// Trả về Blob (file nhị phân) để tải xuống máy
 		return axiosClient.get(`/Files/${id}/download`, {
 			responseType: 'blob'
 		})
 	},
-
+ 
 	// --- ADMIN ---
 	upload: (formData) => {
 		// FormData: 'File', 'Title', 'SubjectCode', 'Permission', 'FileType'
@@ -35,7 +60,7 @@ const fileApi = {
 
 	updateMetadata: (id, data) => {
 		// data: { title, subjectCode, permission, filetype }
-		return axiosClient.put(`/Files/${id}/metadata`, data)
+		return axiosClient.put(`/Files/${id}`, data)
 	},
 
 	delete: (id) => {
@@ -43,12 +68,12 @@ const fileApi = {
 	},
 
 	getPendingList: () => {
-		return axiosClient.get('/Files/pending')
+		return axiosClient.get('/Files/requests/pending')
 	},
 
 	approve: (id, data) => {
 		// data: { isApproved: true/false, reason: '...' }
-		return axiosClient.put(`/Files/request/${id}/approve`, data)
+		return axiosClient.put(`/Files/requests/${id}/approve`, data)
 	},
 
 	// --- THỐNG KÊ (DASHBOARD) ---

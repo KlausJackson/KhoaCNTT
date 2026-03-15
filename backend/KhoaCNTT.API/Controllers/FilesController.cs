@@ -75,10 +75,9 @@ namespace KhoaCNTT.API.Controllers
             var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             bool isAdmin = User.IsInRole("Admin");
 
-            var (stream, fileName) = await _fileService.DownloadFileAsync(id, userIdStr, isAdmin);
+            var (stream, contentType, fileName) = await _fileService.DownloadFileAsync(id, userIdStr, isAdmin);
 
-            return File(stream, fileName);
-            // return File(stream, "application/octet-stream", fileName);
+            return File(stream, contentType, fileName);
         }
 
         // Duyệt file
@@ -97,6 +96,7 @@ namespace KhoaCNTT.API.Controllers
         public async Task<IActionResult> Search(
         [FromQuery] string? keyword,
         [FromQuery] List<string>? subjectCodes,
+        [FromQuery] string? fileType,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10)
         {
@@ -106,7 +106,7 @@ namespace KhoaCNTT.API.Controllers
             var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             bool isAdmin = User.IsInRole("Admin");
 
-            var result = await _fileService.SearchFilesAsync(keyword ?? "", codes, page, pageSize, userIdStr, isAdmin);
+            var result = await _fileService.SearchFilesAsync(keyword ?? "", codes, fileType, page, pageSize, userIdStr, isAdmin);
             return Ok(result);
         }
 
@@ -117,9 +117,10 @@ namespace KhoaCNTT.API.Controllers
             var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             bool isAdmin = User.IsInRole("Admin");
 
-            var result = await _fileService.GetFileByIdAsync(id, userIdStr, isAdmin);
-            return Ok(result);
+            var (stream, contentType) = await _fileService.GetFileByIdAsync(id, userIdStr, isAdmin);
+            return File(stream, contentType);
         }
+
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]

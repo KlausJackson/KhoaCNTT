@@ -6,6 +6,7 @@ namespace KhoaCNTT.Application.DTOs.File
     {
         public int Id { get; set; } // ID của FileEntity
         public string Title { get; set; }
+        public string FileName { get; set; }
         public string SubjectName { get; set; }
         public string SubjectCode { get; set; }
         public FilePermission Permission { get; set; }

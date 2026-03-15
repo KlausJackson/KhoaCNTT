@@ -15,7 +15,6 @@ namespace KhoaCNTT.Domain.Entities
         public Lecturer Lecturer { get; set; } = null!;
 
         // Khóa ngoại trỏ đến Môn học (Subject PK là SubjectCode)
-        public int SubjectId { get; set; } // phần của composite key (LecturerId, SubjectId)
         public string SubjectCode { get; set; } = string.Empty; // FK đến Subjects
         public Subject Subject { get; set; } = null!;
     }
