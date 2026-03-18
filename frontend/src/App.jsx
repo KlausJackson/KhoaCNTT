@@ -3,9 +3,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // Import Layout & Pages
 import UserLayout from './components/Layout/UserLayout'
 import LoginPage from './pages/Auth/LoginPage'
+import HomePage from './pages/Home/HomePage'
 
 import FileList from './pages/File/FileList'
 import FileDetail from './pages/File/FileDetail'
+
+import NewsList from './pages/News/NewsList'
+import NewsDetail from './pages/News/NewsDetail'
 
 import LecturerList from './pages/Lecturer/LecturerList'
 import LecturerDetail from './pages/Lecturer/LecturerDetail'
@@ -18,7 +22,7 @@ import ManageAdmin from './pages/Admin/manages/ManageAdmins'
 import ManageFiles from './pages/Admin/file/ManageFiles'
 import ManageLecturers from './pages/Admin/manages/ManageLecturers'
 import ManageReports from './pages/Admin/manages/ManageReports'
-import ManageNews from './pages/Admin/manages/ManageNews'
+import AdminNewsManagement from './pages/News/Admin/AdminNewsManagement'
 
 const HomePlaceholder = () => (
 	<div className='p-12 text-center text-2xl font-bold'>
@@ -52,7 +56,7 @@ function App() {
 					<Route path='files' element={<ManageFiles />} />
 					<Route path='lecturers' element={<ManageLecturers />} />
 					<Route path='reports' element={<ManageReports />} />
-					<Route path='news' element={<ManageNews />} />
+					<Route path='news' element={<AdminNewsManagement />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

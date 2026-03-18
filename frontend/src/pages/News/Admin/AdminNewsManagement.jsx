@@ -1,239 +1,673 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import newsApi from '../../../api/newsApi'
-import { formatDate } from '../../../helpers/newsHelpers'
+import { newsTypeLabel, newsTypeColor } from '../../../constants/news'
+import { formatDate, timeAgo } from '../../../helpers/newsHelpers'
+import PopupMessage from '../../../components/parts/PopupMessage'
 
-const HomePage = () => {
-	const navigate = useNavigate()
-	const [news, setNews] = useState([])
-	const [searchKeyword, setSearchKeyword] = useState('')
-
-	useEffect(() => {
-		newsApi
-			.search({ pageSize: 5 })
-			.then((res) => {
-				const data = res.items ?? res ?? []
-				setNews(data)
-			})
-			.catch(() => setNews([]))
-	}, [])
-
-	const fallbackNews = [
-		{
-			newsID: 1,
-			title: 'Hội thảo Khoa học Công nghệ Sinh viên lần thứ XV - Năm 2026',
-			createdAt: '2026-03-15'
-		},
-		{
-			newsID: 2,
-			title: 'Lịch bảo vệ Đồ án tốt nghiệp đợt 1 năm 2026 dành cho K62',
-			createdAt: '2026-03-12'
-		},
-		{
-			newsID: 3,
-			title: 'Thông báo tuyển dụng thực tập sinh FPT Software 2026',
-			createdAt: '2026-03-10'
-		},
-		{
-			newsID: 4,
-			title: 'Kết quả kỳ thi Olympic Tin học cấp trường năm học 2025-2026',
-			createdAt: '2026-03-05'
-		},
-		{
-			newsID: 5,
-			title: 'Thông báo tuyển sinh Đợt 1 năm 2026 dành cho K62',
-			createdAt: '2026-03-15'
-		}
-	]
-
-	const displayNews = news.length > 0 ? news : fallbackNews
-
-	const featured = displayNews[0]
-	const largeNews = displayNews[1] || displayNews[0]
-	const smallNews = displayNews.slice(2, 5)
-
-	const handleSearch = (e) => {
-		e.preventDefault()
-		if (searchKeyword.trim()) {
-			navigate(`/news?keyword=${encodeURIComponent(searchKeyword)}`)
-		}
-	}
-
-	return (
-		<div>
-			{/* HERO BANNER */}
-			<div className='bg-gradient-to-br from-[#1f4c7a] to-[#0f172a] text-white py-20 px-4'>
-				<div className='max-w-7xl mx-auto'>
-					<span className='inline-flex items-center gap-1.5 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-4'>
-						📢 TIN NỔI BẬT
-					</span>
-					<h1 className='text-4xl font-bold leading-tight max-w-2xl mb-4'>
-						{featured?.title ||
-							'Chào mừng Tân sinh viên K66 Nhập học năm 2026'}
-					</h1>
-					<p className='text-gray-300 max-w-xl mb-8 line-clamp-3'>
-						Khoa Công nghệ thông tin - Đại học Thủy Lợi tự hào là
-						cái nôi đào tạo nguồn nhân lực chất lượng cao, đáp ứng
-						nhu cầu khắt khe của kỷ nguyên số.
-					</p>
-					<button
-						onClick={() =>
-							featured &&
-							navigate(`/news/${featured.newsID}`, {
-								state: featured
-							})
-						}
-						className='bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition flex items-center gap-2'>
-						Xem chi tiết →
-					</button>
-				</div>
+// ── Modal xác nhận xóa ─────────────────────────────
+const DeleteModal = ({ onConfirm, onCancel }) => (
+	<div className='fixed inset-0 bg-black/40 flex items-center justify-center z-50'>
+		<div className='bg-white rounded-2xl p-8 max-w-sm w-full mx-4 text-center shadow-2xl'>
+			<div className='w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl'>
+				🗑️
 			</div>
+			<h3 className='text-xl font-bold text-gray-900 mb-2'>
+				Xác nhận xóa tin tức
+			</h3>
+			<p className='text-gray-500 text-sm mb-2'>
+				Bạn có chắc chắn muốn xóa tin tức này khỏi hệ thống không?
+			</p>
+			<p className='text-red-500 text-xs font-medium mb-6'>
+				* Hành động này không thể hoàn tác và sẽ xóa toàn bộ dữ liệu
+				liên quan.
+			</p>
+			<div className='flex gap-3'>
+				<button
+					onClick={onCancel}
+					className='flex-1 py-3 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition'>
+					Hủy bỏ
+				</button>
+				<button
+					onClick={onConfirm}
+					className='flex-1 py-3 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition flex items-center justify-center gap-2'>
+					🗑️ Xóa tin tức
+				</button>
+			</div>
+		</div>
+	</div>
+)
 
-			{/* PHẦN TIN TỨC & SỰ KIỆN - NỀN ĐEN */}
-			<div className='bg-white py-16'>
-				<div className='max-w-7xl mx-auto px-4'>
-					{/* Header row - mirrors the 3-column layout below */}
-					<div className='flex gap-8 mb-8'>
-						{/* Tiêu đề căn theo card lớn */}
-						<div className='flex-1'>
-							<h2 className='text-3xl font-bold text-white border-l-4 border-red-500 pl-4'>
-								Tin tức & Sự kiện
-							</h2>
-						</div>
-						{/* "Xem tất cả" căn theo cột 3 card nhỏ */}
-						<div className='w-[340px] flex-shrink-0 flex justify-end items-center'>
-							<Link
-								to='/news'
-								className='text-blue-400 hover:text-white transition text-sm font-medium'>
-								Xem tất cả →
-							</Link>
-						</div>
-						{/* Spacer căn theo widget bên phải */}
-						<div className='w-52 flex-shrink-0' />
+// ── Modal từ chối ──────────────────────────────────
+const RejectModal = ({ onConfirm, onCancel }) => {
+	const [reason, setReason] = useState('')
+	return (
+		<div className='fixed inset-0 bg-black/40 flex items-center justify-center z-50'>
+			<div className='bg-white rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl'>
+				<div className='flex items-center gap-3 mb-4 pb-4 border-b'>
+					<div className='w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-xl'>
+						❌
 					</div>
-
-					<div className='flex gap-8'>
-						{/* CARD LỚN */}
-						{largeNews && (
-							<div
-								onClick={() =>
-									navigate(`/news/${largeNews.newsID}`, {
-										state: largeNews
-									})
-								}
-								className='flex-1 bg-white rounded-3xl overflow-hidden shadow-2xl relative h-[380px] cursor-pointer group'>
-								<div className='h-[55%] bg-gradient-to-br from-slate-100 to-white flex items-center justify-center'>
-									<span className='text-7xl text-gray-300'>
-										📰
-									</span>
-								</div>
-								<div className='absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/95 via-black/80 to-transparent' />
-								<div className='absolute bottom-10 left-8 right-8 text-white z-10'>
-									<div className='flex items-center gap-2 text-yellow-300 text-sm font-medium mb-3'>
-										{formatDate(largeNews.createdAt)} • SỰ
-										KIỆN
-									</div>
-									<h3 className='text-3xl font-bold leading-tight group-hover:text-yellow-300 transition'>
-										{largeNews.title}
-									</h3>
-								</div>
-							</div>
-						)}
-
-						{/* 3 CARD NHỎ */}
-						<div className='w-[340px] flex-shrink-0 space-y-4'>
-							{smallNews.map((item) => (
-								<div
-									key={item.newsID}
-									onClick={() =>
-										navigate(`/news/${item.newsID}`, {
-											state: item
-										})
-									}
-									className='bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100 cursor-pointer group'>
-									<div className='h-28 bg-gray-200 flex items-center justify-center'>
-										<span className='text-5xl text-gray-400'>
-											📅
-										</span>
-									</div>
-									<div className='p-5'>
-										<div className='text-xs text-red-600 font-semibold mb-2'>
-											{formatDate(item.createdAt)}
-										</div>
-										<h4 className='font-semibold text-gray-900 group-hover:text-[#1f4c7a] transition line-clamp-3'>
-											{item.title}
-										</h4>
-									</div>
-								</div>
-							))}
-						</div>
-
-						{/* WIDGET BÊN PHẢI */}
-						<div className='w-52 flex-shrink-0 space-y-3'>
-							<form
-								onSubmit={handleSearch}
-								className='flex items-center border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm'>
-								<input
-									type='text'
-									value={searchKeyword}
-									onChange={(e) =>
-										setSearchKeyword(e.target.value)
-									}
-									placeholder='Tìm kiếm...'
-									className='px-3 py-2 text-xs text-gray-600 outline-none w-full'
-								/>
-								<button
-									type='submit'
-									className='bg-[#1f4c7a] px-3 py-2 text-white text-xs'>
-									🔍
-								</button>
-							</form>
-
-							<div className='bg-blue-50 rounded-2xl shadow-sm border border-blue-200 p-4'>
-								<h3 className='font-bold text-blue-800 mb-1.5 flex items-center gap-1.5 text-sm'>
-									🎓 Tra cứu học tập
-								</h3>
-								<p className='text-xs text-blue-600 mb-3'>
-									Đăng nhập để xem điểm, thời khóa biểu và tài
-									liệu nội bộ.
-								</p>
-								<Link
-									to='/student-portal'
-									className='block w-full bg-[#1f4c7a] text-white text-xs font-medium text-center py-2 rounded-xl hover:bg-[#163a5d] transition'>
-									Truy cập Cổng Sinh Viên
-								</Link>
-							</div>
-
-							<div className='bg-white rounded-2xl shadow-sm border border-gray-100 p-5'>
-								<h3 className='font-bold text-gray-800 mb-4 flex items-center gap-1.5 text-sm'>
-									🔗 Liên kết nhanh
-								</h3>
-								<ul className='space-y-3 text-xs text-gray-600'>
-									{[
-										'Thông báo Đào tạo',
-										'Tuyển dụng & Việc làm',
-										'Biểu mẫu Sinh viên',
-										'Cổng Đăng ký tín chỉ'
-									].map((item) => (
-										<li key={item}>
-											<a
-												href='#'
-												className='flex items-center gap-2 bg-gray-50 hover:bg-blue-50 hover:text-[#1f4c7a] text-gray-700 px-3 py-2.5 rounded-lg transition'>
-												<span className='text-[#1f4c7a] font-bold'>
-													›
-												</span>{' '}
-												{item}
-											</a>
-										</li>
-									))}
-								</ul>
-							</div>
-						</div>
-					</div>
+					<h3 className='text-xl font-bold text-gray-900'>
+						Từ chối phê duyệt
+					</h3>
+				</div>
+				<p className='text-sm font-medium text-gray-800 mb-1'>
+					Lý do từ chối
+				</p>
+				<p className='text-xs text-gray-400 mb-3'>
+					Lý do này sẽ được gửi cho tác giả để họ chỉnh sửa lại nội
+					dung phù hợp.
+				</p>
+				<textarea
+					value={reason}
+					onChange={(e) => setReason(e.target.value)}
+					placeholder='Nhập lý do từ chối tin tức này...'
+					className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none min-h-[120px] focus:outline-none focus:ring-2 focus:ring-orange-400 mb-4'
+				/>
+				<div className='flex gap-3 justify-end'>
+					<button
+						onClick={onCancel}
+						className='px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition'>
+						Hủy bỏ
+					</button>
+					<button
+						onClick={() => onConfirm(reason)}
+						className='px-5 py-2.5 bg-orange-400 text-white rounded-xl text-sm font-medium hover:bg-orange-500 transition flex items-center gap-2'>
+						✈️ Xác nhận
+					</button>
 				</div>
 			</div>
 		</div>
 	)
 }
 
-export default HomePage
+// ── Modal bình luận ────────────────────────────────
+const CommentsModal = ({ news, onClose }) => {
+	const [comments, setComments] = useState([])
+
+	useEffect(() => {
+		if (!news?.newsID) return
+		newsApi
+			.getComments(news.newsID)
+			.then(setComments)
+			.catch(() => {})
+	}, [news?.newsID])
+
+	const handleDelete = async (commentId) => {
+		try {
+			await newsApi.deleteComment(commentId)
+			setComments((prev) => prev.filter((c) => c.id !== commentId))
+		} catch {}
+	}
+
+	return (
+		<div className='fixed inset-0 bg-black/40 flex items-center justify-center z-50'>
+			<div className='bg-white rounded-2xl p-8 max-w-lg w-full mx-4 shadow-2xl'>
+				<h3 className='text-lg font-bold text-gray-900 mb-1'>
+					Bình luận bài viết
+				</h3>
+				<p className='text-sm text-gray-400 mb-4 pb-4 border-b'>
+					Bài viết: {news?.title}
+				</p>
+				<div className='space-y-4 max-h-80 overflow-y-auto'>
+					{comments.length === 0 ? (
+						<p className='text-sm text-gray-400 text-center py-8'>
+							Chưa có bình luận nào.
+						</p>
+					) : (
+						comments.map((c) => (
+							<div
+								key={c.id}
+								className='flex items-start gap-3 pb-4 border-b last:border-0'>
+								<div className='w-9 h-9 rounded-full bg-[#1f4c7a] flex items-center justify-center text-white text-sm font-bold flex-shrink-0'>
+									{c.studentName?.charAt(0) || '?'}
+								</div>
+								<div className='flex-1'>
+									<div className='flex items-center justify-between'>
+										<span className='text-sm font-semibold text-gray-800 underline'>
+											{c.studentName}
+										</span>
+										<button
+											onClick={() => handleDelete(c.id)}
+											className='text-red-400 hover:text-red-600 text-xs transition'>
+											Xóa
+										</button>
+									</div>
+									<p className='text-sm text-gray-600 mt-1'>
+										{c.content}
+									</p>
+								</div>
+							</div>
+						))
+					)}
+				</div>
+				<div className='flex justify-end mt-4'>
+					<button
+						onClick={onClose}
+						className='px-6 py-2.5 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition'>
+						Đóng
+					</button>
+				</div>
+			</div>
+		</div>
+	)
+}
+
+// ── Modal thêm/sửa bài ─────────────────────────────
+const EditModal = ({ news, onClose, onSubmit }) => {
+	const [form, setForm] = useState({
+		title: news?.title || '',
+		newsType: news?.newsType || '',
+		content: news?.content || ''
+	})
+	const isEdit = !!news?.newsID
+	const set = (k, v) => setForm((f) => ({ ...f, [k]: v }))
+
+	return (
+		<div className='fixed inset-0 bg-black/40 flex items-center justify-center z-50'>
+			<div className='bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 shadow-2xl'>
+				<h3 className='text-xl font-bold text-gray-900 mb-6'>
+					{isEdit ? 'Chỉnh sửa tin tức' : 'Thêm tin tức mới'}
+				</h3>
+				<div className='space-y-4'>
+					<div>
+						<label className='text-sm font-medium text-gray-700 mb-1 block'>
+							Tiêu đề bài viết{' '}
+							<span className='text-red-500'>*</span>
+						</label>
+						<input
+							value={form.title}
+							onChange={(e) => set('title', e.target.value)}
+							placeholder='Nhập tiêu đề tin tức...'
+							className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1f4c7a]'
+						/>
+					</div>
+					<div>
+						<label className='text-sm font-medium text-gray-700 mb-1 block'>
+							Danh mục <span className='text-red-500'>*</span>
+						</label>
+						<select
+							value={form.newsType}
+							onChange={(e) => set('newsType', e.target.value)}
+							className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1f4c7a]'>
+							<option value=''>-- Chọn danh mục --</option>
+							<option value='Event'>Sự kiện</option>
+							<option value='Announcement'>Thông báo</option>
+							<option value='Education'>Tin giáo dục</option>
+							<option value='Admission'>Tuyển sinh</option>
+							<option value='Other'>Khác</option>
+						</select>
+					</div>
+					<div>
+						<label className='text-sm font-medium text-gray-700 mb-1 block'>
+							Mô tả ngắn
+						</label>
+						<textarea
+							placeholder='Đoạn trích dẫn ngắn hiển thị ở trang chủ...'
+							className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none min-h-[80px] focus:outline-none focus:ring-2 focus:ring-[#1f4c7a]'
+						/>
+					</div>
+					<div>
+						<label className='text-sm font-medium text-gray-700 mb-1 block'>
+							Nội dung chi tiết{' '}
+							<span className='text-red-500'>*</span>
+						</label>
+						<textarea
+							value={form.content}
+							onChange={(e) => set('content', e.target.value)}
+							placeholder='Nội dung bài viết...'
+							className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none min-h-[160px] focus:outline-none focus:ring-2 focus:ring-[#1f4c7a]'
+						/>
+					</div>
+				</div>
+				<div className='flex justify-end gap-3 mt-6'>
+					<button
+						onClick={onClose}
+						className='px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition'>
+						Hủy
+					</button>
+					<button
+						onClick={() => onSubmit(form)}
+						className='px-6 py-2.5 bg-[#1f4c7a] text-white rounded-xl text-sm font-medium hover:bg-[#163a5d] transition'>
+						Đăng bài
+					</button>
+				</div>
+			</div>
+		</div>
+	)
+}
+
+// ── Main ───────────────────────────────────────────
+const AdminNewsManagement = () => {
+	const navigate = useNavigate()
+	const [tab, setTab] = useState('list')
+	const [newsList, setNewsList] = useState([])
+	const [pendingList, setPendingList] = useState([])
+	const [popup, setPopup] = useState(null)
+	const [isLoading, setIsLoading] = useState(false)
+	const [keyword, setKeyword] = useState('')
+	const [selectedType, setSelectedType] = useState('')
+
+	const [deleteTarget, setDeleteTarget] = useState(null)
+	const [rejectTarget, setRejectTarget] = useState(null)
+	const [editTarget, setEditTarget] = useState(null)
+	const [commentTarget, setCommentTarget] = useState(null)
+
+	const showPopup = (msg) => setPopup(msg)
+
+	const loadData = async () => {
+		setIsLoading(true)
+		try {
+			const [listRes, pending] = await Promise.all([
+				newsApi.search({ pageSize: 100 }),
+				newsApi.getPendingList()
+			])
+			setNewsList(listRes.items ?? listRes)
+			setPendingList(pending)
+		} catch {
+			showPopup('Không thể tải dữ liệu.')
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		loadData()
+	}, [])
+
+	const handleDelete = async () => {
+		try {
+			await newsApi.delete(deleteTarget.newsID)
+			showPopup('Đã xóa tin tức thành công.')
+			setDeleteTarget(null)
+			loadData()
+		} catch {
+			showPopup('Xóa tin tức thất bại.')
+		}
+	}
+
+	const handleApprove = async (requestId) => {
+		try {
+			await newsApi.approve(requestId, {
+				decision: 'Approved',
+				rejectReason: null
+			})
+			showPopup('Đã phê duyệt thành công.')
+			loadData()
+		} catch {
+			showPopup('Phê duyệt thất bại.')
+		}
+	}
+
+	const handleReject = async (reason) => {
+		try {
+			await newsApi.approve(rejectTarget.newsRequestID, {
+				decision: 'Rejected',
+				rejectReason: reason
+			})
+			showPopup('Đã từ chối yêu cầu.')
+			setRejectTarget(null)
+			loadData()
+		} catch {
+			showPopup('Từ chối thất bại.')
+		}
+	}
+
+	const handleSubmitEdit = async (form) => {
+		try {
+			if (editTarget?.newsID) {
+				await newsApi.update(editTarget.newsID, form)
+				showPopup('Đã gửi yêu cầu chỉnh sửa.')
+			} else {
+				await newsApi.create(form)
+				showPopup('Đã tạo tin tức mới.')
+			}
+			setEditTarget(null)
+			loadData()
+		} catch {
+			showPopup('Thao tác thất bại.')
+		}
+	}
+
+	const filtered = newsList.filter((n) => {
+		const matchKw = n.title.toLowerCase().includes(keyword.toLowerCase())
+		const matchType = selectedType ? n.newsType === selectedType : true
+		return matchKw && matchType
+	})
+
+	return (
+		<div className='p-6'>
+			{/* Header */}
+			<div className='flex items-center justify-between mb-6'>
+				<h1 className='text-2xl font-bold text-[#1f4c7a]'>
+					Quản lý Tin tức & Sự kiện
+				</h1>
+				<button
+					onClick={() => setEditTarget({})}
+					className='flex items-center gap-2 bg-[#1f4c7a] text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#163a5d] transition'>
+					+ Thêm mới
+				</button>
+			</div>
+
+			{/* Tabs */}
+			<div className='flex border-b border-gray-200 mb-6'>
+				{[
+					{ key: 'list', label: 'Danh sách Bài viết' },
+					{
+						key: 'pending',
+						label: 'Danh sách chờ duyệt',
+						count: pendingList.length
+					}
+				].map((t) => (
+					<button
+						key={t.key}
+						onClick={() => setTab(t.key)}
+						className={`px-4 py-2.5 text-sm font-medium border-b-2 transition flex items-center gap-2 ${
+							tab === t.key
+								? 'border-[#1f4c7a] text-[#1f4c7a]'
+								: 'border-transparent text-gray-500 hover:text-gray-700'
+						}`}>
+						{t.label}
+						{t.count > 0 && (
+							<span className='bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center'>
+								{t.count}
+							</span>
+						)}
+					</button>
+				))}
+			</div>
+
+			{/* TAB: DANH SÁCH */}
+			{tab === 'list' && (
+				<div className='bg-white rounded-xl border border-gray-100 shadow-sm p-5'>
+					<div className='flex gap-3 mb-5'>
+						<div className='flex-1 relative'>
+							<span className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm'>
+								🔍
+							</span>
+							<input
+								type='text'
+								placeholder='Tìm kiếm theo tiêu đề bài viết...'
+								value={keyword}
+								onChange={(e) => setKeyword(e.target.value)}
+								className='w-full border border-gray-200 rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1f4c7a]'
+							/>
+						</div>
+						<select
+							value={selectedType}
+							onChange={(e) => setSelectedType(e.target.value)}
+							className='border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none w-[200px]'>
+							<option value=''>-- Tất cả danh mục --</option>
+							<option value='Event'>Sự kiện</option>
+							<option value='Announcement'>Thông báo</option>
+							<option value='Education'>Tin giáo dục</option>
+							<option value='Admission'>Tuyển sinh</option>
+							<option value='Other'>Khác</option>
+						</select>
+					</div>
+
+					<table className='w-full text-sm'>
+						<thead>
+							<tr className='text-left text-gray-500 border-b border-gray-100 text-xs uppercase tracking-wide'>
+								<th className='py-3 font-medium w-[40%]'>
+									Tiêu đề bài viết
+								</th>
+								<th className='py-3 font-medium w-[15%]'>
+									Danh mục
+								</th>
+								<th className='py-3 font-medium w-[15%]'>
+									Tương tác
+								</th>
+								<th className='py-3 font-medium w-[15%]'>
+									Trạng thái
+								</th>
+								<th className='py-3 font-medium w-[10%]'>
+									Thao tác
+								</th>
+							</tr>
+						</thead>
+						<tbody className='divide-y divide-gray-50'>
+							{isLoading ? (
+								<tr>
+									<td
+										colSpan={5}
+										className='py-12 text-center text-gray-400'>
+										Đang tải...
+									</td>
+								</tr>
+							) : filtered.length === 0 ? (
+								<tr>
+									<td
+										colSpan={5}
+										className='py-12 text-center text-gray-400'>
+										Không có bài viết nào.
+									</td>
+								</tr>
+							) : (
+								filtered.map((item) => (
+									<tr
+										key={item.newsID}
+										className='hover:bg-gray-50 transition'>
+										<td className='py-3 pr-4'>
+											<p className='font-medium text-gray-800 truncate max-w-xs'>
+												{item.title}
+											</p>
+											<p className='text-xs text-gray-400 mt-0.5 truncate max-w-xs'>
+												{item.content?.slice(0, 60)}...
+											</p>
+										</td>
+										<td className='py-3'>
+											<span
+												className={`text-xs font-medium px-2.5 py-1 rounded-full ${newsTypeColor[item.newsType] || 'bg-gray-100 text-gray-600'}`}>
+												{newsTypeLabel[item.newsType] ||
+													item.newsType}
+											</span>
+										</td>
+										<td className='py-3'>
+											<button
+												onClick={() =>
+													setCommentTarget(item)
+												}
+												className='flex items-center gap-1 text-blue-500 hover:text-blue-700 text-xs transition'>
+												💬 Bình luận
+											</button>
+										</td>
+										<td className='py-3'>
+											<span className='text-xs font-medium px-2.5 py-1 rounded-full bg-green-100 text-green-700'>
+												Công khai
+											</span>
+										</td>
+										<td className='py-3'>
+											<div className='flex items-center gap-2'>
+												<button
+													onClick={() =>
+														setEditTarget(item)
+													}
+													className='text-gray-400 hover:text-[#1f4c7a] transition'
+													title='Chỉnh sửa'>
+													✏️
+												</button>
+												<button
+													onClick={() =>
+														setDeleteTarget(item)
+													}
+													className='text-gray-400 hover:text-red-500 transition'
+													title='Xóa'>
+													🗑️
+												</button>
+											</div>
+										</td>
+									</tr>
+								))
+							)}
+						</tbody>
+					</table>
+				</div>
+			)}
+
+			{/* TAB: CHỜ DUYỆT */}
+			{tab === 'pending' && (
+				<div className='bg-white rounded-xl border border-gray-100 shadow-sm p-5'>
+					<h3 className='font-semibold text-gray-800 mb-4'>
+						Bài viết đang chờ phê duyệt
+					</h3>
+					<table className='w-full text-sm'>
+						<thead>
+							<tr className='text-left text-gray-500 border-b border-gray-100 text-xs uppercase tracking-wide'>
+								<th className='py-3 font-medium w-[28%]'>
+									Tiêu đề bài viết
+								</th>
+								<th className='py-3 font-medium w-[12%]'>
+									Danh mục
+								</th>
+								<th className='py-3 font-medium w-[13%]'>
+									Người soạn
+								</th>
+								<th className='py-3 font-medium w-[14%]'>
+									Thời gian gửi
+								</th>
+								<th className='py-3 font-medium w-[10%]'>
+									Loại
+								</th>
+								<th className='py-3 font-medium w-[10%]'>
+									Trạng thái
+								</th>
+								<th className='py-3 font-medium w-[10%]'>
+									Thao tác
+								</th>
+							</tr>
+						</thead>
+						<tbody className='divide-y divide-gray-50'>
+							{isLoading ? (
+								<tr>
+									<td
+										colSpan={7}
+										className='py-12 text-center text-gray-400'>
+										Đang tải...
+									</td>
+								</tr>
+							) : pendingList.length === 0 ? (
+								<tr>
+									<td
+										colSpan={7}
+										className='py-12 text-center text-gray-400'>
+										Không có yêu cầu nào đang chờ duyệt.
+									</td>
+								</tr>
+							) : (
+								pendingList.map((item) => (
+									<tr
+										key={item.newsRequestID}
+										className='hover:bg-gray-50 transition'>
+										<td className='py-3 pr-4'>
+											<p className='font-medium text-gray-800 truncate max-w-[200px]'>
+												{item.title}
+											</p>
+										</td>
+										<td className='py-3'>
+											<span
+												className={`text-xs font-medium px-2.5 py-1 rounded-full ${newsTypeColor[item.newsType] || 'bg-gray-100 text-gray-600'}`}>
+												{newsTypeLabel[item.newsType] ||
+													item.newsType}
+											</span>
+										</td>
+										<td className='py-3 text-gray-600 text-xs'>
+											{item.requesterName || 'Editor'}
+										</td>
+										<td className='py-3 text-gray-500 text-xs'>
+											{formatDate(item.createdAt)}
+										</td>
+										<td className='py-3'>
+											<span
+												className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+													item.requestType ===
+													'Replace'
+														? 'bg-orange-100 text-orange-600'
+														: 'bg-blue-100 text-blue-600'
+												}`}>
+												{item.requestType === 'Replace'
+													? 'Chỉnh sửa'
+													: 'Đăng mới'}
+											</span>
+										</td>
+										<td className='py-3'>
+											<span className='text-xs font-medium px-2.5 py-1 rounded-full bg-yellow-100 text-yellow-700'>
+												Từ chối
+											</span>
+										</td>
+										<td className='py-3'>
+											<div className='flex items-center gap-2'>
+												<button
+													onClick={() =>
+														handleApprove(
+															item.newsRequestID
+														)
+													}
+													className='text-green-500 hover:text-green-700 transition'
+													title='Duyệt'>
+													✅
+												</button>
+												<button
+													onClick={() =>
+														setRejectTarget(item)
+													}
+													className='text-red-400 hover:text-red-600 transition'
+													title='Từ chối'>
+													❌
+												</button>
+												<button
+													onClick={() =>
+														navigate(
+															`/news/${item.newsID}`
+														)
+													}
+													className='text-gray-400 hover:text-[#1f4c7a] transition'
+													title='Xem chi tiết'>
+													👁️
+												</button>
+											</div>
+										</td>
+									</tr>
+								))
+							)}
+						</tbody>
+					</table>
+				</div>
+			)}
+
+			{/* Modals */}
+			{deleteTarget && (
+				<DeleteModal
+					onConfirm={handleDelete}
+					onCancel={() => setDeleteTarget(null)}
+				/>
+			)}
+			{rejectTarget && (
+				<RejectModal
+					onConfirm={handleReject}
+					onCancel={() => setRejectTarget(null)}
+				/>
+			)}
+			{editTarget !== null && (
+				<EditModal
+					news={editTarget}
+					onClose={() => setEditTarget(null)}
+					onSubmit={handleSubmitEdit}
+				/>
+			)}
+			{commentTarget && (
+				<CommentsModal
+					news={commentTarget}
+					onClose={() => setCommentTarget(null)}
+				/>
+			)}
+
+			{popup && (
+				<PopupMessage message={popup} onClose={() => setPopup(null)} />
+			)}
+		</div>
+	)
+}
+
+export default AdminNewsManagement

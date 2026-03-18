@@ -29,7 +29,7 @@ export 	const menu = [
 	{
 		name: 'Tin tức & Sự kiện',
 		path: '/admin/news',
-		icon: Newspaper
+		icon: Newspaper 
 	},
 	{
 		name: 'Tài liệu',
