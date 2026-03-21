@@ -14,8 +14,10 @@ function FormModal({
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		const formData = new FormData(e.target)
+		// const formData = Object.fromEntries(formData.entries())
 		onSubmit(formData)
 	}
+	const isEdit = !!defaultValues
 
 	return (
 		<Modal title={title} onClose={onClose} width={width}>
@@ -134,6 +136,7 @@ function FormModal({
 										required={field.required}
 										readOnly={field.readOnly}
 										placeholder={field.placeholder}
+										disabled={field.disabled && isEdit}
 										defaultValue={
 											defaultValues?.[field.name] ?? ''
 										}

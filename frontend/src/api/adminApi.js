@@ -12,7 +12,6 @@ const adminApi = {
 	},
 
 	update: (data) => {
-		console.log(typeof data.isActive, data.isActive)
         // data: { fullName, email, level, isActive }
 		return axiosClient.put(`/Admins/${data.id}`, data)
 	},

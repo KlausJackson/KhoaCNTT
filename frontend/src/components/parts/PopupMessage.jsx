@@ -1,4 +1,14 @@
+import { useEffect } from 'react'
+
 const PopupMessage = ({ message, onClose }) => {
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			onClose()
+		}, 3000)
+
+		return () => clearTimeout(timer) // cleanup
+	}, [message])
+	
 	if (!message) return null
 
 	return (

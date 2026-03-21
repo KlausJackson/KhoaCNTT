@@ -136,15 +136,18 @@ function ManageAdmin() {
 					title='Cập nhật thông tin tài khoản'
 					fields={fields.filter(f => f.name !== "isActive")}
 					defaultValues={editingAdmin}
-					onSubmit={(data) =>
+					onSubmit={(formData) => {
+						const data = Object.fromEntries(formData.entries())
 						handleAction(
 							adminApi.update,
 							{ id: editingAdmin.id, ...data },
 							setEditingAdmin,
 							loadAdmins,
 							setPopup,
-							//"Cập nhật tài khoản thành công."
+							// "Cập nhật tài khoản thành công."
 						)
+					}
+						
 					}
 					onClose={() => setEditingAdmin(null)}
 				/>
