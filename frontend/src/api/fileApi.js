@@ -53,7 +53,7 @@ const fileApi = {
 	},
 
 	replace: (id, formData) => {
-		return axiosClient.put(`/Files/${id}/replace`, formData, {
+		return axiosClient.post(`/Files/${id}/replace`, formData, {
 			headers: { 'Content-Type': 'multipart/form-data' }
 		})
 	},

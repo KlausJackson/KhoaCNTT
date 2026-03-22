@@ -1,9 +1,18 @@
-
 export const columns = [
-	{ key: 'title', label: 'Tiêu đề', width: '22%' }, 
+	{ key: 'title', label: 'Tiêu đề', width: '22%' },
 	{ key: 'subjectCode', label: 'Môn học', width: '12%' },
-	{ key: 'fileType', label: 'Loại tài liệu', width: '14%' },
-	{ key: 'permission', label: 'Quyền', width: '14%' },
+	{
+		key: 'fileType',
+		label: 'Loại tài liệu',
+		width: '14%',
+		render: (value) => fileTypeMap[value] || value
+	},
+	{
+		key: 'permission',
+		label: 'Quyền',
+		width: '14%',
+		render: (value) => permissionMap[value] || value
+	},
 	{ key: 'viewCount', label: 'Views', width: '10%' },
 	{ key: 'downloadCount', label: 'Downloads', width: '10%' }
 ]
@@ -12,7 +21,7 @@ export const editMetadataFields = [
 	{
 		name: 'title',
 		label: 'Tiêu đề tài liệu',
-		required: true,
+		required: true
 	},
 	{
 		name: 'permission',
@@ -51,7 +60,7 @@ export const pendingColumns = [
 	{
 		key: 'title',
 		label: 'Tiêu đề',
-		width: '25%',
+		width: '25%'
 	},
 	{
 		key: 'createdAt',
@@ -90,7 +99,7 @@ export const uploadFields = [
 	{
 		name: 'title',
 		label: 'Tiêu đề',
-		required: true,
+		required: true
 	},
 	{
 		name: 'fileType',
@@ -128,7 +137,12 @@ export const uploadFields = [
 		required: true,
 		fullWidth: true
 	},
-	{ name: 'subjectCode', label: 'Mã môn học', required: false, fullWidth: true }
+	{
+		name: 'subjectCode',
+		label: 'Mã môn học',
+		required: false,
+		fullWidth: true
+	}
 ]
 
 export const replaceFields = [
@@ -154,7 +168,7 @@ export const getSearchConfig = (subjects) => [
 		type: 'text',
 		placeholder: 'Tìm kiếm...',
 		colSpan: 2,
-		width: "w-[200px]"
+		width: 'w-[200px]'
 	},
 	{
 		name: 'subjectCodes',
@@ -178,7 +192,7 @@ export const getSearchConfig = (subjects) => [
 			{ label: 'Biểu mẫu', value: 'Form' },
 			{ label: 'Khác', value: 'Other' }
 		],
-		width: "w-[140px]"
+		width: 'w-[140px]'
 	},
 	{
 		name: 'pageSize',
@@ -186,10 +200,9 @@ export const getSearchConfig = (subjects) => [
 		type: 'number',
 		defaultValue: 10,
 		colSpan: 1,
-		width: "w-[90px]"
+		width: 'w-[90px]'
 	}
 ]
-
 
 export const fileTypeMap = {
 	LectureNotes: 'Bài giảng',

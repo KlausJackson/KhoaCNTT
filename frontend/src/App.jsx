@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // Import Layout & Pages
 import UserLayout from './components/Layout/UserLayout'
 import LoginPage from './pages/Auth/LoginPage'
+import NotFound from './components/Layout/NotFound'
 import HomePage from './pages/Home/HomePage'
 
 import FileList from './pages/File/FileList'
@@ -30,6 +31,7 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				{/* Route Đăng nhập độc lập không có Header/Footer */}
+				<Route path='*' element={<NotFound />} />
 				<Route path='/login' element={<LoginPage />} />
 
 				{/* Các trang User bọc trong UserLayout */}
@@ -47,6 +49,7 @@ function App() {
 
 				{/* Route Admin */}
 				<Route path='/admin' element={<AdminLayout />}>
+					<Route path='*' element={<NotFound />} />
 					<Route path='accounts' element={<ManageAdmin />} />
 					<Route path='files' element={<ManageFiles />} />
 					<Route path='lecturers' element={<ManageLecturers />} />

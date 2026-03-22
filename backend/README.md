@@ -176,6 +176,14 @@ API → Application → Domain
 # Project Setup
 
 Tạo folder mới để lưu trữ file trên ổ D nếu muốn test các chức năng quản lý tài liệu: `D:\KhoaCNTT_data`.
+Máy không có ổ D thì tạo folder `KhoaCNTT_data` ở bất kỳ đâu trên máy, sau đó chỉnh sửa đường dẫn trong file `appsettings.json` của KhoaCNTT.API:
+
+```json
+  "FileStorage": {
+    "UploadFolder": "D:\\KhoaCNTT_data"
+  },
+```
+
 
 ## Database Setup
 
