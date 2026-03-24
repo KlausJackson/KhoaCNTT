@@ -38,7 +38,8 @@ export const fields = [
 		label: 'Tên đăng nhập',
 		placeholder: 'Nhập username',
 		required: true,
-		disabled: true
+		disabled: true,
+		readOnly: true
 	},
 	{
 		name: 'email',

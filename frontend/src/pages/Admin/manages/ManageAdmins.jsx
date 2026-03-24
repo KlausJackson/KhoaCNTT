@@ -114,15 +114,21 @@ function ManageAdmin() {
 				<FormModal
 					title='Thêm tài khoản quản trị viên'
 					fields={fields}
-					onSubmit={(data) => 
+					onSubmit={(data) => {
+						const formData = Object.fromEntries(data.entries())
+						formData.level = Number(formData.level)
+						formData.isActive = Boolean(formData.isActive)
+						console.log(formData)
 						handleAction(
 							adminApi.create,
-							data,
+							formData,
 							setShowCreate,
 							loadAdmins,
 							setPopup,
 							//"Tạo tài khoản thành công."
 						)
+					}
+						
 					}
 					onClose={() => setShowCreate(false)}
 				/>
@@ -135,6 +141,8 @@ function ManageAdmin() {
 					defaultValues={editingAdmin}
 					onSubmit={(formData) => {
 						const data = Object.fromEntries(formData.entries())
+						data.level = Number(data.level)
+						
 						handleAction(
 							adminApi.update,
 							{ id: editingAdmin.id, ...data },

@@ -134,7 +134,7 @@ function FormModal({
 										name={field.name}
 										type={field.type || 'text'}
 										required={field.required}
-										readOnly={field.readOnly}
+										readOnly={field.readOnly && isEdit}
 										placeholder={field.placeholder}
 										disabled={field.disabled && isEdit}
 										defaultValue={
