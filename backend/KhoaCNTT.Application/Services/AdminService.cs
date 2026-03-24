@@ -42,14 +42,15 @@ namespace KhoaCNTT.Application.Services
                 );
             }
             // Check các trường khác
-            _checkFields(request.Password, request.FullName, request.Email, request.Level, true);
+            CheckFields(request.Password, request.FullName, request.Email, request.Level, true);
 
             // Check trùng Username
-            var existAdmin = await _repo.GetByUsernameAsync(request.Username);
-            if (existAdmin != null)
+            var existUsername = await _repo.GetByUsernameAsync(request.Username);
+            if (existUsername != null)
                 throw new BusinessRuleException("Tên đăng nhập này đã tồn tại.");
 
-            if (existAdmin.Email == request.Email)
+            var existEmail = await _repo.GetByEmailAsync(request.Email);
+            if (existEmail != null)
                 throw new BusinessRuleException("Email này đã tồn tại.");
 
             // 2. Hash Password
@@ -63,7 +64,7 @@ namespace KhoaCNTT.Application.Services
                 FullName = request.FullName,
                 Email = request.Email,
                 Level = request.Level,
-                IsActive = true // Mặc định kích hoạt
+                IsActive = request.IsActive
             };
 
             await _repo.AddAsync(newAdmin);
@@ -71,14 +72,13 @@ namespace KhoaCNTT.Application.Services
 
         public async Task UpdateAdminAsync(int id, UpdateAdminRequest request)
         {
-            var admin = await _repo.GetByIdAsync(id);
-            if (admin == null) throw new NotFoundException("Admin", id);
+            var admin = await _repo.GetByIdAsync(id) ?? throw new NotFoundException("Admin", id);
+            CheckFields(request.Password, request.FullName, request.Email, request.Level, false);
 
-            _checkFields(request.Password, request.FullName, request.Email, request.Level, false);
-
-            var existAdmin = await _repo.GetByIdAsync(id);
-            if (existAdmin.Email == request.Email)
+            var existEmail = await _repo.GetByEmailAsync(request.Email);
+            if (existEmail != null && existEmail.Id != id)
                 throw new BusinessRuleException("Email này đã tồn tại.");
+
 
             if (admin.Level == 1)
             {
@@ -97,8 +97,7 @@ namespace KhoaCNTT.Application.Services
 
         public async Task DeleteAdminAsync(string currentUsername, int id)
         {
-            var admin = await _repo.GetByIdAsync(id);
-            if (admin == null) throw new NotFoundException("Admin", id);
+            var admin = await _repo.GetByIdAsync(id) ?? throw new NotFoundException("Admin", id);
 
             // Không cho tự xóa chính mình
             if (currentUsername == admin.Username)
@@ -109,7 +108,7 @@ namespace KhoaCNTT.Application.Services
             await _repo.DeleteAsync(admin);
         }
 
-        private bool _checkFields(string? password, string? fullName, string? email, int? level, bool isCreate)
+        private static bool CheckFields(string? password, string? fullName, string? email, int? level, bool isCreate)
         {
             if (level != null && (level < 1 || level > 3))
             {

@@ -1,6 +1,7 @@
 ﻿
 using KhoaCNTT.Application.Interfaces.Repositories;
 using KhoaCNTT.Domain.Entities;
+using KhoaCNTT.Domain.Entities.FileEntities;
 using KhoaCNTT.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,12 @@ namespace KhoaCNTT.Infrastructure.Repositories
         {
             return await _context.Admins
                 .FirstOrDefaultAsync(u => u.Username == username);
+        }
+
+        public async Task<Admin?> GetByEmailAsync(string email)
+        {
+            return await _context.Admins
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
 
@@ -49,5 +56,7 @@ namespace KhoaCNTT.Infrastructure.Repositories
         {
             return await _context.Admins.ToListAsync();
         }
+
+        public Task<List<Admin>> GetAllAsync(System.Linq.Expressions.Expression<Func<Admin, bool>> predicate) => throw new NotImplementedException();
     }
 }

@@ -20,7 +20,7 @@ namespace KhoaCNTT.API.Controllers
         }
 
         // Middleware kiểm tra quyền Cấp 1
-        private bool _isRootAdmin()
+        private bool IsRootAdmin()
         {
             var levelStr = User.FindFirst("Level")?.Value;
             return int.TryParse(levelStr, out int level) && level == 1;
@@ -29,7 +29,7 @@ namespace KhoaCNTT.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            if (!_isRootAdmin()) return Forbid(); // Chỉ Cấp 1 xem được danh sách
+            if (!IsRootAdmin()) return Forbid(); // Chỉ Cấp 1 xem được danh sách
 
             var result = await _adminService.GetAllAdminsAsync();
             return Ok(result);
@@ -38,7 +38,7 @@ namespace KhoaCNTT.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateAdminRequest request)
         {
-            if (!_isRootAdmin()) return Forbid();
+            if (!IsRootAdmin()) return Forbid();
 
             await _adminService.CreateAdminAsync(request);
             return Ok(new { Message = "Tạo tài khoản thành công." });
@@ -47,7 +47,7 @@ namespace KhoaCNTT.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateAdminRequest request)
         {
-            if (!_isRootAdmin()) return Forbid();
+            if (!IsRootAdmin()) return Forbid();
 
             // dùng chung cho: Sửa thông tin, Phân quyền (đổi Level), Vô hiệu hóa (đổi IsActive)
             await _adminService.UpdateAdminAsync(id, request);
@@ -57,7 +57,7 @@ namespace KhoaCNTT.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!_isRootAdmin()) return Forbid();
+            if (!IsRootAdmin()) return Forbid();
             var currentUsername = User.Identity?.Name ?? "";
             await _adminService.DeleteAdminAsync(currentUsername, id);
             return Ok(new { Message = "Xóa tài khoản thành công." });

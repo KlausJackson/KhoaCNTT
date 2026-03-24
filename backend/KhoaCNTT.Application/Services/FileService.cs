@@ -11,6 +11,7 @@ using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 using System.IO;
 using System.Reflection.Metadata.Ecma335;
+using static System.Net.WebRequestMethods;
 
 namespace KhoaCNTT.Application.Services
 {
@@ -52,15 +53,14 @@ namespace KhoaCNTT.Application.Services
 
         // UPLOAD & DUYỆT
 
-        public async Task ActionFileAsync(UploadFileRequest request, string username, int adminLevel, RequestType type, int? targetFileId = null)
+        public async Task ActionFileAsync(UploadFileRequest request, string username, RequestType type, int? targetFileId = null)
         {
             // Validate
-            await checkSubjectCode(request.SubjectCode);
-            if (request.Title.Length < 3 || request.Title.Length > 20)
-            {
-                throw new BusinessRuleException("Tiêu đề phải có độ dài từ 3-20 ký tự.");
-            }
-            int adminId = await getAdminId(username);
+            await CheckSubjectCode(request.SubjectCode);
+            CheckTitle(request.Title);
+            var admin = await _adminRepo.GetByUsernameAsync(username);
+            if (admin == null) throw new BusinessRuleException("Không tìm thấy thông tin Admin.");
+            if (request.File == null) throw new BusinessRuleException("Vui lòng tải lên tài liệu.");
 
             // Lưu file vật lý
             var path = await _storage.SaveFileAsync(request.File);
@@ -70,7 +70,7 @@ namespace KhoaCNTT.Application.Services
             {
                 FileName = request.File.FileName,
                 FilePath = path,
-                CreatedBy = adminId,
+                CreatedBy = admin.Id,
                 Size = request.File.Length,
                 CreatedAt = DateTime.UtcNow
             };
@@ -103,26 +103,28 @@ namespace KhoaCNTT.Application.Services
             await _requestRepo.AddAsync(fileRequest);
 
             // Auto Approve nếu là Admin Cấp 1, 2
-            if (adminLevel <= 2)
+            if (admin.Level <= 2)
             {
                 await ApproveFileAsync(fileRequest.Id, true, "Auto Approved", username);
             }
         }
 
-        public async Task UploadFileAsync(UploadFileRequest request, string username, int adminLevel)
+        public async Task UploadFileAsync(UploadFileRequest request, string username)
         {
-            await ActionFileAsync(request, username, adminLevel, RequestType.CreateNew, null);
+            await ActionFileAsync(request, username, RequestType.CreateNew, null);
         }
 
-        public async Task ReplaceFileAsync(int targetFileId, UploadFileRequest request, string username, int adminLevel)
+        public async Task ReplaceFileAsync(int targetFileId, UploadFileRequest request, string username)
         {
-            await ActionFileAsync(request, username, adminLevel, RequestType.Replace, targetFileId);
+            await ActionFileAsync(request, username, RequestType.Replace, targetFileId);
         }
 
         public async Task ApproveFileAsync(int requestId, bool isApproved, string? reason, string username)
         {
             // Validate
-            int adminId = await getAdminId(username);
+            var admin = await _adminRepo.GetByUsernameAsync(username);
+            if (admin == null) throw new BusinessRuleException("Không tìm thấy thông tin Admin.");
+
             var request = await _requestRepo.GetByIdAsync(requestId);
             if (request == null) throw new NotFoundException("Request", requestId);
             if (request.IsProcessed) throw new BusinessRuleException("Yêu cầu đã được xử lý.");
@@ -133,7 +135,7 @@ namespace KhoaCNTT.Application.Services
             var approval = new FileApproval
             {
                 FileRequestId = requestId,
-                ApproverId = adminId,
+                ApproverId = admin.Id,
                 Decision = decision,
                 Reason = reason,
                 CreatedAt = DateTime.UtcNow
@@ -155,7 +157,7 @@ namespace KhoaCNTT.Application.Services
                         ViewCount = 0,
                         DownloadCount = 0,
                         CreatedAt = DateTime.UtcNow,
-                        CreatedBy = adminId
+                        CreatedBy = admin.Id
                     };
                     await _fileRepo.AddAsync(newFile);
                 }
@@ -232,19 +234,16 @@ namespace KhoaCNTT.Application.Services
                 throw new BusinessRuleException("Tài liệu này không hỗ trợ xem trước.");
             }
 
-            var stream = _storage.GetFileStream(file.CurrentResource.FilePath);
-            if (stream == null)
-                throw new NotFoundException("File vật lý không tồn tại", id);
-
+            var stream = _storage.GetFileStream(file.CurrentResource.FilePath) ?? throw new NotFoundException("File vật lý không tồn tại", id);
             using var originalPdf = PdfReader.Open(stream, PdfDocumentOpenMode.Import);
 
             var previewPdf = new PdfDocument();
 
-            if (originalPdf.PageCount > 1)
-            {
+            if (originalPdf.PageCount >= 1)
                 previewPdf.AddPage(originalPdf.Pages[0]);
+
+            if (originalPdf.PageCount >= 2)
                 previewPdf.AddPage(originalPdf.Pages[1]);
-            }
 
             var memoryStream = new MemoryStream();
             previewPdf.Save(memoryStream, false);
@@ -261,16 +260,14 @@ namespace KhoaCNTT.Application.Services
         public async Task<(Stream stream, string contentType, string fileName)> DownloadFileAsync(int fileId, string? userId, bool isAdmin)
         {
             // Lấy FileEntity
-            var file = await _fileRepo.GetByIdAsync(fileId);
-            if (file == null) throw new NotFoundException("File", fileId);
+            var file = await _fileRepo.GetByIdAsync(fileId) ?? throw new NotFoundException("File", fileId);
 
             // Check Quyền
             CheckPermission(file.Permission, userId, isAdmin, "tải về");
 
             // Lấy Resource vật lý
             // FileEntity giữ ID của Resource đang dùng
-            var resource = await _resourceRepo.GetByIdAsync(file.CurrentResourceId);
-            if (resource == null) throw new NotFoundException("File Resource", file.CurrentResourceId);
+            var resource = await _resourceRepo.GetByIdAsync(file.CurrentResourceId) ?? throw new NotFoundException("File Resource", file.CurrentResourceId);
 
             // Tăng lượt tải
             file.DownloadCount++;
@@ -280,17 +277,13 @@ namespace KhoaCNTT.Application.Services
 
             // Stream file từ ổ cứng
             var stream = _storage.GetFileStream(resource.FilePath);
-            if (stream == null) throw new NotFoundException("File vật lý", fileName);
-            
-            return (stream, GetContentType(fileName), fileName);
+            return stream == null ? throw new NotFoundException("File vật lý", fileName) : ((Stream stream, string contentType, string fileName))(stream, GetContentType(fileName), fileName);
         }
 
         public async Task DeleteFileAsync(int fileId)
         {
             // Xóa FileEntity
-            var file = await _fileRepo.GetByIdAsync(fileId);
-            if (file == null) throw new NotFoundException("File", fileId);
-
+            var file = await _fileRepo.GetByIdAsync(fileId) ?? throw new NotFoundException("File", fileId);
             await _fileRepo.DeleteAsync(file);
         }
 
@@ -298,15 +291,11 @@ namespace KhoaCNTT.Application.Services
         {
             // Chỉ sửa metadata (Title, Subject...), không sửa file vật lý
 
-            var file = await _fileRepo.GetByIdAsync(fileId);
-            if (file == null) throw new NotFoundException("File", fileId);
-            if (request.Title.Length < 3 || request.Title.Length > 20)
-            {
-                throw new BusinessRuleException("Tiêu đề phải có độ dài từ 3-20 ký tự.");
-            }
-            await checkSubjectCode(request.SubjectCode);
+            var file = await _fileRepo.GetByIdAsync(fileId) ?? throw new NotFoundException("File", fileId);
+            await CheckSubjectCode(request.SubjectCode);
+            CheckTitle(request.Title);
 
-            file.Title = request.Title ?? request.Title;
+            file.Title = request.Title;
             file.SubjectCode = string.IsNullOrWhiteSpace(request.SubjectCode)
                 ? null
                 : request.SubjectCode;
@@ -321,7 +310,7 @@ namespace KhoaCNTT.Application.Services
 
 
         // Hàm phụ check quyền
-        private void CheckPermission(FilePermission permission, string? userId, bool isAdmin, string action)
+        private static void CheckPermission(FilePermission permission, string? userId, bool isAdmin, string action)
         {
             if (isAdmin) return;
             switch (permission)
@@ -341,14 +330,18 @@ namespace KhoaCNTT.Application.Services
             }
         }
 
-        private async Task<int> getAdminId(string username)
+        private static void CheckTitle(string? title)
         {
-            var admin = await _adminRepo.GetByUsernameAsync(username);
-            if (admin == null) throw new BusinessRuleException("Không tìm thấy thông tin Admin.");
-            return admin.Id;
+            if (string.IsNullOrWhiteSpace(title)) throw new BusinessRuleException("Tiêu đề không được để trống.");
+            if (title.Length < 3 || title.Length > 20)
+            {
+                throw new BusinessRuleException("Tiêu đề phải có độ dài từ 3-20 ký tự.");
+            }
+            return;
         }
 
-        private async Task checkSubjectCode(string? subjectCode)
+
+        private async Task CheckSubjectCode(string? subjectCode)
         {
             if (string.IsNullOrWhiteSpace(subjectCode))
             {
@@ -359,7 +352,7 @@ namespace KhoaCNTT.Application.Services
         }
 
 
-        public string GetContentType(string fileName)
+        public static string GetContentType(string fileName)
         {
             var extension = Path.GetExtension(fileName).ToLower();
             string contentType = extension switch

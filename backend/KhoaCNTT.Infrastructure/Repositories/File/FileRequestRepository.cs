@@ -6,10 +6,9 @@ using Microsoft.EntityFrameworkCore;
 namespace KhoaCNTT.Infrastructure.Repositories.File
 {
 
-    public class FileRequestRepository : IFileRequestRepository
+    public class FileRequestRepository(AppDbContext context) : IFileRequestRepository
     {
-        private readonly AppDbContext _context;
-        public FileRequestRepository(AppDbContext context) => _context = context;
+        private readonly AppDbContext _context = context;
 
         public async Task AddAsync(FileRequest entity) { _context.Set<FileRequest>().Add(entity); await _context.SaveChangesAsync(); }
         public async Task UpdateAsync(FileRequest entity) { _context.Set<FileRequest>().Update(entity); await _context.SaveChangesAsync(); }

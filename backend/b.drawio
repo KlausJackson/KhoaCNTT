@@ -1,0 +1,572 @@
+<mxfile host="65bd71144e">
+    <diagram name="KhoaCNTT Class Diagram" id="khoacntt_diagram">
+        <mxGraphModel dx="1489" dy="4094" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2500" pageHeight="3500" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="Ent_Subject" value="&lt;p style=&quot;margin:0;padding:5px;background-color:#d5e8d4;border-bottom:1px solid black;text-align:center;&quot;&gt;&lt;b&gt;Subject&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ SubjectCode: string&lt;br&gt;+ SubjectName: string&lt;br&gt;+ Credits: int&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="1720" y="2510" width="140" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_FileEnt" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;FileEntity&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ CurrentResourceID: int&lt;br&gt;+ Title: string&lt;br&gt;+ FileType: string&lt;br&gt;+ ViewCount: int&lt;br&gt;+ DownloadCount: int&lt;br&gt;+ Permission: string&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="1720" y="2640" width="150" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_FileRes" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;FileResource&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ FileName: string&lt;br&gt;+ FilePath: string&lt;br&gt;+ Size: int&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="1720" y="2960" width="110" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_FileReq" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;FileRequest&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ TargetFileID: int&lt;br&gt;+ AdminID: int&lt;br&gt;+ NewResourceID: int&lt;br&gt;+ RequestType: string&lt;br&gt;+ IsProcessed: bool&lt;br&gt;+ Title: string&lt;br&gt;+ Permission: string&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="1820" y="3120" width="130" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_FileApp" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;FileApproval&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ ApproverID: int&lt;br&gt;+ Decision: string&lt;br&gt;+ Reason: string&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="1950" y="3050" width="110" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_NewsReq" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;NewsRequest&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ TargetNewsID: int&lt;br&gt;+ AdminID: int&lt;br&gt;+ NewResourceID: int&lt;br&gt;+ RequestType: string&lt;br&gt;+ IsProcessed: bool&lt;br&gt;+ Title: string&lt;br&gt;+ NewsType: string&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="1950" y="2830" width="130" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_C1" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Ctrl_Admin" target="3" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="2320" y="-880"/>
+                            <mxPoint x="2320" y="-880"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Edge_C2" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Ctrl_Auth" target="Svc_Auth" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1980" y="-640"/>
+                            <mxPoint x="1980" y="-640"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Edge_C3" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Ctrl_File" target="Svc_File" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="2840" y="-790"/>
+                            <mxPoint x="2840" y="-790"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Edge_C4" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Ctrl_News" target="Svc_News" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_C5" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Ctrl_Lec" target="Svc_Lec" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_C6" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Ctrl_Student" target="Svc_School" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_S1" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="3" target="Repo_IAdmin" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="2430" y="-80"/>
+                            <mxPoint x="1780" y="-80"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Edge_S2" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Svc_Auth" target="Repo_IAdmin" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="2040" y="-200"/>
+                            <mxPoint x="1030" y="-200"/>
+                            <mxPoint x="1030" y="385"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Edge_S3" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Svc_File" target="Repo_IFile" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="2845" y="110"/>
+                            <mxPoint x="2340" y="110"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Edge_S4" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Svc_File" target="Repo_IFileReq" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_S5" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Svc_File" target="Repo_IFileOthers" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="2215" y="-40"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Edge_S6" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Svc_News" target="Repo_INews" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_I2" style="endArrow=block;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Ent_Subject" target="Ent_BaseEntity" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_I3" style="endArrow=block;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Ent_NewsRes" target="Ent_BaseEntity" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_Rel1" style="endArrow=open;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="Ent_FileReq" target="Ent_FileEnt" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_Rel2" style="endArrow=open;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" target="Ent_News" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1165" y="1770" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="10" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Ctrl_File" target="9">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2110" y="535" as="sourcePoint"/>
+                        <mxPoint x="2030" y="470" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="3140" y="-1280"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="11" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Ctrl_News" target="9">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2360" y="535" as="sourcePoint"/>
+                        <mxPoint x="2520" y="240" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="3200" y="-1280"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="15" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_File" target="14">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1995" y="960" as="sourcePoint"/>
+                        <mxPoint x="1760" y="890" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="2235"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="17" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_News" target="12">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1850" y="1410" as="sourcePoint"/>
+                        <mxPoint x="1705" y="1335" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="18" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_News" target="13">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1860" y="1420" as="sourcePoint"/>
+                        <mxPoint x="1715" y="1345" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="3445" y="100"/>
+                            <mxPoint x="3017" y="100"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="20" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_News" target="19">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1990" y="1500" as="sourcePoint"/>
+                        <mxPoint x="1873" y="1570" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="3445" y="270"/>
+                            <mxPoint x="2961" y="270"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="21" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_Lec" target="DTO_Generic">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2230" y="1710" as="sourcePoint"/>
+                        <mxPoint x="2130" y="1765" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="3580" y="-265"/>
+                            <mxPoint x="3580" y="-905"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="22" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_News" target="DTO_Generic">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1990" y="1500" as="sourcePoint"/>
+                        <mxPoint x="1873" y="1570" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="3280" y="-540"/>
+                            <mxPoint x="3200" y="-540"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="24" value="" style="endArrow=block;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Ent_FileEnt" target="Ent_NewsRes">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1870" y="2705" as="sourcePoint"/>
+                        <mxPoint x="2260" y="2320" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Ent_NewsRes" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;NewsResource&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ Content: string&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ Size: long&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ CreatedBy: int&lt;/span&gt;&lt;br&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="1630" y="2835" width="110" height="85" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_File" target="27">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2250" y="700" as="sourcePoint"/>
+                        <mxPoint x="2100" y="885" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="2780" y="-820"/>
+                            <mxPoint x="2710" y="-820"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="31" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Ctrl_File" target="27">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1920" y="-30" as="sourcePoint"/>
+                        <mxPoint x="1740" y="170" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="2780" y="-1060"/>
+                            <mxPoint x="2710" y="-1060"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="33" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_File" target="26">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2410" y="620" as="sourcePoint"/>
+                        <mxPoint x="2470" y="715" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="2720" y="-540"/>
+                            <mxPoint x="2650" y="-540"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="35" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_File" target="DTO_File">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2110" y="255" as="sourcePoint"/>
+                        <mxPoint x="2050" y="370" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="2900" y="-860"/>
+                            <mxPoint x="2970" y="-860"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="39" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_News" target="36">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2745" y="700" as="sourcePoint"/>
+                        <mxPoint x="2871" y="740" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="40" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Ctrl_Auth" target="DTO_Auth">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="900" y="-540" as="sourcePoint"/>
+                        <mxPoint x="900" y="-440" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="2140" y="-1430"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="42" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_File" target="41">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2235" y="890" as="sourcePoint"/>
+                        <mxPoint x="2335" y="1010" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="2845" y="210"/>
+                            <mxPoint x="2145" y="210"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="46" value="API Layer (Controllers)" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1490" y="-1560" width="2670" height="420" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ctrl_File" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(248, 206, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;FilesController&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;- _fileService: IFileService&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px;&quot;&gt;+ Upload(UploadFileRequest req)&lt;br&gt;+ UpdateInfo(int id, UpdateFileRequest req)&lt;br&gt;+ Replace(UploadFileRequest req)&lt;br&gt;+ GetPendingList()&lt;br&gt;+ Download(int id)&lt;br&gt;+ Approve(int id, ApproveRequest req)&lt;br&gt;+ Search(string? keyword, List&amp;lt;string&amp;gt;? subjectCodes, string? fileType, int page, int pageSize)&lt;br&gt;+ GetById(int id)&lt;br&gt;+ DeleteFile(int id)&lt;br&gt;+ GetStatsByFileType()&lt;br&gt;+ GetStatsBySubject()&lt;br&gt;+ GetStatsByTraffic()&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;+ IsAdminLevel12(): bool&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;+ GetAdminInfoFromToken(): (string username, int level)&lt;/span&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="46" vertex="1">
+                    <mxGeometry x="1220" y="60" width="250" height="310" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ctrl_News" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(248, 206, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;NewsController&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;- _newsService: INewsService&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ CreateNews(CreateNewsRequest req)&lt;br&gt;+ UpdateNews(UpdateNewsRequest req)&lt;br&gt;+ DeleteNews(int id)&lt;br&gt;+ ApproveNews(int id, ApproveRequest req)&lt;br&gt;+ GetNewsById(int id)&lt;br&gt;+ SearchNews(&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;string? keyword, string? newsType, int page, int pageSize&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;+ GetPendingList()&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;+ GetStatsByMonth(int year)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;+ GetStatsByType()&lt;/span&gt;&lt;/p&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ AddComment(string msv, string studentName, string content)&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ DeleteComment(int id)&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="46" vertex="1">
+                    <mxGeometry x="1790" y="100" width="250" height="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ctrl_Lec" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(248, 206, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;LecturersController&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;- _lecturerService: ILecturerService&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ GetAllLecturers(string? name, string? degree, string? position, string? subjectCode, int page, int pageSize)&lt;br&gt;+ CreateLecturer(Create&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;LecturerRequest&amp;nbsp;&lt;/span&gt;req)&lt;br&gt;+ UpdateLecturer(Update&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;LecturerRequest&amp;nbsp;&lt;/span&gt;req)&lt;br&gt;+ DeleteLecturer(int id)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;+ GetStatsBySubject()&lt;/span&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="46" vertex="1">
+                    <mxGeometry x="2290" y="80" width="310" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ctrl_Admin" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(248, 206, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;AdminsController&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;- _adminService: IAdminService&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ GetAll()&lt;br&gt;+ Create(CreateAdminRequest req)&lt;br&gt;+ Update(int id, UpdateAdminRequest req)&lt;br&gt;+ Delete(int id)&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;+ I&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;sRootAdmin(): bool&lt;/span&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="46" vertex="1">
+                    <mxGeometry x="730" y="60" width="240" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ctrl_Auth" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(248, 206, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;AuthController&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;- _authService: IAuthService&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ LoginAdmin(LoginRequest req)&lt;br&gt;+ LoginStudent(LoginRequest req)&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="46" vertex="1">
+                    <mxGeometry x="390" y="60" width="200" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ctrl_Student" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(248, 206, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;StudentsController&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;- _schoolApi: ISchoolApiService&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ GetGrades()&lt;br&gt;+ GetSchedule()&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;+ GetInfo()&lt;/span&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="46" vertex="1">
+                    <mxGeometry x="120" y="60" width="190" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="Infrastructure Layer (Repositories)" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1520" y="60" width="2670" height="870" as="geometry"/>
+                </mxCell>
+                <mxCell id="Repo_IRepo" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;br&gt;IRepository&amp;lt;T&amp;gt;&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ GetByIdAsync(int id): T?&lt;br&gt;+ GetAllAsync(): List&amp;lt;T&amp;gt;&lt;br&gt;+ AddAsync(T): void&lt;br&gt;+ UpdateAsync(T): void&lt;br&gt;+ DeleteAsync(T): void&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="47" vertex="1">
+                    <mxGeometry x="1150" y="690" width="160" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="Repo_IFile" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt; IFileRepository&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ SearchAsync(string? keyword, List&amp;lt;string&amp;gt;? subjectCodes, string? fileType, int page, int pageSize): PagedResult&amp;lt;FileEntity&amp;gt;&lt;br&gt;+ GetStatsByFileTypeAsync(): Dict&amp;lt;string, int&amp;gt;&lt;br&gt;+ GetStatsBySubjectAsync(): Dict&amp;lt;string, int&amp;gt;&lt;br&gt;+ GetStatsByTrafficAsync(): Dict&amp;lt;string, int&amp;gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="47" vertex="1">
+                    <mxGeometry x="690" y="200" width="260" height="125" as="geometry"/>
+                </mxCell>
+                <mxCell id="Repo_IFileReq" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt; IFileRequestRepository&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ GetPendingRequestsWithDetailsAsync(): List&amp;lt;FileRequest&amp;gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="47" vertex="1">
+                    <mxGeometry x="1000" y="227.5" width="250" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="Repo_IFileOthers" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;br&gt;IFileResourceRepository&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="47" vertex="1">
+                    <mxGeometry x="620" y="430" width="150" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="Repo_INews" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt; INewsRepository&lt;/b&gt;&lt;/p&gt;&lt;hr style=&quot;margin:0px;&quot;&gt;+ Search(string? keyword, string? newsType, int page, int pageSize): PagedResult&amp;lt;News&amp;gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ GetStatsByType(): Dict&amp;lt;string, int&amp;gt;&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ GetStatsByMonth(int year): Dict&amp;lt;string, int&amp;gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="47" vertex="1">
+                    <mxGeometry x="1770" y="260" width="250" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt; INewsRequestRepository&lt;/b&gt;&lt;/p&gt;&lt;hr style=&quot;margin:0px;&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ GetPendingRequestsWithDetailsAsync(): List&amp;lt;NewsRequest&amp;gt;&lt;/span&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="47">
+                    <mxGeometry x="1442.5" y="490" width="240" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;br&gt;INewsResourceRepository&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="47">
+                    <mxGeometry x="1415" y="645" width="165" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;br&gt;IFileApprovalRepository&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="47">
+                    <mxGeometry x="640" y="50" width="150" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt; INewsApprovalRepository&lt;/b&gt;&lt;/p&gt;&lt;hr style=&quot;margin:0px;&quot;&gt;&lt;br&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="47">
+                    <mxGeometry x="1360" y="297.5" width="162.5" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="36" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;br&gt;ICommentRepository&lt;/b&gt;&lt;/p&gt;&lt;hr style=&quot;margin:0px;&quot;&gt;+ IsViolate(int id): bool&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="47">
+                    <mxGeometry x="1660" y="350" width="135" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt; IStorageRepository&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ SaveFileAsync(IFormFIle file): string&lt;br&gt;+ DeleteFileAsync(string filePath): void&lt;br&gt;+ GetFileStream(string filePath): FileStream&lt;br&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="47">
+                    <mxGeometry x="500" y="550" width="250" height="85" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="47" source="Repo_IFile" target="Repo_IRepo">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="320" y="1290" as="sourcePoint"/>
+                        <mxPoint x="210" y="1143" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="8" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="47" source="Repo_IFileReq" target="Repo_IRepo">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="320" y="1290" as="sourcePoint"/>
+                        <mxPoint x="250" y="1375" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="6" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="47" source="Repo_IFileOthers" target="Repo_IRepo">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="505" y="1130" as="sourcePoint"/>
+                        <mxPoint x="255" y="1050" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="45" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="47" source="Repo_INews" target="Repo_IRepo">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1185" y="1768" as="sourcePoint"/>
+                        <mxPoint x="770" y="1725" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="44" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="47" source="13" target="Repo_IRepo">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1430" y="1485" as="sourcePoint"/>
+                        <mxPoint x="690" y="1660" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="16" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="47" source="14" target="Repo_IRepo">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="185" y="1035" as="sourcePoint"/>
+                        <mxPoint x="-100" y="1150" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="43" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="47" source="19" target="Repo_IRepo">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1430" y="1485" as="sourcePoint"/>
+                        <mxPoint x="690" y="1660" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="38" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="47" source="36" target="Repo_IRepo">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="935" y="1780" as="sourcePoint"/>
+                        <mxPoint x="1030" y="1560" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="Repo_IAdmin" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(218, 232, 252); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt; IAdminRepository&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ GetByUsernameAsync(string username): Admin?&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="47" vertex="1">
+                    <mxGeometry x="160" y="300" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="47" source="Repo_IAdmin" target="Repo_IRepo">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="330" y="710" as="sourcePoint"/>
+                        <mxPoint x="180" y="560" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="48" value="Domain Layer (DTOs)" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1490" y="-1140" width="2670" height="650" as="geometry"/>
+                </mxCell>
+                <mxCell id="DTO_Auth" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; text-align: left; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;LoginRequest&lt;/b&gt;&lt;b&gt;&amp;nbsp;DTO&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ Username: string&lt;br&gt;+ Password: string&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="48" vertex="1">
+                    <mxGeometry x="590" y="80" width="120" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;FileDto&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ Id: int&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; + Title: string&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;+ FileName: string&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; + SubjectName: string&amp;nbsp; &amp;nbsp; + SubjectCode: string&amp;nbsp; &amp;nbsp; &amp;nbsp;+ Permission: string&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; + ViewCount: long&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;+ DownloadCount: long&amp;nbsp; + FileType: string&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; + Size: long&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;+ CreatedAt: datetime&amp;nbsp; &amp;nbsp; + UpdatedAt: datetime&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="48">
+                    <mxGeometry x="1470" y="330" width="150" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="DTO_File" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;UpdateFileRequestDto&lt;/b&gt;&lt;/p&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;+ Title: string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;+ SubjectCode: string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;+ Permission: string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;+ FileType: string&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="48" vertex="1">
+                    <mxGeometry x="1410" y="125" width="140" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; text-align: left; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;UploadFileRequest&lt;/b&gt;&lt;b&gt;Dto&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;&lt;/p&gt;+ Title: string&lt;div&gt;+ File: IFormFile&lt;/div&gt;&lt;div&gt;+ SubjectCode: string?&lt;/div&gt;&lt;div&gt;+ Permission: string&lt;/div&gt;&lt;div&gt;+ FileType: string&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="48">
+                    <mxGeometry x="1150" y="140" width="140" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;ApproveRequest DTO&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ isApproved: bool&lt;br&gt;+ Reason: string?&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="48">
+                    <mxGeometry x="1610" y="80" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="DTO_Generic" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; text-align: left; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;PagedResult&amp;lt;T&amp;gt;&amp;nbsp;&lt;/b&gt;&lt;b&gt;DTO&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ Total: int&lt;br&gt;+ Items: List&amp;lt;T&amp;gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="48" vertex="1">
+                    <mxGeometry x="1610" y="200" width="130" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;FileRequestDto&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;&lt;/p&gt;+ Id: int&lt;div&gt;+ RequestType: string&lt;/div&gt;&lt;div&gt;+ Title: string&lt;/div&gt;&lt;div&gt;+ NewFileName: string&lt;/div&gt;&lt;div&gt;+ NewFileSize: long&amp;nbsp;&lt;/div&gt;&lt;div&gt;+ RequesterName: string&lt;/div&gt;&lt;div&gt;+ CreatedAt: datetime&lt;/div&gt;&lt;div&gt;+ OldFileName: string&lt;/div&gt;&lt;div&gt;+ OldFileSize: long&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="48">
+                    <mxGeometry x="1090" y="370" width="140" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="DTO_NewsLec" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; text-align: left; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;CreateNewsRequest&amp;nbsp;&lt;/b&gt;&lt;b&gt;DTO&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ Title: string&lt;br&gt;+ Content: string&lt;br&gt;+ NewsType: string&lt;/p&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="48" vertex="1">
+                    <mxGeometry x="1750" y="430" width="150" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; text-align: left; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;UpdateNewsRequest&lt;/b&gt;&lt;b&gt;&amp;nbsp;DTO&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ Title: string&lt;br&gt;+ Content: string&lt;br&gt;+ NewsType: string&lt;/p&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="48">
+                    <mxGeometry x="1930" y="330" width="160" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; text-align: left; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;NewsResponse&lt;/b&gt;&lt;b&gt;&amp;nbsp;DTO&lt;/b&gt;&lt;/p&gt;+ Id: int&lt;br&gt;+ Title: string&lt;br&gt;+ Content: string&lt;br&gt;+ CreatedAt: datetime&lt;br&gt;+ UpdatedAt: datetime&lt;br&gt;+ CreatedBy: string&lt;br&gt;+ ViewCount: int&lt;br&gt;+ Comments: List&amp;lt;Comment&amp;gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="48">
+                    <mxGeometry x="2320" y="480" width="170" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; text-align: left; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;SearchLecturerRequest&amp;nbsp;&lt;/b&gt;&lt;b&gt;DTO&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); background-color: transparent;&quot;&gt;+ Name: string&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;+ Degree: string&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;+ Position: string&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;/span&gt;&lt;span style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); color: rgb(63, 63, 63);&quot;&gt;+ SubjectCodes: List&amp;lt;string?&amp;gt;&lt;br&gt;+ Page: int&lt;br&gt;+ PageSize: int&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="48">
+                    <mxGeometry x="2160" y="420" width="180" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="58" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; text-align: left; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;UpdateLecturerRequest&amp;nbsp;&lt;/b&gt;&lt;b&gt;DTO&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;+ FullName: string&lt;br&gt;+ ImageUrl: string&lt;br&gt;+ Degree: string&lt;br&gt;+ Email: string&lt;br&gt;+ Position: string&lt;br&gt;+ Birthdate: date&lt;br&gt;+ PhoneNumber: string&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ SubjectCodes: List&amp;lt;string?&amp;gt;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="48">
+                    <mxGeometry x="2430" y="80" width="170" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="62" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; text-align: left; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;LecturerResponse&amp;nbsp;&lt;/b&gt;&lt;b&gt;DTO&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;+ FullName: string&lt;br&gt;+ ImageUrl: string&lt;br&gt;+ Degree: string&lt;br&gt;+ Email: string&lt;br&gt;+ Position: string&lt;br&gt;+ Birthdate: date&lt;br&gt;+ PhoneNumber: string&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ SubjectCodes: List&amp;lt;string?&amp;gt;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="48">
+                    <mxGeometry x="2210" y="65" width="180" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="63" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; text-align: left; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;CreateLecturerRequest&amp;nbsp;&lt;/b&gt;&lt;b&gt;DTO&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;+ FullName: string&lt;br&gt;+ ImageUrl: string&lt;br&gt;+ Degree: string&lt;br&gt;+ Email: string&lt;br&gt;+ Position: string&lt;br&gt;+ Birthdate: date&lt;br&gt;+ PhoneNumber: string&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ SubjectCodes: List&amp;lt;string?&amp;gt;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="48">
+                    <mxGeometry x="1960" y="80" width="170" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="48" source="Ctrl_File" target="DTO_File">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="730" y="725" as="sourcePoint"/>
+                        <mxPoint x="790" y="825" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="1410" y="80"/>
+                            <mxPoint x="1480" y="80"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="32" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="48" source="Svc_File" target="28">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="920" y="1740" as="sourcePoint"/>
+                        <mxPoint x="980" y="1835" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="1470" y="600"/>
+                            <mxPoint x="1535" y="600"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="49" value="Application Layer (Services)" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1490" y="-490" width="2670" height="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="Svc_News" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 230, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); color: rgb(63, 63, 63);&quot;&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt; I&lt;/b&gt;&lt;b&gt;NewsService&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); margin: 0px; padding: 5px; border-bottom: 1px solid black; color: rgb(63, 63, 63);&quot;&gt;+ _newsRepo: INewsRepository&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;+ _requestRepo: INewsRequestRepository&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;+ _approvalRepo: INewsApprovalRepository&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;+ _resourceRepo: INewsResourceRepository&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;+ _adminRepo: IAdminRepository&lt;br&gt;+ _commentRepo: ICommentRepository&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ CreateNewsAsync(CreateNewsRequest req, string username): void&lt;br&gt;+ UpdateNewsAsync(int id, UpdateNewsRequest req): void&lt;br&gt;+ DeleteNewsAsync(int id): void&lt;br&gt;+ ApproveNewsAsync(int requestId, bool isApproved, string? reason, string username): void&lt;br&gt;+ SearchNewsAsync(&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;string? keyword, string? newsType, int page, int pageSize, string userId, bool isAdmin&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ GetNewsByIdAsync(int id): void&lt;br&gt;+ GetPendingRequestsAsync(): PagedResult&amp;lt;NewsRequestDto&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;+ GetStatsByType(): Dict&amp;lt;string, int&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;span style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); color: rgb(63, 63, 63);&quot;&gt;+ GetStatsByMonth(int year): Dict&amp;lt;string, int&amp;gt;&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ AddComment(string msv, string studentName, string content)&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;+ DeleteComment(int id)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="49" vertex="1">
+                    <mxGeometry x="1730" y="90" width="390" height="350" as="geometry"/>
+                </mxCell>
+                <mxCell id="Svc_File" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 230, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&amp;nbsp;&lt;/b&gt;&lt;b&gt;IFileService&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ _fileRepo: IFileRepository&lt;br&gt;+ _requestRepo: IFileRequestRepository&lt;br&gt;+ _approvalRepo: IFileApprovalRepository&lt;br&gt;+ _resourceRepo: IFileResourceRepository&lt;br&gt;+ _adminRepo: IAdminRepository&lt;br&gt;+ _subjectRepo: ISubjectRepository&lt;br&gt;+ _storageRepo: IStorageRepository&lt;/p&gt;&lt;p style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); margin: 0px; padding: 5px;&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;+ UploadFileAsync(UploadFileRequest request, string username): void&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ ReplaceFileAsync(int fileId, UploadFileRequest request, string username, int adminLevel): void&lt;br&gt;+ ApproveFileAsync(int requestId, bool isApproved, string? reason, string username): void&lt;br&gt;+ GetPendingRequestsAsync():&amp;nbsp;PagedResult&amp;lt;FileRequestDto&amp;gt;&lt;br&gt;+ SearchFilesAsync(string? keyword, List&amp;lt;string&amp;gt;? subjectCodes, string? fileType, int page, int pageSize, string userId, bool isAdmin):&amp;nbsp;PagedResult&amp;lt;FileDto&amp;gt;&lt;br&gt;+ GetFileByIdAsync(int id, string? userId, bool isAdmin):&amp;nbsp;(Stream stream, string contentType)&lt;br&gt;+ DownloadFileAsync(int fileId, string? userId, bool isAdmin):&amp;nbsp;(Stream stream, string contentType, string fileName)&lt;br&gt;+ DeleteFileAsync(int id): void&lt;br&gt;+ UpdateFileInfoAsync(int id, UpdateFileRequest request): void&lt;br&gt;+&amp;nbsp;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;GetStatsByFileTypeAsync(): Dict&amp;lt;string, int&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;&amp;nbsp; + GetStatsBySubjectAsync(): Dict&amp;lt;string, int&amp;gt;&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;&amp;nbsp; + GetStatsByTrafficAsync(): Dict&amp;lt;string, int&amp;gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="49" vertex="1">
+                    <mxGeometry x="1180" y="70" width="350" height="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 230, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;IAdminService&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); margin: 0px; padding: 5px; border-bottom: 1px solid black; color: rgb(63, 63, 63);&quot;&gt;+ _adminRepo: IAdminRepository&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ GetAllAdminsAsync(): List&amp;lt;AdminResponse&amp;gt;&lt;br&gt;+ CreateAdminAsync(CreateAdminRequest req): void&lt;br&gt;+ UpdateAdminAsync(int id, UpdateAdminRequest req): void&lt;br&gt;+ DeleteAdminAsync(string currentUsername, int id): void&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="49">
+                    <mxGeometry x="750" y="90" width="340" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="Svc_Auth" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 230, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;IAuthService&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); margin: 0px; padding: 5px; border-bottom: 1px solid black; color: rgb(63, 63, 63);&quot;&gt;+ _sschoolApi: ISchoolApiService&lt;br&gt;+ _adminRepo: IAdminRepository&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ LoginAdminAsync(string username, string password): (string Token, string role)&lt;br&gt;+ LoginStudentAsync(string username, string password): string&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="49" vertex="1">
+                    <mxGeometry x="430" y="90" width="240" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="Svc_School" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 230, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;ISchoolApiService&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ LoginStudentAsync(string username, string password): string?&lt;br&gt;+ GetScoresAsync()&lt;br&gt;+ GetScheduleAsync()&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;+ GetInfoAsync(string token): (string name, string class)&lt;/span&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="49" vertex="1">
+                    <mxGeometry x="110" y="90" width="210" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="Svc_Lec" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 230, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b style=&quot;background-color: transparent; scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); color: rgb(63, 63, 63);&quot;&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt; I&lt;/b&gt;&lt;b&gt;LecturerService&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ GetAllLecturersAsync(&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;string? name, string? degree, string? position, string? subjectCode, int page, int pageSize&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;): PagedResult&amp;lt;LecturerDto&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ CreateLecturerAsync(CreateLecturerRequest req, string username): void&lt;br&gt;+ UpdateLecturerAsync(int id, UpdateLecturerRequest req): void&lt;br&gt;+ DeleteLecturerAsync(int id): void&lt;br&gt;+ GetStatsBySubject(): Dict&amp;lt;string, int&amp;gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="49" vertex="1">
+                    <mxGeometry x="2320" y="260" width="290" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="49" source="Svc_Auth" target="Svc_School">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="800" y="150" as="sourcePoint"/>
+                        <mxPoint x="270" y="820" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="400" y="155"/>
+                            <mxPoint x="400" y="155"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="50" value="API Layer (Controllers)" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="3090" y="2360" width="1020" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="API Layer (Controllers)" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="3110" y="2040" width="1020" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" value="Domain Layer (&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Entities, Enums)&lt;/span&gt;" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1020" y="2000" width="1990" height="430" as="geometry"/>
+                </mxCell>
+                <mxCell id="Enum_NewsType" value="&lt;p style=&quot;margin:0;padding:5px;background-color:#e1d5e7;border-bottom:1px solid black;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Enumeration&amp;gt;&amp;gt;&lt;br&gt;NewsType&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;Event&lt;br&gt;Announcement&lt;br&gt;Recruitment&lt;br&gt;Other&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="40" y="280" width="110" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="Enum_RequestType" value="&lt;p style=&quot;margin:0;padding:5px;background-color:#e1d5e7;border-bottom:1px solid black;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Enumeration&amp;gt;&amp;gt;&lt;br&gt;RequestType&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;CreateNew&lt;br&gt;Replace&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="210" y="280" width="110" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="Enum_FilePermission" value="&lt;p style=&quot;margin:0;padding:5px;background-color:#e1d5e7;border-bottom:1px solid black;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Enumeration&amp;gt;&amp;gt;&lt;br&gt;FilePermission&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;Hidden&lt;br&gt;PublicRead&lt;br&gt;PublicDownload&lt;br&gt;StudentRead&lt;br&gt;StudentDownload&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="390" y="270" width="110" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="Enum_Decision" value="&lt;p style=&quot;margin:0;padding:5px;background-color:#e1d5e7;border-bottom:1px solid black;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Enumeration&amp;gt;&amp;gt;&lt;br&gt;Decision&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;Approved&lt;br&gt;Rejected&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="550" y="290" width="110" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="Enum_FileType" value="&lt;p style=&quot;margin:0;padding:5px;background-color:#e1d5e7;border-bottom:1px solid black;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Enumeration&amp;gt;&amp;gt;&lt;br&gt;FileType&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;LectureNotes&lt;br&gt;Test&lt;br&gt;Form&lt;br&gt;Other&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="720" y="290" width="110" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="Enum_DegreeType" value="&lt;p style=&quot;margin:0;padding:5px;background-color:#e1d5e7;border-bottom:1px solid black;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Enumeration&amp;gt;&amp;gt;&lt;br&gt;DegreeType&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;Bachelor&lt;br&gt;Master&lt;br&gt;Doctor&lt;br&gt;AssociateProfessor&lt;br&gt;Professor&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="910" y="290" width="120" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_Lecturer" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;Lecturer&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ FullName: string&lt;br&gt;+ ImageUrl: string&lt;br&gt;+ Degree: DegreeType&lt;br&gt;+ Position: string&lt;br&gt;+ Birthdate: Date&lt;br&gt;+ Email: string&lt;br&gt;+ PhoneNumber: string&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="1820" y="60" width="140" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_BaseEntity" value="&lt;p style=&quot;margin:0;padding:5px;background-color:#d5e8d4;border-bottom:1px solid black;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;Abstract&amp;gt;&amp;gt;&lt;br&gt;BaseEntity&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;+ Id: int&lt;br&gt;+ CreatedAt: DateTime&lt;br&gt;+ UpdatedAt: DateTime&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="1070" y="310" width="140" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_I5" style="endArrow=block;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="52" source="Ent_Lecturer" target="Ent_BaseEntity" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_Comment" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;Comment&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ NewsID: int&lt;br&gt;+ MSV: string&lt;br&gt;+ StudentName: string&lt;br&gt;+ Content: string&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="1590" y="285" width="140" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_NewsApp" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;NewsApproval&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ ApproverID: int&lt;br&gt;+ Decision: string&lt;br&gt;+ Reason: string&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="1250" y="220" width="110" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_Admin" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;Admin&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ Username: string&lt;br&gt;+ PasswordHash: string&lt;br&gt;+ FullName: string&lt;br&gt;+ Email: string&lt;br&gt;+ Level: int&lt;br&gt;+ IsActive: bool&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="600" y="45" width="140" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="Ent_News" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(213, 232, 212); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;News&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px; padding: 5px; border-bottom: 1px solid black;&quot;&gt;+ CurrentResourceID: int&lt;br&gt;+ Title: string&lt;br&gt;+ Content: string&lt;br&gt;+ NewsType: string&lt;br&gt;+ ViewCount: int&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="52" vertex="1">
+                    <mxGeometry x="850" y="175" width="150" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_I1" style="endArrow=block;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="52" source="Ent_Admin" target="Ent_BaseEntity" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Edge_I4" style="endArrow=block;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="52" source="Ent_News" target="Ent_BaseEntity" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="56" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_News" target="55">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2930" y="-410" as="sourcePoint"/>
+                        <mxPoint x="3000" y="-880" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="3320" y="-460"/>
+                            <mxPoint x="3320" y="-460"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="DTO_Admin" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;Admin DTOs&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;&lt;b&gt;AdminResponse&lt;/b&gt;&lt;br&gt;+ Id,&amp;nbsp;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;Username, FullName, Email, Level, isActive&lt;/span&gt;&lt;/p&gt;&lt;hr style=&quot;margin:0px&quot;&gt;&lt;b&gt;CreateAdminRequest&lt;/b&gt;&lt;br&gt;+ Username, Password, Level, FullName, Email, isActive&lt;hr style=&quot;margin:0px&quot;&gt;&lt;b&gt;UpdateAdminRequest&lt;/b&gt;&lt;br&gt;+ FullName, Email, Level, Password, IsActive&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="1180" y="-820" width="310" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="59" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;Admin DTOs&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;&lt;b&gt;AdminResponse&lt;/b&gt;&lt;br&gt;+ Id,&amp;nbsp;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;Username, FullName, Email, Level, isActive&lt;/span&gt;&lt;/p&gt;&lt;hr style=&quot;margin:0px&quot;&gt;&lt;b&gt;CreateAdminRequest&lt;/b&gt;&lt;br&gt;+ Username, Password, Level, FullName, Email, isActive&lt;hr style=&quot;margin:0px&quot;&gt;&lt;b&gt;UpdateAdminRequest&lt;/b&gt;&lt;br&gt;+ FullName, Email, Level, Password, IsActive&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="1170" y="-640" width="310" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="60" value="&lt;p style=&quot;margin: 0px; padding: 5px; background-color: rgb(255, 242, 204); border-bottom: 1px solid black; text-align: center;&quot;&gt;&lt;b&gt;Admin DTOs&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:5px;&quot;&gt;&lt;b&gt;AdminResponse&lt;/b&gt;&lt;br&gt;+ Id,&amp;nbsp;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;Username, FullName, Email, Level, isActive&lt;/span&gt;&lt;/p&gt;&lt;hr style=&quot;margin:0px&quot;&gt;&lt;b&gt;CreateAdminRequest&lt;/b&gt;&lt;br&gt;+ Username, Password, Level, FullName, Email, isActive&lt;hr style=&quot;margin:0px&quot;&gt;&lt;b&gt;UpdateAdminRequest&lt;/b&gt;&lt;br&gt;+ FullName, Email, Level, Password, IsActive&lt;p&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="1190" y="-1020" width="310" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="61" value="" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_Lec" target="58">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="3020" y="-200" as="sourcePoint"/>
+                        <mxPoint x="3595" y="-940" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="4040" y="-740"/>
+                            <mxPoint x="4040" y="-740"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="23" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Ctrl_Lec" target="58">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2250" y="1490" as="sourcePoint"/>
+                        <mxPoint x="2130" y="1410" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="4040" y="-1210"/>
+                            <mxPoint x="4040" y="-1210"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="64" style="endArrow=open;dashed=1;html=1;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="Svc_File" target="DTO_Generic">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="3455" y="-430" as="sourcePoint"/>
+                        <mxPoint x="3290" y="-835" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="3160" y="-360"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

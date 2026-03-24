@@ -54,7 +54,5 @@ namespace KhoaCNTT.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
     }
 }

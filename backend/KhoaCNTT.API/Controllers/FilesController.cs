@@ -1,6 +1,7 @@
 ﻿
 using System.Security.Claims;
 using KhoaCNTT.Application.DTOs.File;
+using KhoaCNTT.Application.DTOs;
 using KhoaCNTT.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace KhoaCNTT.API.Controllers
         }
 
         // Middleware kiểm tra quyền cấp 1, 2
-        private bool _isAdminLevel12()
+        private bool IsAdminLevel12()
         {
             var (_, level) = GetAdminInfoFromToken();
             return level == 1 || level == 2;
@@ -32,10 +33,10 @@ namespace KhoaCNTT.API.Controllers
         {
             // Lấy username và level từ Token
             var (username, level) = GetAdminInfoFromToken();
-            await _fileService.UploadFileAsync(request, username, level);
+            await _fileService.UploadFileAsync(request, username);
 
-            var message = "";
-            if (_isAdminLevel12()) {
+            string? message;
+            if (IsAdminLevel12()) {
                 message = "Tạo tài liệu mới thành công.";
             } else {
                 message = "Tạo yêu cầu duyệt tài liệu mới thành công.";
@@ -58,9 +59,9 @@ namespace KhoaCNTT.API.Controllers
         public async Task<IActionResult> Replace(int id, [FromForm] UploadFileRequest request)
         {
             var (username, level) = GetAdminInfoFromToken();
-            await _fileService.ReplaceFileAsync(id, request, username, level);
+            await _fileService.ReplaceFileAsync(id, request, username);
             var message = "";
-            if (_isAdminLevel12()) {
+            if (IsAdminLevel12()) {
                 message = "Thay đổi tài liệu thành công.";
             } else {
                 message = "Tạo yêu cầu duyệt tài liệu mới thành công.";
@@ -74,7 +75,7 @@ namespace KhoaCNTT.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPendingList()
         {
-            if (!_isAdminLevel12()) return Forbid(); // Chỉ Cấp 1, 2 xem được danh sách
+            if (!IsAdminLevel12()) return Forbid(); // Chỉ Cấp 1, 2 xem được danh sách
             var result = await _fileService.GetPendingRequestsAsync();
             return Ok(result);
         }
@@ -96,7 +97,7 @@ namespace KhoaCNTT.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Approve(int id, [FromBody] ApproveRequest req)
         {
-            if (!_isAdminLevel12()) return Forbid(); // Chỉ Cấp 1,2 xem được duyệt
+            if (!IsAdminLevel12()) return Forbid(); // Chỉ Cấp 1,2 xem được duyệt
             var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             await _fileService.ApproveFileAsync(id, req.IsApproved, req.Reason, username!);
             return Ok(new { Message = "Xử lý yêu cầu duyệt thành công." });
@@ -138,7 +139,7 @@ namespace KhoaCNTT.API.Controllers
         public async Task<IActionResult> DeleteFile(int id)
         {
             // Xóa chỉ dành cho admin cấp 1, 2
-            if (!_isAdminLevel12()) return Forbid();
+            if (!IsAdminLevel12()) return Forbid();
             await _fileService.DeleteFileAsync(id);
             return Ok(new { Message = "Đã xóa file thành công." });
         }
@@ -164,11 +165,5 @@ namespace KhoaCNTT.API.Controllers
             int level = int.TryParse(levelStr, out int l) ? l : 3; // Mặc định cấp 3
             return (username, level);
         }
-    }
-
-
-    public class ApproveRequest { 
-        public bool IsApproved { get; set; } 
-        public string? Reason { get; set; } 
     }
 }

@@ -1,16 +1,13 @@
 ﻿
 using KhoaCNTT.Domain.Entities;
+using KhoaCNTT.Domain.Entities.FileEntities;
 
 
 namespace KhoaCNTT.Application.Interfaces.Repositories
 {
-    public interface IAdminRepository
+    public interface IAdminRepository : IRepository<Admin>
     {
         Task<Admin?> GetByUsernameAsync(string username);
-        Task<Admin?> GetByIdAsync(int id);
-        Task AddAsync(Admin admin);
-        Task UpdateAsync(Admin admin);
-        Task DeleteAsync(Admin admin);
-        Task<List<Admin>> GetAllAsync();
+        Task<Admin?> GetByEmailAsync(string email);
     }
 }

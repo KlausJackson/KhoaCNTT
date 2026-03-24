@@ -3,8 +3,8 @@
 public interface IFileService
 {
     // --- UPLOAD & DUYỆT ---
-    Task UploadFileAsync(UploadFileRequest request, string username, int adminLevel);
-    Task ReplaceFileAsync(int fileId, UploadFileRequest request, string username, int adminLevel);
+    Task UploadFileAsync(UploadFileRequest request, string username);
+    Task ReplaceFileAsync(int fileId, UploadFileRequest request, string username);
     Task ApproveFileAsync(int requestId, bool isApproved, string? reason, string username);
     Task<PagedResult<FileRequestDto>> GetPendingRequestsAsync();
 

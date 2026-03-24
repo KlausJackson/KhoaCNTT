@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 namespace KhoaCNTT.Infrastructure.Repositories.File
 {
 
-    public class FileApprovalRepository : IFileApprovalRepository
+    public class FileApprovalRepository(AppDbContext context) : IFileApprovalRepository
     {
-        private readonly AppDbContext _context;
-        public FileApprovalRepository(AppDbContext context) => _context = context;
+        private readonly AppDbContext _context = context;
+
         public async Task AddAsync(FileApproval entity) { _context.Set<FileApproval>().Add(entity); await _context.SaveChangesAsync(); }
 
         // Các hàm IRepository khác...

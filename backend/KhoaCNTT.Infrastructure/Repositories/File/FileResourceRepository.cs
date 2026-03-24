@@ -10,10 +10,9 @@ using System.Threading.Tasks;
 namespace KhoaCNTT.Infrastructure.Repositories.File
 {
 
-    public class FileResourceRepository : IFileResourceRepository
+    public class FileResourceRepository(AppDbContext context) : IFileResourceRepository
     {
-        private readonly AppDbContext _context;
-        public FileResourceRepository(AppDbContext context) => _context = context;
+        private readonly AppDbContext _context = context;
 
         public async Task AddAsync(FileResource entity) { _context.Set<FileResource>().Add(entity); await _context.SaveChangesAsync(); }
         public async Task<FileResource?> GetByIdAsync(int id) => await _context.Set<FileResource>().FindAsync(id);

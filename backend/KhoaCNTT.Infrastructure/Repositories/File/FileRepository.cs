@@ -8,10 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KhoaCNTT.Infrastructure.Repositories
 {
-    public class FileRepository : IFileRepository
+    public class FileRepository(AppDbContext context) : IFileRepository
     {
-        private readonly AppDbContext _context;
-        public FileRepository(AppDbContext context) => _context = context;
+        private readonly AppDbContext _context = context;
 
         public async Task<FileEntity?> GetByIdAsync(int id) =>
             await _context.Set<FileEntity>()
