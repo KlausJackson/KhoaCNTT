@@ -8,6 +8,7 @@ import { pendingColumns } from '../../../constants/file'
 
 import { ClipboardCheck } from 'lucide-react'
 import { handleError } from '../../../helpers/commonHelpers'
+import { handleApprove } from '../../../helpers/fileHelpers'
 
 function FileRequests() {
 	const [requests, setRequests] = useState([])
@@ -24,30 +25,10 @@ function FileRequests() {
 	}
 
 	useEffect(() => {
-			const loadRequests = async () => {
-				try {
-					const res = await fileApi.getPendingList()
-					setRequests(res)
-				} catch (err) {
-					handleError(err, setPopup)
-				}
-			}
-		loadRequests()
+		(async () => {
+			await loadRequests()
+		})()
 	}, [])
-
-	const handleApprove = async (isApproved, reason) => {
-		try {
-			const res = await fileApi.approve(selected.id, {
-				isApproved,
-				reason
-			})
-			setPopup(res.message)
-			setSelected(null)
-			loadRequests()
-		} catch (err) {
-			handleError(err, setPopup)
-		}
-	}
 
 	return (
 		<div>
@@ -81,7 +62,7 @@ function FileRequests() {
 						{ label: 'Người gửi', value: selected.requesterName },
 						{ label: 'Tên file mới', value: selected.newFileName }
 					]}
-					onConfirm={handleApprove}
+					onConfirm={(isApproved, reason) => handleApprove(isApproved, reason, selected.id, setPopup, setSelected, loadRequests)}
 					onClose={() => setSelected(null)}
 				/>
 			)}

@@ -84,8 +84,13 @@ export function checkSize(file, maxSizeMB) {
 	return file.size <= maxSizeBytes
 }
 
-
-export const handleFormSubmit = async ({ formData, type, extraData, onSuccess, setPopup }) => {
+export const handleFormSubmit = async ({
+	formData,
+	type,
+	extraData,
+	onSuccess,
+	setPopup
+}) => {
 	try {
 		// ===== validate subject =====
 		console.log([...formData.entries()])
@@ -130,6 +135,20 @@ export const handleFormSubmit = async ({ formData, type, extraData, onSuccess, s
 		}
 		setPopup(res.message)
 		onSuccess?.()
+	} catch (err) {
+		handleError(err, setPopup)
+	}
+}
+
+export const handleApprove = async (isApproved, reason, id, setPopup, setSelected, loadRequests) => {
+	try {
+		const res = await fileApi.approve(id, {
+			isApproved,
+			reason
+		})
+		setPopup(res.message)
+		setSelected(null)
+		loadRequests()
 	} catch (err) {
 		handleError(err, setPopup)
 	}

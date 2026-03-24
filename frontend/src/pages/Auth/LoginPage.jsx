@@ -31,10 +31,9 @@ const LoginPage = () => {
 
 			console.log('Login success:', response)
 			localStorage.setItem('token', response.token)
-			localStorage.setItem('role', role)
-			localStorage.setItem('username', username)			
+			localStorage.setItem('role', response.role)
+			localStorage.setItem('username', username)
 			navigate('/')
-
 		} catch (err) {
 			if (err.response) {
 				if (
@@ -191,7 +190,7 @@ const LoginPage = () => {
 					{/* BUTTONS */}
 					<div className='flex gap-4'>
 						<button
-                            type='button'
+							type='button'
 							onClick={() => handleLogin('student')}
 							disabled={isLoading}
 							className='flex-1 bg-[#1f4c7a] text-white py-2 rounded-md hover:bg-[#163a5d] transition flex items-center justify-center gap-2'>
@@ -199,7 +198,7 @@ const LoginPage = () => {
 						</button>
 
 						<button
-                            type='button'
+							type='button'
 							onClick={() => handleLogin('admin')}
 							disabled={isLoading}
 							className='flex-1 border border-[#1f4c7a] text-[#1f4c7a] py-2 rounded-md hover:bg-blue-50 transition flex items-center justify-center gap-2'>

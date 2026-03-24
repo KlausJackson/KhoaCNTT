@@ -12,6 +12,8 @@ const UserLayout = () => {
 	const username = localStorage.getItem('username')
 	const role = localStorage.getItem('role')
 
+	const isAdmin = role && role.toLowerCase().includes('admin') // Kiểm tra nếu role chứa "admin"
+
 	const handleLogout = () => {
 		localStorage.removeItem('token')
 		localStorage.removeItem('role')
@@ -48,7 +50,7 @@ const UserLayout = () => {
 							{isDropdownOpen && (
 								<div className='absolute right-0 mt-2 w-48 bg-white text-black rounded shadow-lg py-2 z-50'>
 									{/* Nếu là admin thì hiện nút Trang quản trị */}
-									{role === 'admin' && (
+									{isAdmin && (
 										<Link
 											to='/admin'
 											className='block px-4 py-2 hover:bg-gray-100'>

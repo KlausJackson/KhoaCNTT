@@ -29,12 +29,9 @@ function ManageAdmin() {
 	}
 
 	useEffect(() => {
-		const fetch = async () => {
-			const res = await adminApi.getAll()
-			const filteredAdmins = res.filter((admin) => admin.level !== 1)
-			setAdmins(filteredAdmins)
-		}
-		fetch()
+		(async () => {
+			await loadAdmins()
+		})()
 	}, [])
 
 	return (

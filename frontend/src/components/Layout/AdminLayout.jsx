@@ -1,42 +1,30 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { menu } from '../../constants/layout'
-import adminApi from '../../api/adminApi'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 function AdminLayout() {
 	const location = useLocation()
 	const navigate = useNavigate()
 	const username = localStorage.getItem('username')
-	// const role = localStorage.getItem('role')
-	const [canViewAccounts, setCanViewAccounts] = useState(null)
+	const role = localStorage.getItem('role')
+	const canViewAccounts = role !== 'Admin3'
 
+	// frontend based route protection
 	// Redirect nếu vào /admin
 	useEffect(() => {
-		// nếu không có quyền accounts
 		if (!canViewAccounts) {
-			// đang ở accounts → đá sang lecturers
-			if (location.pathname === '/admin/accounts') {
+			if (
+				location.pathname === '/admin' ||
+				location.pathname === '/admin/accounts'
+			) {
 				navigate('/admin/lecturers', { replace: true })
 			}
-
-			// vừa vào /admin → cũng đá sang lecturers
+		} else {
 			if (location.pathname === '/admin') {
-				navigate('/admin/lecturers', { replace: true })
+				navigate('/admin/accounts', { replace: true })
 			}
 		}
-	}, [canViewAccounts, location.pathname])
-
-	useEffect(() => {
-		const checkAccounts = async () => {
-			try {
-				await adminApi.getAll()
-				setCanViewAccounts(true)
-			} catch {
-				setCanViewAccounts(false)
-			}
-		}
-		checkAccounts()
-	}, [])
+	}, [canViewAccounts, location.pathname, navigate])
 
 	return (
 		<div className='flex h-screen bg-gray-100'>
