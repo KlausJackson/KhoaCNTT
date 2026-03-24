@@ -209,7 +209,6 @@ const EditModal = ({ news, onClose, onSubmit }) => {
         <h3 className="text-xl font-bold text-gray-900 mb-6">
           {isEdit ? "Chỉnh sửa tin tức" : "Thêm tin tức mới"}
         </h3>
-
         <div className="space-y-5">
           {/* Tiêu đề */}
           <div>
@@ -305,7 +304,6 @@ const EditModal = ({ news, onClose, onSubmit }) => {
             )}
           </div>
         </div>
-
         <div className="flex justify-end gap-3 mt-8">
           <button
             onClick={onClose}
@@ -443,11 +441,19 @@ const PreviewModal = ({ item, onClose, onApprove, onReject, canApprove }) => (
 // ── Main Component ───────────────────────────────────────────
 const AdminNewsManagement = () => {
   const navigate = useNavigate();
-  const adminLevel = parseInt(
-    localStorage.getItem("adminLevel") ?? localStorage.getItem("level") ?? "0",
-    10,
-  );
-  const canApprove = adminLevel === 1 || adminLevel === 2;
+  const getAdminLevelFromToken = () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return 3;
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return parseInt(payload["Level"] ?? "3", 10);
+    } catch {
+      return 3;
+    }
+  };
+  const adminLevel = getAdminLevelFromToken();
+  // Cấp 0, 1, 2 được duyệt/từ chối. Cấp 3 KHÔNG có quyền này.
+  const canApprove = adminLevel === 0 || adminLevel === 1 || adminLevel === 2;
 
   const [tab, setTab] = useState("list");
   const [newsList, setNewsList] = useState([]);
@@ -456,6 +462,8 @@ const AdminNewsManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const [pendingKeyword, setPendingKeyword] = useState("");
+  const [pendingType, setPendingType] = useState("");
 
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [rejectTarget, setRejectTarget] = useState(null);
@@ -551,6 +559,14 @@ const AdminNewsManagement = () => {
       showPopup("Thao tác thất bại.");
     }
   };
+
+  const filteredPending = pendingList.filter((n) => {
+    const matchKw = n.title
+      .toLowerCase()
+      .includes(pendingKeyword.toLowerCase());
+    const matchType = pendingType ? n.newsType === pendingType : true;
+    return matchKw && matchType;
+  });
 
   const filtered = newsList.filter((n) => {
     const matchKw = n.title.toLowerCase().includes(keyword.toLowerCase());
@@ -714,9 +730,32 @@ const AdminNewsManagement = () => {
       {/* TAB CHỜ DUYỆT */}
       {tab === "pending" && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-          <h3 className="font-semibold text-gray-800 mb-4">
-            Bài viết đang chờ phê duyệt
-          </h3>
+          <div className="flex gap-3 mb-5">
+            <div className="flex-1 relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+                🔍
+              </span>
+              <input
+                type="text"
+                placeholder="Tìm kiếm theo tiêu đề bài viết..."
+                value={pendingKeyword}
+                onChange={(e) => setPendingKeyword(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1f4c7a]"
+              />
+            </div>
+            <select
+              value={pendingType}
+              onChange={(e) => setPendingType(e.target.value)}
+              className="border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1f4c7a] min-w-[180px]"
+            >
+              <option value="">-- Tất cả danh mục --</option>
+              <option value="Event">Sự kiện</option>
+              <option value="Announcement">Thông báo</option>
+              <option value="Education">Tin giáo dục</option>
+              <option value="Admission">Tuyển sinh</option>
+              <option value="Other">Khác</option>
+            </select>
+          </div>
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-gray-500 border-b border-gray-100 text-xs uppercase tracking-wide">
@@ -736,14 +775,14 @@ const AdminNewsManagement = () => {
                     Đang tải...
                   </td>
                 </tr>
-              ) : pendingList.length === 0 ? (
+              ) : filteredPending.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-gray-400">
                     Không có yêu cầu nào đang chờ duyệt.
                   </td>
                 </tr>
               ) : (
-                pendingList.map((item) => (
+                filteredPending.map((item) => (
                   <tr
                     key={item.newsRequestID}
                     className="hover:bg-gray-50 transition"
