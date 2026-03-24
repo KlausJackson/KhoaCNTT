@@ -2,7 +2,6 @@ import { getPagination } from '../../helpers/fileHelpers'
 
 function Pagination({ page, totalPages, setPage }) {
 	if (totalPages <= 1) return null
-	console.log('PAGE:', page, 'TOTAL:', totalPages)
 
 	return (
 		<div className='flex justify-center mt-10 gap-2 flex-wrap'>

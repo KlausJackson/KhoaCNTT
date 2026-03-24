@@ -52,9 +52,26 @@ export const handleDownload = async (id, file, setPopup) => {
 		link.click()
 		link.remove()
 	} catch (error) {
-		const message =
-			error.response?.data?.message ||
-			'Không thể kết nối đến máy chủ, thử lại sau.'
+		let message = 'Không thể kết nối đến máy chủ, thử lại sau.'
+
+		if (error.response?.data instanceof Blob) {
+			try {
+				const text = await error.response.data.text()
+				const json = JSON.parse(text)
+
+				message = json.message || json.error || json.detail || message
+			} catch {
+				message = await error.response.data.text()
+			}
+		} else {
+			message =
+				error.response?.data?.message ||
+				error.response?.data?.error ||
+				error.response?.data?.detail ||
+				error.message ||
+				message
+		}
+
 		setPopup(message)
 	}
 }

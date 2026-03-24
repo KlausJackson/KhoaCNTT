@@ -84,10 +84,16 @@ namespace KhoaCNTT.API.Controllers
         [HttpGet("{id}/download")]
         public async Task<IActionResult> Download(int id)
         {
-            var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             bool isAdmin = User.IsInRole("Admin");
 
-            var (stream, contentType, fileName) = await _fileService.DownloadFileAsync(id, userIdStr, isAdmin);
+            var token = Request.Headers["Authorization"]
+                .ToString()
+                .Replace("Bearer ", "");
+            //var rawAuth = Request.Headers["Authorization"].ToString();
+            //Console.WriteLine($"RAW AUTH: [{rawAuth}]");
+
+            var (stream, contentType, fileName) = await _fileService.DownloadFileAsync(id, token, isAdmin);
 
             return File(stream, contentType, fileName);
         }

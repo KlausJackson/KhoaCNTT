@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KhoaCNTT.Domain.Entities.NewsEntities;
 
-namespace KhoaCNTT.Application.Interfaces.Repositories
+namespace KhoaCNTT.Application.Interfaces.Repositories.INewsRepositories;
+
+public interface ICommentRepository : IRepository<Comment>
 {
-    internal class ICommentRepository
-    {
-    }
+    Task<Comment?> GetByIdAsync(int id);
+    Task<IEnumerable<Comment>> GetByNewsIdAsync(int newsId);
 }

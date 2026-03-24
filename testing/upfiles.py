@@ -1,6 +1,8 @@
 import os
 import re
 import random
+import dotenv
+dotenv.load_dotenv()
 import requests
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -10,9 +12,9 @@ ROOT_FOLDER = r"E:\PDF\Programming"
 API_URL = "https://localhost:7108/api/Files"
 
 TOKENS = {
-    "admin1": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImFkbWluMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiTGV2ZWwiOiIxIiwiZXhwIjoxNzc0NDIxMzg4LCJpc3MiOiJLaG9hQ05UVF9BUEkiLCJhdWQiOiJLaG9hQ05UVF9Vc2VyIn0.R-p4NnF5-Wa7_uIsmEU0IYAxxbw2TeFlj2sbtxQGplA",
-    "admin2": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImFkbWluMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiTGV2ZWwiOiIyIiwiZXhwIjoxNzc0NDIzNzA5LCJpc3MiOiJLaG9hQ05UVF9BUEkiLCJhdWQiOiJLaG9hQ05UVF9Vc2VyIn0.dJZ8Jl4k_mmUsiz0zPFx76v-kVbGGJxFpUrA_9X53QE",
-    "admin3": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImFkbWluMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiTGV2ZWwiOiIzIiwiZXhwIjoxNzc0NDIzNzk1LCJpc3MiOiJLaG9hQ05UVF9BUEkiLCJhdWQiOiJLaG9hQ05UVF9Vc2VyIn0.N9dI6kptPrQe2nu8ag_KQcrQ2R2w87o1-e_sg8JjBKc",
+    "admin1": os.getenv("ADMIN1"),
+    "admin2": os.getenv("ADMIN2"),
+    "admin3": os.getenv("ADMIN3")
 }
 
 SUBJECT_CODES = [
