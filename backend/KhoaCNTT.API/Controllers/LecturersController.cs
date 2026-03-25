@@ -69,7 +69,7 @@ namespace KhoaCNTT.API.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] UpdateLecturerRequest request)
         {
             await _lecturerService.UpdateLecturerAsync(id, request);
-            return Ok(new { Message = "Cập nhật giảng viên thành công." });
+            return Ok(new { Message = "Cập nhật thành công" });
         }
 
         /// <summary>

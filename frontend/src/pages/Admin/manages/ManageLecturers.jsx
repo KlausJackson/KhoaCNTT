@@ -11,6 +11,32 @@ import { columns, fields } from '../../../constants/lecturer'
 
 import { UserCog, Trash2 } from 'lucide-react'
 
+/** FormModal truyền FormData; API cần object JSON (camelCase). */
+function lecturerPayloadFromFormData(formData) {
+	const raw = Object.fromEntries(formData.entries())
+	let subjectCodes = []
+	if (raw.subjectCodes) {
+		try {
+			const parsed = JSON.parse(raw.subjectCodes)
+			subjectCodes = Array.isArray(parsed) ? parsed : []
+		} catch {
+			subjectCodes = []
+		}
+	}
+	return {
+		fullName: raw.fullName ?? '',
+		imageUrl: raw.imageUrl ?? '',
+		degree: raw.degree,
+		position: raw.position ?? '',
+		birthdate: raw.birthdate
+			? new Date(raw.birthdate).toISOString()
+			: null,
+		email: raw.email ?? '',
+		phoneNumber: raw.phoneNumber ?? '',
+		subjectCodes
+	}
+}
+
 function ManageLecturers() {
 	const [lecturers, setLecturers] = useState([])
 	const [showCreate, setShowCreate] = useState(false)
@@ -78,7 +104,7 @@ function ManageLecturers() {
 					onSubmit={(data) =>
 						handleAction(
 							lecturerApi.create,
-							data,
+							lecturerPayloadFromFormData(data),
 							setShowCreate,
 							loadLecturers,
 							setPopup
@@ -98,7 +124,10 @@ function ManageLecturers() {
 					onSubmit={(data) =>
 						handleAction(
 							lecturerApi.update,
-							{ id: editing.id, ...data },
+							{
+								id: editing.id,
+								...lecturerPayloadFromFormData(data)
+							},
 							setEditing,
 							loadLecturers,
 							setPopup

@@ -66,6 +66,10 @@ namespace KhoaCNTT.Application.Services
                 PhoneNumber = (request.PhoneNumber ?? "").Trim()
             };
 
+            var emailCreate = request.Email.Trim();
+            if (await _lecturerRepo.ExistsWithEmailAsync(emailCreate, null))
+                throw new BusinessRuleException("Email đã được sử dụng");
+
             await SetLecturerSubjectsAsync(lecturer, request.SubjectCodes ?? new List<string>());
             await _lecturerRepo.AddAsync(lecturer);
         }
@@ -79,12 +83,16 @@ namespace KhoaCNTT.Application.Services
             if (string.IsNullOrWhiteSpace(request.FullName))
                 throw new BusinessRuleException("Họ tên không được để trống.");
 
+            var emailUpdate = request.Email.Trim();
+            if (await _lecturerRepo.ExistsWithEmailAsync(emailUpdate, id))
+                throw new BusinessRuleException("Email đã được sử dụng");
+
             lecturer.FullName = request.FullName.Trim();
             lecturer.ImageUrl = string.IsNullOrWhiteSpace(request.ImageUrl) ? "" : request.ImageUrl.Trim();
             lecturer.Degree = request.Degree;
             lecturer.Position = (request.Position ?? "").Trim();
             lecturer.Birthdate = request.Birthdate;
-            lecturer.Email = request.Email.Trim();
+            lecturer.Email = emailUpdate;
             lecturer.PhoneNumber = (request.PhoneNumber ?? "").Trim();
             lecturer.UpdatedAt = DateTime.UtcNow;
 

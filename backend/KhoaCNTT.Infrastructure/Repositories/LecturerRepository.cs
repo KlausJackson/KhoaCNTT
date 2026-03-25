@@ -23,6 +23,14 @@ namespace KhoaCNTT.Infrastructure.Repositories
                 .FirstOrDefaultAsync(l => l.Id == id);
         }
 
+        public async Task<bool> ExistsWithEmailAsync(string email, int? exceptLecturerId)
+        {
+            var q = _context.Lecturers.AsQueryable().Where(l => l.Email == email);
+            if (exceptLecturerId.HasValue)
+                q = q.Where(l => l.Id != exceptLecturerId.Value);
+            return await q.AnyAsync();
+        }
+
         public async Task<(List<Lecturer> Items, int TotalCount)> GetAllAsync(string? name, DegreeType? degree, string? position, string? subjectCodeOrName, int page, int pageSize)
         {
             var query = _context.Lecturers
