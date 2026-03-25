@@ -47,7 +47,7 @@ export const fields = [
 			{ label: 'Master', value: 'Master' },
 			{ label: 'Doctor', value: 'Doctor' },
 			{ label: 'Professor', value: 'Professor' },
-            { label: 'Associate Professor', value: 'AssociateProfessor' }
+            { label: 'Associate Professor', value: 'Associate Professor' }
 		]
 	},
 
