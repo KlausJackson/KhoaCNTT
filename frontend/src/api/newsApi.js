@@ -1,14 +1,18 @@
 import axiosClient from "./axiosClient";
 
-// BE serialize enum thành string → gửi string trực tiếp, không convert sang số
+// Khớp với C# enum ApprovalDecision { Approved = 0, Rejected = 1 }
 const approvalDecisionMap = {
   Approved: 0,
   Rejected: 1,
 };
 
+// Chuẩn hóa payload về PascalCase để C# [FromBody] binding luôn nhận đúng
 const toPayload = (form) => ({
-  ...form,
-  // newsType giữ nguyên string vì BE expect string
+  Title: form.title ?? form.Title ?? "",
+  NewsType: form.newsType ?? form.NewsType ?? "",
+  Content: form.content ?? form.Content ?? "",
+  ResourceContent: form.resourceContent ?? form.ResourceContent ?? "",
+  ...(form.TargetNewsID !== undefined && { TargetNewsID: form.TargetNewsID }),
 });
 
 const newsApi = {
@@ -16,9 +20,6 @@ const newsApi = {
   search: (params) => axiosClient.get("/News", { params }),
 
   getById: (id) => axiosClient.get(`/News/${id}`),
-
-  // === THÊM HÀM TĂNG VIEW Ở ĐÂY ===
-  incrementView: (id) => axiosClient.post(`/News/${id}/view`),
 
   // ── Admin - Tạo/Sửa/Xóa ──────────────────────────────
   create: (data) => axiosClient.post("/News/requests/create", toPayload(data)),
@@ -41,12 +42,24 @@ const newsApi = {
     }),
 
   // ── Bình luận ─────────────────────────────────────────
+  // GET /api/News/{newsId}/comments — public
   getComments: (newsId) => axiosClient.get(`/News/${newsId}/comments`),
 
-  postComment: (newsId, data) =>
-    axiosClient.post(`/News/${newsId}/comments`, data),
+  // POST /api/News/{newsId}/comments — sinh viên đăng nhập
+  // Sinh viên login bằng MSV → localStorage "username" chính là MSV
+  postComment: (newsId, data) => {
+    const msv = localStorage.getItem("username") || "";
+    const studentName = localStorage.getItem("username") || "Sinh viên";
+    return axiosClient.post(`/News/${newsId}/comments`, {
+      ...data,
+      msv,
+      studentName,
+    });
+  },
 
-  deleteComment: (commentId) => axiosClient.delete(`/comments/${commentId}`),
+  // DELETE /api/News/comments/{commentId} — admin cấp 1,2,3
+  deleteComment: (commentId) =>
+    axiosClient.delete(`/News/comments/${commentId}`),
 };
 
 export default newsApi;

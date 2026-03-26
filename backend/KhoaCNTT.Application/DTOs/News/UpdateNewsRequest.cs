@@ -9,6 +9,5 @@ namespace KhoaCNTT.Application.DTOs.News
         public NewsType NewsType { get; set; }
         public string Content { get; set; } = string.Empty;
         public string ResourceContent { get; set; } = string.Empty;
-        public string ImageUrl { get; set; } = string.Empty;
     }
 }

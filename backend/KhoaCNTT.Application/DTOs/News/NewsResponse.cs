@@ -12,7 +12,6 @@ namespace KhoaCNTT.Application.DTOs.News
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public string Content { get; set; } = string.Empty;
-        public string ResourceContent { get; set; } = string.Empty;
-        public string ImageUrl { get; set; } = string.Empty;
+     
     }
 }
