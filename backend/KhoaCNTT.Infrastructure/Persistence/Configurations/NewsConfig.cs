@@ -21,7 +21,9 @@ namespace KhoaCNTT.Infrastructure.Persistence.Configurations
 
             // FK
             builder.HasOne(x => x.CurrentResource).WithMany().HasForeignKey(x => x.CurrentResourceId).OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(x => x.CreatedBy).WithMany().HasForeignKey(x => x.CreatedById).OnDelete(DeleteBehavior.Restrict);
+
+            // ĐÃ SỬA: Gọi Navigation Property "Admin", map vào Foreign Key "CreatedBy"
+            builder.HasOne(x => x.Admin).WithMany().HasForeignKey(x => x.CreatedBy).OnDelete(DeleteBehavior.Restrict);
         }
 
         public void Configure(EntityTypeBuilder<NewsResource> builder)
@@ -29,7 +31,9 @@ namespace KhoaCNTT.Infrastructure.Persistence.Configurations
             builder.ToTable("NewsResource");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName("NewsResourceID");
-            builder.Property(x => x.Content).HasColumnType("nvarchar(MAX)").IsRequired();
+
+            // ĐÃ ĐIỀU CHỈNH: Khớp với DB Design (nvarchar(255))
+            builder.Property(x => x.Content).HasColumnType("nvarchar(255)").IsRequired();
 
             // FK
             builder.HasOne(x => x.Admin).WithMany().HasForeignKey(x => x.CreatedBy).OnDelete(DeleteBehavior.Restrict);
@@ -41,6 +45,7 @@ namespace KhoaCNTT.Infrastructure.Persistence.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName("NewsRequestID");
             builder.Property(x => x.Title).HasColumnType("nvarchar(255)").IsRequired();
+
             builder.Property(x => x.RequestType).HasConversion<string>().HasColumnType("varchar(50)");
             builder.Property(x => x.NewsType).HasConversion<string>().HasColumnType("varchar(50)");
 

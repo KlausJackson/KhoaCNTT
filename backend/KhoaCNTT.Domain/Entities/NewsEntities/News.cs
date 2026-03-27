@@ -8,14 +8,14 @@ namespace KhoaCNTT.Domain.Entities.NewsEntities
         public string Title { get; set; } = string.Empty;
         public int CurrentResourceId { get; set; }
         public NewsResource CurrentResource { get; set; } = null!;
-        public NewsType NewsType { get; set; }
         public int ViewCount { get; set; } = 0;
+        public NewsType NewsType { get; set; }
 
         // Khóa ngoại Admin
-        public int CreatedById { get; set; }
+        public int CreatedBy { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
-        public Admin CreatedBy { get; set; } = null!;
+        public Admin Admin { get; set; } = null!;
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
