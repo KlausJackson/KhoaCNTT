@@ -13,7 +13,7 @@ export const handleAction = async (action, data, setter, loader, setPopup) => {
 		const res = await action(data)
 		setter?.(false)
 		loader?.()
-		setPopup?.(res.message)
+		setPopup?.({ message: res.message, type: 'success' })
 	} catch (err) {
 		handleError(err, setPopup)
 	}
@@ -26,5 +26,5 @@ export const handleError = async (err, setPopup) => {
 		err.response?.data?.detail ||
 		err.message ||
 		'Không thể kết nối đến máy chủ, thử lại sau.'
-	setPopup?.(msg)
+	setPopup?.({ message: msg, type: 'error' })
 }

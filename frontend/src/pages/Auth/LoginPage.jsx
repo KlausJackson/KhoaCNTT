@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import authApi from '../../api/authApi'
+import { handleError } from '../../helpers/commonHelpers'
 import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
@@ -35,18 +36,7 @@ const LoginPage = () => {
 			localStorage.setItem('username', username)
 			navigate('/')
 		} catch (err) {
-			if (err.response) {
-				if (
-					err.response.status === 401 ||
-					err.response.status === 400
-				) {
-					setError('Sai tên đăng nhập hoặc mật khẩu!')
-				} else {
-					setError('Vui lòng thử lại sau!')
-				}
-			} else {
-				setError('Không thể kết nối đến máy chủ, thử lại sau!')
-			}
+			handleError(err, setError)
 		} finally {
 			setIsLoading(false)
 		}

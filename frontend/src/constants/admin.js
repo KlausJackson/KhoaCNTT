@@ -31,21 +31,18 @@ export const fields = [
 		name: 'fullName',
 		label: 'Tên người dùng',
 		placeholder: 'Nhập tên',
-		//required: true
 	},
 	{
 		name: 'username',
 		label: 'Tên đăng nhập',
 		placeholder: 'Nhập username',
-		required: true,
 		disabled: true,
 		readOnly: true
 	},
 	{
 		name: 'email',
 		label: 'Email',
-		type: 'email',
-		required: true
+		// type: 'email',
 	},
 	{
 		name: 'password',

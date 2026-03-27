@@ -51,32 +51,32 @@ export const handleDownload = async (id, file, setPopup) => {
 		link.click()
 		link.remove()
 	} catch (error) {
-		let message = 'Không thể kết nối đến máy chủ, thử lại sau.'
+		let msg = 'Không thể kết nối đến máy chủ, thử lại sau.'
 
 		if (error.response?.data instanceof Blob) {
 			try {
 				const text = await error.response.data.text()
 				const json = JSON.parse(text)
 
-				message = json.message || json.error || json.detail || message
+				msg = json.message || json.error || json.detail || msg
 			} catch {
-				message = await error.response.data.text()
+				msg = await error.response.data.text()
 			}
 		} else {
-			message =
+			msg =
 				error.response?.data?.message ||
 				error.response?.data?.error ||
 				error.response?.data?.detail ||
 				error.message ||
-				message
+				msg
 		}
 
-		setPopup(message)
+		setPopup({ message: msg, type: 'error' })
 	}
 }
 
 export function checkSize(file, maxSizeMB) {
-	if (!file) return false
+	if (!file || file.size === 0) return false
 
 	const maxSize = parseInt(maxSizeMB)
 	const maxSizeBytes = maxSize * 1024 * 1024
@@ -93,19 +93,25 @@ export const handleFormSubmit = async ({
 }) => {
 	try {
 		// ===== validate subject =====
-		console.log([...formData.entries()])
+		// console.log([...formData.entries()])
 
 		// ===== validate file nếu có =====
 		if (type === 'upload' || type === 'replace') {
 			const file = formData.get('file')
-			if (!file) {
-				setPopup('Vui lòng chọn file.')
+			if (!file || file.size === 0) {
+				setPopup({
+					message: 'Vui lòng tải lên tài liệu.',
+					type: 'error'
+				})
 				return
 			}
 
 			const ok = checkSize(file, '250MB')
 			if (!ok) {
-				setPopup('Tài liệu tải lên không được nặng hơn 250MB.')
+				setPopup({
+					message: 'Tài liệu tải lên không được nặng hơn 250MB.',
+					type: 'error'
+				})
 				return
 			}
 		}
@@ -120,9 +126,7 @@ export const handleFormSubmit = async ({
 		if (type === 'edit') {
 			const data = Object.fromEntries(formData.entries())
 			if (!data.subjectCode) delete data.subjectCode
-
-			await fileApi.updateMetadata(extraData.id, data)
-			res = { message: 'Cập nhật thông tin tài liệu thành công.' }
+			res = await fileApi.updateMetadata(extraData.id, data)
 		}
 
 		if (type === 'replace') {
@@ -133,23 +137,36 @@ export const handleFormSubmit = async ({
 
 			res = await fileApi.replace(extraData.id, formData)
 		}
-		setPopup(res.message)
+		setPopup({ message: res.message, type: 'success' })
 		onSuccess?.()
 	} catch (err) {
 		handleError(err, setPopup)
 	}
 }
 
-export const handleApprove = async (isApproved, reason, id, setPopup, setSelected, loadRequests) => {
+export const handleApprove = async (
+	isApproved,
+	reason,
+	id,
+	setPopup,
+	setSelected,
+	loadRequests
+) => {
 	try {
 		const res = await fileApi.approve(id, {
 			isApproved,
 			reason
 		})
-		setPopup(res.message)
+		setPopup({ message: res.message, type: 'success' })
 		setSelected(null)
 		loadRequests()
 	} catch (err) {
 		handleError(err, setPopup)
 	}
 }
+
+export const mapToOptions = (map) =>
+	Object.entries(map).map(([value, label]) => ({
+		value,
+		label
+	}))

@@ -68,7 +68,7 @@ function FileRequests() {
 			)}
 
 			{popup && (
-				<PopupMessage message={popup} onClose={() => setPopup(null)} />
+				<PopupMessage message={popup.message} type={popup.type} onClose={() => setPopup(null)} />
 			)}
 		</div>
 	)

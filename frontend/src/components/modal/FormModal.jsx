@@ -8,8 +8,9 @@ function FormModal({
 	defaultValues,
 	onSubmit,
 	onClose,
+	confirmText = 'Xác nhận',
 	columns = 2,
-	width = '720px'
+	width = '750px',
 }) {
 	const handleSubmit = (e) => {
 		e.preventDefault()
@@ -20,7 +21,7 @@ function FormModal({
 	const isEdit = !!defaultValues
 
 	return (
-		<Modal title={title} onClose={onClose} width={width}>
+		<Modal title={title} width={width}>
 			<form
 				onSubmit={handleSubmit}
 				className='flex flex-col max-h-[80vh]'>
@@ -164,7 +165,7 @@ function FormModal({
 					<button
 						type='submit'
 						className='px-4 py-2 bg-[#1f4c7a] text-white rounded-lg hover:bg-[#163a5d] transition shadow-sm font-medium'>
-						Xác nhận
+						{confirmText}
 					</button>
 				</div>
 			</form>

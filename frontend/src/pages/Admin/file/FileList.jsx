@@ -17,7 +17,7 @@ import {
 } from '../../../constants/file'
 import { handleDownload, handleFormSubmit } from '../../../helpers/fileHelpers'
 import { Replace, Download, Trash2, Pencil } from 'lucide-react'
-import { handleError } from '../../../helpers/commonHelpers'
+import { handleError, handleAction } from '../../../helpers/commonHelpers'
 
 function FileList() {
 	const [files, setFiles] = useState([])
@@ -58,19 +58,9 @@ function FileList() {
 	}
 
 	useEffect(() => {
-		const loadFiles = async () => {
-			try {
-				const res = await fileApi.search({ ...filters, page })
-				setFiles(res.items)
-				const newTotal = Math.ceil(res.total / filters.pageSize)
-				// setTotalPages(newTotal)
-				// setPage((prev) => (prev > newTotal ? newTotal : prev))
-				setTotalPages((prev) => Math.max(prev, newTotal))
-			} catch (err) {
-				handleError(err, setPopup)
-			}
-		}
-		loadFiles()
+		;(async () => {
+			await loadFiles()
+		})()
 	}, [page, filters])
 
 	return (
@@ -129,7 +119,11 @@ function FileList() {
 							color='red'
 							onClick={() => {
 								if (role === 'Admin3') {
-									setPopup('Bạn không có quyền xóa tài liệu.')
+									setPopup({
+										message:
+											'Bạn không có quyền xóa tài liệu.',
+										type: 'error'
+									})
 									return
 								}
 								setWarning({
@@ -137,11 +131,11 @@ function FileList() {
 									message:
 										'Bạn có chắc chắn muốn xóa tài liệu này?',
 									action: () => fileApi.delete(row.id),
-									popup: 'Xóa tài liệu thành công.'
+									popup: 'Xóa tài liệu thành công.',
+									color: 'red',
+									icon: "mdi:delete-outline"
 								})
-							}
-								
-							}
+							}}
 						/>
 					</>
 				)}
@@ -150,10 +144,11 @@ function FileList() {
 			{/* Modal Upload */}
 			{showUpload && (
 				<FormModal
-					title='Thêm tài liệu'
+					title='Thêm tài liệu mới'
 					fields={uploadFields}
 					columns={2}
 					width='600px'
+					confirmText='Thêm tài liệu'
 					onSubmit={async (formData) =>
 						handleFormSubmit({
 							formData,
@@ -175,6 +170,7 @@ function FileList() {
 					title='Sửa thông tin tài liệu'
 					fields={editMetadataFields}
 					defaultValues={editFile}
+					confirmText='Lưu thay đổi'
 					onSubmit={async (formData) =>
 						handleFormSubmit({
 							formData,
@@ -196,6 +192,7 @@ function FileList() {
 				<FormModal
 					title='Đổi tài liệu'
 					fields={replaceFields}
+					confirmText='Đổi tài liệu'
 					defaultValues={{ oldTitle: replaceFile.title }}
 					onSubmit={async (formData) =>
 						handleFormSubmit({
@@ -214,26 +211,31 @@ function FileList() {
 			)}
 
 			{popup && (
-				<PopupMessage message={popup} onClose={() => setPopup(null)} />
+				<PopupMessage
+					message={popup.message}
+					type={popup.type}
+					onClose={() => setPopup(null)}
+				/>
 			)}
 
 			{warning && (
 				<ConfirmModal
 					title={warning.title}
 					message={warning.message}
+					color={warning.color}
+					icon={warning.icon}
 					onConfirm={async () => {
-						try {
-							await warning.action()
-							setPopup(warning.popup)
-							setWarning(null)
-							loadFiles()
-						} catch (err) {
-							handleError(err, setPopup)
-						}
+						await handleAction(
+							warning.action,
+							null,
+							setWarning,
+							loadFiles,
+							setPopup,
+							warning.popup
+						)
 					}}
 					onClose={() => setWarning(null)}
 					confirmText='Xác nhận'
-					color='red'
 				/>
 			)}
 		</div>

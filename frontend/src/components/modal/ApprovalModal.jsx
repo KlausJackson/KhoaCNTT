@@ -7,7 +7,6 @@ function ApprovalModal({ title, details, onConfirm, onClose }) {
 	return (
 		<Modal
 			title={title}
-			onClose={onClose}
 			width='700px'>
 			<div className='bg-slate-50 p-4 rounded-lg mb-4 text-sm space-y-2 border'>
 				{details.map((item, index) => (
@@ -33,6 +32,11 @@ function ApprovalModal({ title, details, onConfirm, onClose }) {
 			/>
 
 			<div className='flex justify-end gap-3 mt-4 pt-4 border-t'>
+				<button
+					className='px-4 py-2 border rounded-lg hover:bg-gray-50 transition font-medium'
+					onClick={onClose}>
+					Hủy bỏ
+				</button>
 				<button
 					className='bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-lg hover:bg-red-100 transition font-medium'
 					onClick={() => onConfirm(false, reason)}>

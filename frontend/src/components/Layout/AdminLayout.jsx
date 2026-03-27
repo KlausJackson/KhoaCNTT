@@ -7,7 +7,7 @@ function AdminLayout() {
 	const navigate = useNavigate()
 	const username = localStorage.getItem('username')
 	const role = localStorage.getItem('role')
-	const canViewAccounts = role !== 'Admin3'
+	const canViewAccounts = role === 'Admin1'
 
 	// frontend based route protection
 	// Redirect nếu vào /admin

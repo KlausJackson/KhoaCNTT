@@ -6,6 +6,65 @@ import { formatDateTime, timeAgo } from "../../helpers/newsHelpers";
 import PopupMessage from "../../components/parts/PopupMessage";
 import Button from "../../components/parts/Button";
 
+// ── Popover xóa bình luận (hiện tại vị trí click) ──────────────
+const CommentPopover = ({ x, y, onDelete, onClose }) => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) onClose();
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [onClose]);
+
+  return (
+    <div
+      ref={ref}
+      style={{ position: "fixed", top: y, left: x, zIndex: 1000 }}
+      className="bg-white border border-gray-200 rounded-xl shadow-xl py-1 min-w-[160px]"
+    >
+      <button
+        onClick={onDelete}
+        className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition flex items-center gap-2"
+      >
+        🗑️ Xóa bình luận
+      </button>
+    </div>
+  );
+};
+
+// ── Modal xác nhận xóa bình luận ────────────────────────────────
+const ConfirmDeleteModal = ({ onConfirm, onCancel }) => (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 text-center shadow-2xl">
+      <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+        🗑️
+      </div>
+      <h3 className="text-xl font-bold text-gray-900 mb-2">Xóa bình luận</h3>
+      <p className="text-gray-500 text-sm mb-6">
+        Bạn có chắc chắn muốn xóa bình luận này không? Hành động này không thể
+        hoàn tác.
+      </p>
+      <div className="flex gap-3">
+        <button
+          onClick={onCancel}
+          className="flex-1 py-3 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition"
+        >
+          Hủy bỏ
+        </button>
+        <button
+          onClick={onConfirm}
+          className="flex-1 py-3 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition"
+        >
+          Đồng ý
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+// ── Component chính ─────────────────────────────────────────────
 const NewsDetail = () => {
   const { id } = useParams();
   const location = useLocation();
@@ -18,27 +77,32 @@ const NewsDetail = () => {
   const [commentText, setCommentText] = useState("");
   const [error, setError] = useState(null);
 
-  // Ref để tránh gọi 2 lần do React StrictMode
+  // Popover state
+  const [popover, setPopover] = useState(null); // { x, y, commentId }
+  // Modal xác nhận xóa
+  const [confirmDelete, setConfirmDelete] = useState(null); // commentId
+
+  // Lấy role từ localStorage để kiểm tra có phải admin không
+  const role = localStorage.getItem("role"); // "Admin" | "Student" | null
+  const isAdmin = role === "Admin";
+
   const hasLoaded = useRef(false);
 
-  // ====================== LOAD BÀI VIẾT + TĂNG VIEW (CHỈ 1 LẦN) ======================
+  // Load bài viết
   useEffect(() => {
     if (!id || hasLoaded.current) return;
-
     const loadNews = async () => {
       try {
         hasLoaded.current = true;
-        const data = await newsApi.getById(id); // ← Backend tự tăng view + cooldown
+        const data = await newsApi.getById(id);
         setNews(data);
       } catch (err) {
         console.error(err);
         setError("Không tìm thấy bài viết");
       }
     };
-
     loadNews();
   }, [id]);
-  // ===================================================================================
 
   // Load bình luận
   useEffect(() => {
@@ -50,14 +114,12 @@ const NewsDetail = () => {
         console.log("Không load được bình luận", err);
       }
     };
-
     if (id) loadComments();
   }, [id]);
 
   // Load tin liên quan
   useEffect(() => {
     if (!news?.newsType) return;
-
     newsApi
       .search({ newsType: news.newsType, pageSize: 5 })
       .then((res) => {
@@ -67,22 +129,22 @@ const NewsDetail = () => {
       .catch(() => {});
   }, [id, news?.newsType]);
 
-  // Popup tự đóng sau 3 giây
+  // Popup tự đóng
   useEffect(() => {
     if (!popup) return;
     const t = setTimeout(() => setPopup(null), 3000);
     return () => clearTimeout(t);
   }, [popup]);
 
-  // Gửi bình luận
+  // ── Gửi bình luận ───────────────────────────────────
   const handleComment = async () => {
-    if (!commentText.trim()) return;
-
+    if (!commentText.trim()) {
+      setPopup("Nội dung bình luận không được để trống.");
+      return;
+    }
     try {
       await newsApi.postComment(id, { content: commentText });
       setCommentText("");
-
-      // Reload lại danh sách bình luận sau khi gửi
       const updatedComments = await newsApi.getComments(id);
       setComments(updatedComments);
     } catch (err) {
@@ -94,7 +156,36 @@ const NewsDetail = () => {
     }
   };
 
-  // ====================== RENDER ======================
+  // ── Click vào bình luận → hiện popover (chỉ admin) ──
+  const handleCommentClick = (e, commentId) => {
+    if (!isAdmin) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setPopover({ x: e.clientX, y: e.clientY, commentId });
+  };
+
+  // ── Bắt đầu xóa: đóng popover, mở modal xác nhận ────
+  const handleRequestDelete = () => {
+    setConfirmDelete(popover.commentId);
+    setPopover(null);
+  };
+
+  // ── Xác nhận xóa bình luận ───────────────────────────
+  const handleConfirmDelete = async () => {
+    try {
+      await newsApi.deleteComment(confirmDelete);
+      setComments((prev) => prev.filter((c) => c.commentID !== confirmDelete));
+      setPopup("Đã xóa bình luận thành công.");
+    } catch (err) {
+      setPopup(
+        err.response?.data?.message || "Không thể xóa bình luận. Thử lại sau.",
+      );
+    } finally {
+      setConfirmDelete(null);
+    }
+  };
+
+  // ── Render error ─────────────────────────────────────
   if (error) {
     return (
       <div className="max-w-5xl mx-auto px-4 py-12">
@@ -173,34 +264,42 @@ const NewsDetail = () => {
             )}
           </div>
 
-          {/* ==================== PHẦN BÌNH LUẬN (ĐÃ GIỮ NGUYÊN) ==================== */}
+          {/* ── PHẦN BÌNH LUẬN ── */}
           <div className="mt-10 border-t pt-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               💬 Bình luận ({comments.length})
             </h3>
 
-            {/* Form bình luận */}
-            <div className="flex gap-3 mb-6">
-              <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-white text-sm flex-shrink-0">
-                👤
-              </div>
-              <div className="flex-1">
-                <textarea
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  placeholder="Nhập bình luận của bạn về bài viết này..."
-                  className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#1f4c7a] min-h-[80px]"
-                />
-                <div className="flex justify-end mt-2">
-                  <button
-                    onClick={handleComment}
-                    className="flex items-center gap-2 bg-[#1f4c7a] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#163a5d] transition"
-                  >
-                    ✈️ Gửi bình luận
-                  </button>
+            {isAdmin && (
+              <p className="text-xs text-blue-500 mb-4 bg-blue-50 px-3 py-2 rounded-lg">
+                💡 Click vào bình luận để xem tùy chọn xóa.
+              </p>
+            )}
+
+            {/* Form bình luận — chỉ hiện khi không phải admin */}
+            {!isAdmin && (
+              <div className="flex gap-3 mb-6">
+                <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-white text-sm flex-shrink-0">
+                  👤
+                </div>
+                <div className="flex-1">
+                  <textarea
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    placeholder="Nhập bình luận của bạn về bài viết này..."
+                    className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#1f4c7a] min-h-[80px]"
+                  />
+                  <div className="flex justify-end mt-2">
+                    <button
+                      onClick={handleComment}
+                      className="flex items-center gap-2 bg-[#1f4c7a] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#163a5d] transition"
+                    >
+                      ✈️ Gửi bình luận
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Danh sách bình luận */}
             <div className="space-y-4">
@@ -209,8 +308,17 @@ const NewsDetail = () => {
                   Chưa có bình luận nào.
                 </p>
               ) : (
-                comments.map((c, i) => (
-                  <div key={i} className="flex gap-3">
+                comments.map((c) => (
+                  <div
+                    key={c.commentID}
+                    className={`flex gap-3 rounded-xl p-2 transition ${
+                      isAdmin
+                        ? "cursor-pointer hover:bg-red-50 hover:ring-1 hover:ring-red-200"
+                        : ""
+                    }`}
+                    onClick={(e) => handleCommentClick(e, c.commentID)}
+                    title={isAdmin ? "Click để xóa bình luận" : undefined}
+                  >
                     <div className="w-9 h-9 rounded-full bg-[#1f4c7a] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                       {c.studentName?.charAt(0) || "?"}
                     </div>
@@ -218,6 +326,10 @@ const NewsDetail = () => {
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-sm font-semibold text-gray-800">
                           {c.studentName}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          {c.msv &&
+                            `(${/^\d+$/.test(c.msv) ? "Sinh viên" : "Quản trị viên"})`}
                         </span>
                         <span className="text-xs text-gray-400">
                           {timeAgo(c.createdAt)}
@@ -230,21 +342,38 @@ const NewsDetail = () => {
               )}
             </div>
           </div>
-          {/* ================================================================== */}
         </div>
 
-        {/* Sidebar tin liên quan */}
+        {/* Sidebar */}
         <div className="w-full lg:w-72 flex-shrink-0">
           <NewsSidebar relatedNews={relatedNews} navigate={navigate} />
         </div>
       </div>
+
+      {/* Popover */}
+      {popover && (
+        <CommentPopover
+          x={popover.x}
+          y={popover.y}
+          onDelete={handleRequestDelete}
+          onClose={() => setPopover(null)}
+        />
+      )}
+
+      {/* Modal xác nhận xóa */}
+      {confirmDelete && (
+        <ConfirmDeleteModal
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setConfirmDelete(null)}
+        />
+      )}
 
       {popup && <PopupMessage message={popup} onClose={() => setPopup(null)} />}
     </div>
   );
 };
 
-// Sidebar (giữ nguyên)
+// Sidebar
 const NewsSidebar = ({ relatedNews, navigate }) => (
   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sticky top-4">
     <h3 className="font-semibold text-gray-800 mb-4 text-sm uppercase tracking-wide">

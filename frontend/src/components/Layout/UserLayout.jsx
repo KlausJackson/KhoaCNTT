@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
 import { socialLinks, navLinks } from '../../constants/layout'
 import { Icon } from '@iconify/react'
+import ConfirmModal from '../modal/ConfirmModal'
 
 const UserLayout = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+	const [popUp, setPopup] = useState(null)
 
 	// Kiểm tra xem đã đăng nhập chưa
 	const username = localStorage.getItem('username')
@@ -23,6 +25,20 @@ const UserLayout = () => {
 
 	return (
 		<div className='min-h-screen flex flex-col bg-slate-50'>
+			{popUp && (
+				<ConfirmModal
+					title={popUp.title}
+					message={popUp.message}
+					color={popUp.color}
+					icon={popUp.icon}
+					onConfirm={() => {
+						setPopup(null)
+						handleLogout()}
+					}
+					onClose={() => setPopup(null)}
+					confirmText='Xác nhận'
+				/>
+			)}
 			{/* Top Bar */}
 			<div className='bg-[#0f172a] text-white text-xs py-2 px-8 flex justify-between items-center'>
 				<div className='flex gap-6'></div>
@@ -58,7 +74,14 @@ const UserLayout = () => {
 										</Link>
 									)}
 									<button
-										onClick={handleLogout}
+										onClick={() => {
+											setPopup({
+												title: 'Xác nhận đăng xuất',
+												message: 'Bạn có chắc chắn muốn đăng xuất?',
+												color: 'blue',
+												icon: 'mdi:logout'
+											})
+										}}
 										className='w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600'>
 										Đăng xuất
 									</button>

@@ -7,6 +7,7 @@ import { columns, fields } from '../../../constants/admin'
 import PopupMessage from '../../../components/parts/PopupMessage'
 import ConfirmModal from '../../../components/modal/ConfirmModal'
 import { handleAction } from '../../../helpers/commonHelpers'
+import { Icon } from '@iconify/react'
 
 import { UserCog, Lock, Unlock, Trash2 } from 'lucide-react'
 
@@ -38,7 +39,7 @@ function ManageAdmin() {
 		<div className='p-6'>
 			<div className='flex justify-between mb-6'>
 				<h1 className='text-xl font-semibold'>
-					Quản lý tài khoản quản trị viên
+					Quản lý Tài khoản Quản trị viên
 				</h1>
 
 				<button
@@ -63,17 +64,17 @@ function ManageAdmin() {
 						<IconButton
 							icon={row.isActive === 1 ? Lock : Unlock}
 							onClick={() => {
+								const isActive = row.isActive === 1
 								setWarning({
+									color: isActive ? 'yellow' : 'green',
 									title:
 										'Xác nhận ' +
-										(row.isActive === 1
+										(isActive
 											? 'vô hiệu hóa tài khoản'
 											: 'mở khóa tài khoản'),
 									message:
 										'Bạn có chắc chắn muốn ' +
-										(row.isActive === 1
-											? 'vô hiệu hóa'
-											: 'mở khóa') +
+										(isActive ? 'vô hiệu hóa' : 'mở khóa') +
 										' tài khoản này?',
 									action: async () =>
 										await adminApi.update({
@@ -81,15 +82,14 @@ function ManageAdmin() {
 											fullName: row.fullName,
 											email: row.email,
 											level: row.level,
-											isActive:
-												row.isActive === 1
-													? false
-													: true
+											isActive: isActive ? false : true
 										}),
-									popup:
-										row.isActive === true
-											? 'Vô hiệu hóa tài khoản thành công.'
-											: 'Mở khóa tài khoản thành công.'
+									popup: isActive
+										? 'Vô hiệu hóa tài khoản thành công.'
+										: 'Mở khóa tài khoản thành công.',
+									icon: isActive
+										? 'mdi:lock-outline'
+										: 'mdi:lock-open-outline'
 								})
 							}}
 						/>
@@ -102,7 +102,9 @@ function ManageAdmin() {
 									message:
 										'Bạn có chắc chắn muốn xóa tài khoản này?',
 									action: () => adminApi.delete(row.id),
-									popup: 'Xóa tài khoản thành công.'
+									popup: 'Xóa tài khoản thành công.',
+									color: 'red',
+									icon: "mdi:delete-outline"
 								})
 							}}
 						/>
@@ -114,18 +116,17 @@ function ManageAdmin() {
 				<FormModal
 					title='Thêm tài khoản quản trị viên'
 					fields={fields}
+					confirmText='Tạo tài khoản'
 					onSubmit={(data) => {
 						const formData = Object.fromEntries(data.entries())
 						formData.level = Number(formData.level)
 						formData.isActive = Boolean(formData.isActive)
-						console.log(formData)
 						handleAction(
 							adminApi.create,
 							formData,
 							setShowCreate,
 							loadAdmins,
 							setPopup,
-							//"Tạo tài khoản thành công."
 						)
 					}
 						
@@ -139,6 +140,7 @@ function ManageAdmin() {
 					title='Cập nhật thông tin tài khoản'
 					fields={fields.filter(f => f.name !== "isActive")}
 					defaultValues={editingAdmin}
+					confirmText='Lưu thay đổi'
 					onSubmit={(formData) => {
 						const data = Object.fromEntries(formData.entries())
 						data.level = Number(data.level)
@@ -149,7 +151,6 @@ function ManageAdmin() {
 							setEditingAdmin,
 							loadAdmins,
 							setPopup,
-							// "Cập nhật tài khoản thành công."
 						)
 					}
 						
@@ -158,13 +159,15 @@ function ManageAdmin() {
 				/>
 			)}
 			{popup && (
-				<PopupMessage onClose={() => setPopup(null)} message={popup} />
+				<PopupMessage onClose={() => setPopup(null)} message={popup.message} type={popup.type} />
 			)}
 
 			{warning && (
 				<ConfirmModal
 					title={warning.title}
 					message={warning.message}
+					color={warning.color}
+					icon={warning.icon}
 					onConfirm={async () => {
 						await handleAction(
 							warning.action,
@@ -177,7 +180,6 @@ function ManageAdmin() {
 					}}
 					onClose={() => setWarning(null)}
 					confirmText='Xác nhận'
-					color='red'
 				/>
 			)}
 		</div>

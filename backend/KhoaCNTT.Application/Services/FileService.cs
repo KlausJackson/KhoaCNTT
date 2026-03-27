@@ -9,9 +9,7 @@ using KhoaCNTT.Domain.Enums;
 using Microsoft.AspNetCore.Hosting;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using System.IO;
-using System.Reflection.Metadata.Ecma335;
-using static System.Net.WebRequestMethods;
+
 
 namespace KhoaCNTT.Application.Services
 {
