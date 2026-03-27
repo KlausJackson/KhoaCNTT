@@ -438,120 +438,178 @@ const EditModal = ({ news, onClose, onSubmit }) => {
   );
 };
 
-// ── Modal xem trước nội dung (giữ nguyên phiên bản đẹp) ──────────────────────
-const PreviewModal = ({ item, onClose, onApprove, onReject, canApprove }) => (
-  <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 overflow-y-auto py-8">
-    <div className="bg-white rounded-3xl max-w-4xl w-full mx-4 shadow-2xl max-h-[92vh] flex flex-col">
-      <div className="flex items-start justify-between border-b px-8 py-6">
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <span
-              className={`text-xs font-medium px-3 py-1 rounded-full ${
-                item.requestType === "Replace"
-                  ? "bg-orange-100 text-orange-600"
-                  : "bg-blue-100 text-blue-600"
-              }`}
-            >
-              {item.requestType === "Replace"
-                ? "Yêu cầu chỉnh sửa"
-                : "Yêu cầu đăng mới"}
-            </span>
-            <span className="text-xs text-gray-500">
-              Bởi {item.requesterName || "Editor"} •{" "}
-              {formatDate(item.createdAt)}
-            </span>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 leading-tight">
-            {item.title}
-          </h2>
-        </div>
-        <button
-          onClick={onClose}
-          className="text-3xl text-gray-400 hover:text-gray-600 transition p-2"
-        >
-          ✕
-        </button>
-      </div>
+// ── Modal xem trước nội dung ──────────────────────────────────────────────────
+const PreviewModal = ({ item, onClose, onApprove, onReject, canApprove }) => {
+  const [fetchedContent, setFetchedContent] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const [fetchError, setFetchError] = useState(null);
 
-      <div className="flex-1 overflow-y-auto p-8 space-y-8">
-        {item.imageUrl && (
-          <div className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-            <img
-              src={item.imageUrl}
-              alt={item.title}
-              className="w-full h-auto max-h-[420px] object-cover"
-            />
-          </div>
-        )}
+  useEffect(() => {
+    if (!item.targetNewsID) return;
+    setIsFetching(true);
+    setFetchError(null);
+    newsApi
+      .getById(item.targetNewsID)
+      .then((data) => setFetchedContent(data?.content ?? null))
+      .catch(() => setFetchError("Không thể tải nội dung bài viết."))
+      .finally(() => setIsFetching(false));
+  }, [item.targetNewsID]);
 
-        {item.resourceContent && (
-          <div className="bg-[#f8fafc] border-l-4 border-[#1f4c7a] pl-5 py-4 rounded-r-xl">
-            <p className="text-gray-600 italic leading-relaxed text-[15px]">
-              {item.resourceContent}
-            </p>
-          </div>
-        )}
-
-        <div>
-          <div className="uppercase text-xs tracking-widest text-gray-400 mb-3 font-medium">
-            NỘI DUNG CHI TIẾT
-          </div>
-          <div
-            className="prose prose-gray max-w-none text-[15.2px] leading-relaxed text-gray-700 break-words"
-            style={{ whiteSpace: "pre-wrap" }}
+  // Xác định nội dung hiển thị (dùng chung cho cả Create lẫn Replace)
+  const displayContent = (() => {
+    if (isFetching)
+      return (
+        <div className="flex items-center gap-3 py-8 justify-center text-gray-400">
+          <svg
+            className="animate-spin h-5 w-5 text-[#1f4c7a]"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
           >
-            {item.content || (
-              <p className="text-gray-400 italic py-8 text-center">
-                Bài viết chưa có nội dung chi tiết.
-              </p>
-            )}
-          </div>
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v8H4z"
+            />
+          </svg>
+          <span className="text-sm italic">Đang tải nội dung...</span>
         </div>
-
-        <div className="pt-6 border-t grid grid-cols-2 gap-6 text-sm">
-          <div>
-            <span className="text-gray-500">Danh mục: </span>
-            <span
-              className={`font-medium ${newsTypeColor[item.newsType] || "text-gray-700"}`}
-            >
-              {newsTypeLabel[item.newsType] || item.newsType}
-            </span>
-          </div>
-          <div>
-            <span className="text-gray-500">Ngày tạo: </span>
-            <span className="font-medium">{formatDate(item.createdAt)}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t px-8 py-6 flex justify-end gap-3 bg-gray-50 rounded-b-3xl">
-        <button
-          onClick={onClose}
-          className="px-6 py-3 border border-gray-300 rounded-2xl font-medium text-gray-700 hover:bg-white transition"
+      );
+    if (fetchError)
+      return (
+        <p className="text-red-400 italic py-8 text-center text-sm">
+          ⚠️ {fetchError}
+        </p>
+      );
+    if (fetchedContent)
+      return (
+        <div
+          className="prose prose-gray max-w-none text-[15.2px] leading-relaxed text-gray-700 break-words"
+          style={{ whiteSpace: "pre-wrap" }}
         >
-          Đóng
-        </button>
+          {fetchedContent}
+        </div>
+      );
+    return (
+      <p className="text-gray-400 italic py-8 text-center text-sm">
+        Bài viết chưa có nội dung chi tiết.
+      </p>
+    );
+  })();
 
-        {canApprove && (
-          <>
-            <button
-              onClick={onReject}
-              className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-medium flex items-center gap-2 transition"
-            >
-              ❌ Từ chối
-            </button>
-            <button
-              onClick={onApprove}
-              className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-medium flex items-center gap-2 transition"
-            >
-              ✅ Duyệt & Đăng bài
-            </button>
-          </>
-        )}
+  return (
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 overflow-y-auto py-8">
+      <div className="bg-white rounded-3xl max-w-4xl w-full mx-4 shadow-2xl max-h-[92vh] flex flex-col">
+        <div className="flex items-start justify-between border-b px-8 py-6">
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <span
+                className={`text-xs font-medium px-3 py-1 rounded-full ${
+                  item.requestType === "Replace"
+                    ? "bg-orange-100 text-orange-600"
+                    : "bg-blue-100 text-blue-600"
+                }`}
+              >
+                {item.requestType === "Replace"
+                  ? "Yêu cầu chỉnh sửa"
+                  : "Yêu cầu đăng mới"}
+              </span>
+              <span className="text-xs text-gray-500">
+                Bởi {item.requesterName || "Editor"} •{" "}
+                {formatDate(item.createdAt)}
+              </span>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 leading-tight">
+              {item.title}
+            </h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-3xl text-gray-400 hover:text-gray-600 transition p-2"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-8 space-y-8">
+          {item.imageUrl && (
+            <div className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+              <img
+                src={item.imageUrl}
+                alt={item.title}
+                className="w-full h-auto max-h-[420px] object-cover"
+              />
+            </div>
+          )}
+
+          {item.resourceContent && (
+            <div className="bg-[#f8fafc] border-l-4 border-[#1f4c7a] pl-5 py-4 rounded-r-xl">
+              <p className="text-gray-600 italic leading-relaxed text-[15px]">
+                {item.resourceContent}
+              </p>
+            </div>
+          )}
+
+          <div>
+            <div className="uppercase text-xs tracking-widest text-gray-400 mb-3 font-medium">
+              NỘI DUNG CHI TIẾT
+            </div>
+            {displayContent}
+          </div>
+
+          <div className="pt-6 border-t grid grid-cols-2 gap-6 text-sm">
+            <div>
+              <span className="text-gray-500">Danh mục: </span>
+              <span
+                className={`font-medium ${newsTypeColor[item.newsType] || "text-gray-700"}`}
+              >
+                {newsTypeLabel[item.newsType] || item.newsType}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-500">Ngày tạo: </span>
+              <span className="font-medium">{formatDate(item.createdAt)}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t px-8 py-6 flex justify-end gap-3 bg-gray-50 rounded-b-3xl">
+          <button
+            onClick={onClose}
+            className="px-6 py-3 border border-gray-300 rounded-2xl font-medium text-gray-700 hover:bg-white transition"
+          >
+            Đóng
+          </button>
+
+          {canApprove && (
+            <>
+              <button
+                onClick={onReject}
+                className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-medium flex items-center gap-2 transition"
+              >
+                ❌ Từ chối
+              </button>
+              <button
+                onClick={onApprove}
+                className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-medium flex items-center gap-2 transition"
+              >
+                ✅ Duyệt & Đăng bài
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // ── Main Component ───────────────────────────────────────────
 const AdminNewsManagement = () => {
