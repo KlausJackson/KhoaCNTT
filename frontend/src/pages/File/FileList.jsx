@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import fileApi from '../../api/fileApi'
 import studentApi from '../../api/studentApi'
+import { handleError } from '../../helpers/commonHelpers'
 import { getSearchConfig } from '../../constants/file'
 import PopupMessage from '../../components/parts/PopupMessage'
 import FilterForm from '../../components/parts/FilterForm'
@@ -37,13 +38,7 @@ const FileList = () => {
 				// setPage((prev) => (prev > newTotal ? newTotal : prev))
 				setTotalPages((prev) => Math.max(prev, newTotal))
 			} catch (err) {
-				const msg =
-					err.response?.data?.message ||
-					err.response?.data?.error ||
-					err.response?.data?.detail ||
-					err.message ||
-					'Không thể kết nối đến máy chủ, thử lại sau.'
-				setPopup?.(msg)
+				handleError(err, setPopup)
 			} finally {
 				setIsLoading(false)
 			}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import studentApi from '../../api/studentApi'
-import IconButton from '../../components/parts/IconButton'
 import { Icon } from '@iconify/react'
 import {
 	calculateAvailableDates,
@@ -15,7 +14,6 @@ const StudentPortal = () => {
 	const role = localStorage.getItem('role')
 
 	const navigate = useNavigate()
-	const [isAuthenticated, setIsAuthenticated] = useState(!!username)
 	const [activeTab, setActiveTab] = useState('grades')
 
 	const [semester, setSemester] = useState('14')
@@ -31,13 +29,14 @@ const StudentPortal = () => {
 	const events = eventsForSelectedDate(schedule, selectedDate)
 	const gpa = calculateGPA(grades)
 
+
 	const handleLoginRedirect = () => {
 		navigate('/login')
 	}
 
 	// FETCH ĐIỂM SỐ
 	useEffect(() => {
-		if (isAuthenticated) {
+		if (role === 'Student') {
 			const fetchGrades = async () => {
 				setIsLoadingGrades(true)
 				try {
@@ -51,11 +50,11 @@ const StudentPortal = () => {
 			}
 			fetchGrades()
 		}
-	}, [isAuthenticated])
+	}, [role])
 
 	// FETCH THỜI KHÓA BIỂU (Mỗi khi đổi học kỳ)
 	useEffect(() => {
-		if (isAuthenticated) {
+		if (role === 'Student') {
 			const fetchSchedule = async () => {
 				setIsLoadingSchedule(true)
 				try {
@@ -71,10 +70,10 @@ const StudentPortal = () => {
 			}
 			fetchSchedule()
 		}
-	}, [isAuthenticated, semester])
+	}, [role, semester])
 
 	// 1. MÀN HÌNH YÊU CẦU ĐĂNG NHẬP (Chưa xác thực)
-	if (!isAuthenticated || role !== 'student') {
+	if (role !== 'Student') {
 		return (
 			<div className='max-w-4xl mx-auto px-4 py-16 flex justify-center'>
 				<div className='bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center max-w-2xl w-full'>

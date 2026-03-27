@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import authApi from '../../api/authApi'
+import { handleError } from '../../helpers/commonHelpers'
 import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
@@ -31,23 +32,11 @@ const LoginPage = () => {
 
 			console.log('Login success:', response)
 			localStorage.setItem('token', response.token)
-			localStorage.setItem('role', role)
-			localStorage.setItem('username', username)			
+			localStorage.setItem('role', response.role)
+			localStorage.setItem('username', username)
 			navigate('/')
-
 		} catch (err) {
-			if (err.response) {
-				if (
-					err.response.status === 401 ||
-					err.response.status === 400
-				) {
-					setError('Sai tên đăng nhập hoặc mật khẩu!')
-				} else {
-					setError('Vui lòng thử lại sau!')
-				}
-			} else {
-				setError('Không thể kết nối đến máy chủ, thử lại sau!')
-			}
+			handleError(err, setError)
 		} finally {
 			setIsLoading(false)
 		}
@@ -191,7 +180,7 @@ const LoginPage = () => {
 					{/* BUTTONS */}
 					<div className='flex gap-4'>
 						<button
-                            type='button'
+							type='button'
 							onClick={() => handleLogin('student')}
 							disabled={isLoading}
 							className='flex-1 bg-[#1f4c7a] text-white py-2 rounded-md hover:bg-[#163a5d] transition flex items-center justify-center gap-2'>
@@ -199,7 +188,7 @@ const LoginPage = () => {
 						</button>
 
 						<button
-                            type='button'
+							type='button'
 							onClick={() => handleLogin('admin')}
 							disabled={isLoading}
 							className='flex-1 border border-[#1f4c7a] text-[#1f4c7a] py-2 rounded-md hover:bg-blue-50 transition flex items-center justify-center gap-2'>

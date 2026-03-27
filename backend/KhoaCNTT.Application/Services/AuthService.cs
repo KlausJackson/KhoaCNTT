@@ -4,6 +4,7 @@ using KhoaCNTT.Application.Interfaces.Services;
 using Microsoft.Extensions.Configuration;
 using KhoaCNTT.Application.Common.Utils;
 using KhoaCNTT.Application.Common.Constants;
+using KhoaCNTT.Application.Common.Exceptions;
 
 namespace KhoaCNTT.Application.Services
 {
@@ -46,7 +47,7 @@ namespace KhoaCNTT.Application.Services
             {
                 if (!adminInDb.IsActive)
                 {
-                    throw new Exception("Tài khoản này đã bị vô hiệu hóa.");
+                    throw new BusinessRuleException("Tài khoản này đã bị vô hiệu hóa.");
                 }
                 if (_hasher.Verify(adminInDb.PasswordHash, password))
                 {
@@ -63,7 +64,7 @@ namespace KhoaCNTT.Application.Services
 
             if (!isVerified)
             {
-                throw new Exception("Sai tên đăng nhập hoặc mật khẩu.");
+                throw new BusinessRuleException("Sai tên đăng nhập hoặc mật khẩu.");
             } else {
                 return (_jwtGenerator.GenerateAdminToken(adminInDb.Username, adminInDb.Level),
                     role);
@@ -76,7 +77,7 @@ namespace KhoaCNTT.Application.Services
             
             if (string.IsNullOrEmpty(token))
             {
-                throw new Exception("Mã sinh viên hoặc mật khẩu không đúng (hoặc hệ thống trường lỗi).");
+                throw new BusinessRuleException("Mã sinh viên hoặc mật khẩu không đúng (hoặc hệ thống trường lỗi).");
             }
 
             return token;

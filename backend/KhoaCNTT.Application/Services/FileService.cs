@@ -9,9 +9,7 @@ using KhoaCNTT.Domain.Enums;
 using Microsoft.AspNetCore.Hosting;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using System.IO;
-using System.Reflection.Metadata.Ecma335;
-using static System.Net.WebRequestMethods;
+
 
 namespace KhoaCNTT.Application.Services
 {
@@ -80,9 +78,7 @@ namespace KhoaCNTT.Application.Services
             int? oldResourceId = null;
             if (type == RequestType.Replace && targetFileId != null)
             {
-                var targetFile = await _fileRepo.GetByIdAsync(targetFileId.Value);
-                if (targetFile == null) throw new NotFoundException("File", targetFileId.Value);
-
+                var targetFile = await _fileRepo.GetByIdAsync(targetFileId.Value) ?? throw new BusinessRuleException("Không tồn tại tài liệu này.");
                 oldResourceId = targetFile.CurrentResourceId;
             }
 
@@ -220,8 +216,7 @@ namespace KhoaCNTT.Application.Services
 
         public async Task<(Stream stream, string contentType)> GetFileByIdAsync(int id, string? userId, bool isAdmin)
         {
-            var file = await _fileRepo.GetByIdAsync(id); // Lấy FileEntity
-            if (file == null) throw new NotFoundException("File", id);
+            var file = await _fileRepo.GetByIdAsync(id) ?? throw new BusinessRuleException("Không tồn tại tài liệu này."); // Lấy FileEntity
 
             // CHECK QUYỀN
             CheckPermission(file.Permission, userId, isAdmin, "xem");
@@ -260,7 +255,7 @@ namespace KhoaCNTT.Application.Services
         public async Task<(Stream stream, string contentType, string fileName)> DownloadFileAsync(int fileId, string? userId, bool isAdmin)
         {
             // Lấy FileEntity
-            var file = await _fileRepo.GetByIdAsync(fileId) ?? throw new NotFoundException("File", fileId);
+            var file = await _fileRepo.GetByIdAsync(fileId) ?? throw new BusinessRuleException("Không tồn tại tài liệu này.");
 
             // Check Quyền
             CheckPermission(file.Permission, userId, isAdmin, "tải về");
@@ -283,7 +278,7 @@ namespace KhoaCNTT.Application.Services
         public async Task DeleteFileAsync(int fileId)
         {
             // Xóa FileEntity
-            var file = await _fileRepo.GetByIdAsync(fileId) ?? throw new NotFoundException("File", fileId);
+            var file = await _fileRepo.GetByIdAsync(fileId) ?? throw new BusinessRuleException("Không tồn tại tài liệu này.");
             await _fileRepo.DeleteAsync(file);
         }
 
@@ -291,7 +286,7 @@ namespace KhoaCNTT.Application.Services
         {
             // Chỉ sửa metadata (Title, Subject...), không sửa file vật lý
 
-            var file = await _fileRepo.GetByIdAsync(fileId) ?? throw new NotFoundException("File", fileId);
+            var file = await _fileRepo.GetByIdAsync(fileId) ?? throw new BusinessRuleException("Không tồn tại tài liệu này.");
             await CheckSubjectCode(request.SubjectCode);
             CheckTitle(request.Title);
 

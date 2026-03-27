@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import fileApi from '../../api/fileApi'
 import { handleDownload } from '../../helpers/fileHelpers'
+import { fileTypeMap, permissionMap } from '../../constants/file'
 import PopupMessage from '../../components/parts/PopupMessage'
 import Button from '../../components/parts/Button'
 
@@ -79,7 +80,7 @@ const FileDetail = () => {
 
 						<p className='flex justify-between border-b pb-2'>
 							<span className='font-medium'>Loại tài liệu:</span>
-							<span>{file.fileType}</span>
+							<span>{fileTypeMap[file.fileType] || file.fileType}</span>
 						</p>
 
 						<p className='flex justify-between border-b pb-2'>
@@ -109,7 +110,7 @@ const FileDetail = () => {
 
 						<p className='flex justify-between border-b pb-2'>
 							<span className='font-medium'>Permission:</span>
-							<span>{file.permission}</span>
+							<span>{permissionMap[file.permission] || file.permission}</span>
 						</p>
 
 						<p className='flex justify-between border-b pb-2'>

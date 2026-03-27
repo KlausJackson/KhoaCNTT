@@ -7,6 +7,8 @@ import PopupMessage from '../../../components/parts/PopupMessage'
 import { pendingColumns } from '../../../constants/file'
 
 import { ClipboardCheck } from 'lucide-react'
+import { handleError } from '../../../helpers/commonHelpers'
+import { handleApprove } from '../../../helpers/fileHelpers'
 
 function FileRequests() {
 	const [requests, setRequests] = useState([])
@@ -18,53 +20,15 @@ function FileRequests() {
 			const res = await fileApi.getPendingList()
 			setRequests(res)
 		} catch (err) {
-			const msg =
-				err.response?.data?.message ||
-				err.response?.data?.error ||
-				err.response?.data?.detail ||
-				err.message ||
-				'Không thể kết nối đến máy chủ, thử lại sau.'
-			setPopup?.(msg)
+			handleError(err, setPopup)
 		}
 	}
 
 	useEffect(() => {
-			const loadRequests = async () => {
-				try {
-					const res = await fileApi.getPendingList()
-					setRequests(res)
-				} catch (err) {
-					const msg =
-						err.response?.data?.message ||
-						err.response?.data?.error ||
-						err.response?.data?.detail ||
-						err.message ||
-						'Không thể kết nối đến máy chủ, thử lại sau.'
-					setPopup?.(msg)
-				}
-			}
-		loadRequests()
+		(async () => {
+			await loadRequests()
+		})()
 	}, [])
-
-	const handleApprove = async (isApproved, reason) => {
-		try {
-			const res = await fileApi.approve(selected.id, {
-				isApproved,
-				reason
-			})
-			setPopup(res.message)
-			setSelected(null)
-			loadRequests()
-		} catch (err) {
-			const msg =
-				err.response?.data?.message ||
-				err.response?.data?.error ||
-				err.response?.data?.detail ||
-				err.message ||
-				'Không thể kết nối đến máy chủ, thử lại sau.'
-			setPopup?.(msg)
-		}
-	}
 
 	return (
 		<div>
@@ -98,13 +62,13 @@ function FileRequests() {
 						{ label: 'Người gửi', value: selected.requesterName },
 						{ label: 'Tên file mới', value: selected.newFileName }
 					]}
-					onConfirm={handleApprove}
+					onConfirm={(isApproved, reason) => handleApprove(isApproved, reason, selected.id, setPopup, setSelected, loadRequests)}
 					onClose={() => setSelected(null)}
 				/>
 			)}
 
 			{popup && (
-				<PopupMessage message={popup} onClose={() => setPopup(null)} />
+				<PopupMessage message={popup.message} type={popup.type} onClose={() => setPopup(null)} />
 			)}
 		</div>
 	)

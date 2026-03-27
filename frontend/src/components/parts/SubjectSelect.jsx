@@ -30,7 +30,11 @@ function SubjectSelect({ value, onChange }) {
 				type='text'
 				value={keyword}
 				placeholder='Tìm mã hoặc tên môn...'
-				onChange={(e) => setKeyword(e.target.value)}
+				onChange={(e) => {
+					const val = e.target.value
+					setKeyword(val)
+					onChange(val)
+				}}
 				className='w-full border-b mb-2 pb-1 text-sm outline-none'
 			/>
 
