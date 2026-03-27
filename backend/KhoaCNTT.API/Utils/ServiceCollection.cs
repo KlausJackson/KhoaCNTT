@@ -3,6 +3,7 @@ using KhoaCNTT.Application.Common.Utils;
 using KhoaCNTT.Application.Interfaces.Repositories;
 using KhoaCNTT.Application.Interfaces.Repositories.INewsRepositories;
 using KhoaCNTT.Application.Interfaces.Services;
+using KhoaCNTT.Application.Interfaces.Services.INewsServices;
 using KhoaCNTT.Application.Services;
 using KhoaCNTT.Infrastructure.ExternalServices;
 using KhoaCNTT.Infrastructure.Identity;

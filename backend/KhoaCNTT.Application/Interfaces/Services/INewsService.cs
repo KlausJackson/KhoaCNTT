@@ -1,24 +1,21 @@
-﻿using KhoaCNTT.API.Models.Comment;
-using KhoaCNTT.Application.DTOs;
+﻿
 using KhoaCNTT.Application.DTOs.News;
+using KhoaCNTT.Application.DTOs;
 
-namespace KhoaCNTT.Application.Interfaces.Services;
-
+namespace KhoaCNTT.Application.Interfaces.Services.INewsServices;
 public interface INewsService
 {
-    // ── News ──────────────────────────────────────────────────────
-    Task<IEnumerable<NewsResponse>> GetAllNewsAsync();
+    Task CreateNewsAsync(CreateNewsRequest req, string username);
+    Task UpdateNewsAsync(int id, UpdateNewsRequest req, string username);
+    Task DeleteNewsAsync(int id);
+    Task ApproveNewsAsync(int requestId, bool isApproved, string? reason, string username);
     Task<NewsResponse> GetNewsByIdAsync(int id);
+    Task<PagedResult<NewsResponse>> SearchNewsAsync(string? keyword, string? newsType, int page, int pageSize, string? userId, bool isAdmin);
+    Task<PagedResult<NewsRequestDto>> GetPendingRequestsAsync();
 
-    // ── Requests ──────────────────────────────────────────────────
-    Task<IEnumerable<NewsRequestResponse>> GetPendingRequestsAsync();
-    Task<NewsRequestResponse> SubmitCreateRequestAsync(CreateNewsRequest dto, int submitterId, bool isSenior);
-    Task<NewsRequestResponse> SubmitReplaceRequestAsync(UpdateNewsRequest dto, int submitterId, bool isSenior);
-    Task DeleteNewsAsync(int newsId);
-    Task<NewsApprovalResponse> ProcessApprovalAsync(ApproveNewsRequest dto, int approverId);
+    Task<Dictionary<string, int>> GetStatsByTypeAsync();
+    Task<Dictionary<string, int>> GetStatsByMonthAsync(int year);
 
-    // ── Comments ──────────────────────────────────────────────────
-    Task<IEnumerable<CommentResponse>> GetCommentsByNewsIdAsync(int newsId);
-    Task<CommentResponse> AddCommentAsync(int newsId, CreateCommentRequest dto, string msv, string studentName);
-    Task DeleteCommentAsync(int commentId);
+    Task AddCommentAsync(int newsId, string msv, string studentName, string content);
+    Task DeleteCommentAsync(int id);
 }

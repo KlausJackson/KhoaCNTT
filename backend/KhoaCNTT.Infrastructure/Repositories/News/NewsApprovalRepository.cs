@@ -1,42 +1,47 @@
 ﻿using KhoaCNTT.Application.Interfaces.Repositories.INewsRepositories;
+using KhoaCNTT.Domain.Entities.NewsEntities;
 using KhoaCNTT.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using NewsEntities = KhoaCNTT.Domain.Entities.NewsEntities;
 
 namespace KhoaCNTT.Infrastructure.Repositories.News;
 
 public class NewsApprovalRepository(AppDbContext context) : INewsApprovalRepository
 {
-    public async Task<NewsEntities.NewsApproval?> GetByIdAsync(int id) =>
-        await context.Set<NewsEntities.NewsApproval>().FindAsync(id);
+    public async Task<NewsApproval?> GetByIdAsync(int id) =>
+        await context.Set<NewsApproval>().FindAsync(id);
 
-    public async Task<NewsEntities.NewsApproval?> GetByRequestIdAsync(int requestId) =>
-        await context.Set<NewsEntities.NewsApproval>()
+    public async Task<NewsApproval?> GetByRequestIdAsync(int requestId) =>
+        await context.Set<NewsApproval>()
+            .AsNoTracking()
             .FirstOrDefaultAsync(a => a.NewsRequestId == requestId);
 
-    public async Task AddAsync(NewsEntities.NewsApproval entity)
+    public async Task AddAsync(NewsApproval entity)
     {
-        context.Set<NewsEntities.NewsApproval>().Add(entity);
-        await context.SaveChangesAsync();
+        await context.Set<NewsApproval>().AddAsync(entity);
     }
 
-    public async Task UpdateAsync(NewsEntities.NewsApproval entity)
+    public Task UpdateAsync(NewsApproval entity)
     {
-        context.Set<NewsEntities.NewsApproval>().Update(entity);
-        await context.SaveChangesAsync();
+        context.Set<NewsApproval>().Attach(entity);
+        context.Entry(entity).State = EntityState.Modified;
+        return Task.CompletedTask;
     }
 
-    public async Task DeleteAsync(NewsEntities.NewsApproval entity)
+    public Task DeleteAsync(NewsApproval entity)
     {
-        context.Set<NewsEntities.NewsApproval>().Remove(entity);
-        await context.SaveChangesAsync();
+        context.Set<NewsApproval>().Remove(entity);
+        return Task.CompletedTask;
     }
 
-    public async Task<List<NewsEntities.NewsApproval>> GetAllAsync() =>
-        await context.Set<NewsEntities.NewsApproval>().ToListAsync();
+    public async Task<List<NewsApproval>> GetAllAsync() =>
+        await context.Set<NewsApproval>()
+            .AsNoTracking()
+            .ToListAsync();
 
-    public async Task<List<NewsEntities.NewsApproval>> GetAllAsync(
-        Expression<Func<NewsEntities.NewsApproval, bool>> predicate) =>
-        await context.Set<NewsEntities.NewsApproval>().Where(predicate).ToListAsync();
+    public async Task<List<NewsApproval>> GetAllAsync(Expression<Func<NewsApproval, bool>> predicate) =>
+        await context.Set<NewsApproval>()
+            .AsNoTracking()
+            .Where(predicate)
+            .ToListAsync();
 }

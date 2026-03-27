@@ -1,5 +1,6 @@
 ﻿using KhoaCNTT.Application.Interfaces.Repositories.INewsRepositories;
 using KhoaCNTT.Domain.Entities.NewsEntities;
+using KhoaCNTT.Application.Interfaces.Repositories;
 using KhoaCNTT.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

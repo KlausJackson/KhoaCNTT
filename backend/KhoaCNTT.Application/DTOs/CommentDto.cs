@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace KhoaCNTT.Application.DTOs
 {
-    internal class CommentDto
+
+    public class CommentResponse
     {
+        public int CommentID { get; set; }
+        public string Content { get; set; } = string.Empty;
+        public string StudentName { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; }
     }
 }

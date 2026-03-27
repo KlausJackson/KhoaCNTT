@@ -1,9 +1,11 @@
-﻿using KhoaCNTT.Domain.Entities.NewsEntities;
+﻿
+using KhoaCNTT.Domain.Entities;
+using KhoaCNTT.Domain.Entities.NewsEntities;
 
-namespace KhoaCNTT.Application.Interfaces.Repositories.INewsRepositories;
-
-public interface ICommentRepository : IRepository<Comment>
+namespace KhoaCNTT.Application.Interfaces.Repositories
 {
-    Task<Comment?> GetByIdAsync(int id);
-    Task<IEnumerable<Comment>> GetByNewsIdAsync(int newsId);
+    public interface ICommentRepository : IRepository<Comment>
+    {
+        Task<IEnumerable<Comment>> GetByNewsIdAsync(int newsId);
+    }
 }

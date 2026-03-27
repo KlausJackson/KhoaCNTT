@@ -4,5 +4,4 @@ namespace KhoaCNTT.Application.Interfaces.Repositories.INewsRepositories;
 
 public interface INewsResourceRepository : IRepository<NewsResource>
 {
-    Task<NewsResource?> GetByIdAsync(int id);
 }
